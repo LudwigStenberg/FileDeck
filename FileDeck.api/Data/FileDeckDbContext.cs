@@ -34,6 +34,13 @@ public class FileDeckDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany(folder => folder.Files)       // Each folder can have many files
                 .HasForeignKey(file => file.FolderId)   // FolderId is the foreign key
                 .OnDelete(DeleteBehavior.SetNull);      // When a folder is deleted: set FolderId to null
+
+            // Configure the relationship with User:
+            entity.HasOne(file => file.User)            // Each file can belong to one User
+                .WithMany(user => user.Files)           // Each user can have many files
+                .HasForeignKey(file => file.UserId)     // UserId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade);      // When a user is deleted: delete all their files
+
         });
 
         modelBuilder.Entity<FolderEntity>(entity =>
@@ -46,6 +53,13 @@ public class FileDeckDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany(parentFolder => parentFolder.SubFolders)  // Each parentfolder can have many subfolders
                 .HasForeignKey(folder => folder.ParentFolderId)     // ParentFolderId is the foreign key
                 .OnDelete(DeleteBehavior.Restrict);                 // Prevent deleting a folder if it contains subfolders
+
+            // Configure the relationship with User:
+            entity.HasOne(folder => folder.User)                    // Each folder can have one User
+                .WithMany(user => user.Folders)                     // Each user can have many folders
+                .HasForeignKey(folder => folder.UserId)             // UserId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade);                  // When a user is deleted: delete all their folders.
+
         });
     }
 }

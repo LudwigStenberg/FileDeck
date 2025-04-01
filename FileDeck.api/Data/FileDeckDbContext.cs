@@ -1,7 +1,9 @@
+using FileDeck.api.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileDeck.api.Data;
-public class FileDeckDbContext : DbContext
+public class FileDeckDbContext : IdentityDbContext<ApplicationUser>
 {
     // DbSet properties - represents the tables in the database
     public DbSet<FileEntity> Files { get; set; }

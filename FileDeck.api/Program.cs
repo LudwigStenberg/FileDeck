@@ -1,10 +1,12 @@
-using FileDeck.api.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using FileDeck.api.Data;
+using FileDeck.api.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FileDeck.api;
 
@@ -36,6 +38,20 @@ public class Program
                 Version = "v1",
                 Description = "An API to perform file storage operations",
             });
+        });
+
+        // Add Identity services:
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        {
+            //Password settings
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequiredLength = 8;
+
+            // User settings
+            options.User.RequireUniqueEmail = true;
         });
 
         var app = builder.Build();

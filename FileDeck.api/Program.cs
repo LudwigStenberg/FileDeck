@@ -1,4 +1,7 @@
+using FileDeck.api.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -10,6 +13,12 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        // Add Database context with PostgreSQL provider
+        builder.Services.AddDbContext<FileDeckDbContext>(options => options.UseNpgsql(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            npgsqlOptions => npgsqlOptions.MigrationsAssembly("FileDeck.api")
+        ));
 
         // Add services to the container:
         builder.Services.AddControllers();
@@ -36,7 +45,7 @@ public class Program
         {
             //Enable Swagger UI in development:
             app.UseSwagger();
-            app.UseSwaggerUI(config => config.SwaggerEndpoint("/swagger/v1/swagger.json", "File Storage Api v1")
+            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "File Storage Api v1")
             );
         }
 

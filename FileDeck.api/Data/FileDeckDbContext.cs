@@ -46,7 +46,4 @@ public class FileDeckDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);                 // Prevent deleting a folder if it contains subfolders
         });
     }
-
-
-
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+namespace FileDeck.api.Models;
 public class FolderEntity
 {
     public int Id { get; set; }
@@ -19,6 +20,6 @@ public class FolderEntity
     public ICollection<FileEntity> Files { get; set; } = new List<FileEntity>();
 
     // Relationship to User (many-to-one, many folders - one user)
-    // public string UserId { get; set; } // FK
-    // public ApplicationUser User { get; set; } // NavProp
+    public string UserId { get; set; } = null!; // FK
+    public ApplicationUser User { get; set; } = null!; // NavProp
 }

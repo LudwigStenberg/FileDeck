@@ -1,5 +1,6 @@
 using System;
 
+namespace FileDeck.api.Models;
 public class FileEntity
 {
     public int Id { get; set; }
@@ -18,7 +19,7 @@ public class FileEntity
     public FolderEntity? Folder { get; set; }
 
     // Relationship with User: Many-to-one (Many files, one User)
-    // public string? UserId { get; set; }
-    // public ApplicationUser User { get; set; }
+    public string UserId { get; set; } = null!;
+    public ApplicationUser User { get; set; } = null!;
 
 }

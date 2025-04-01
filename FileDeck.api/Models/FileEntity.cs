@@ -1,18 +1,24 @@
+using System;
+
 public class FileEntity
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string ContentType { get; set; }
-    public byte[] Content { get; set; }
+    public required string Name { get; set; }
+    public required string ContentType { get; set; }
+    public byte[] Content { get; set; } = Array.Empty<byte>(); // Should this be limited somehow, for performance?
     public long Size { get; set; }
-    public DateTime UploadDate { get; set; }
+    public DateTime UploadDate { get; set; } = DateTime.UtcNow;
+    public DateTime LastModifiedDate { get; set; } = DateTime.UtcNow;
+    public bool IsDeleted { get; set; } = false;
 
     // Relationship with FolderEntity (Many-to-One)
-    public int FolderId { get; set; }
-    public FolderEntity Folder { get; set; }
+    // Foreign Key
+    public int? FolderId { get; set; } // Can be null to support "root" files (not in any folder)
+    // Navigation Property
+    public FolderEntity? Folder { get; set; }
 
     // Relationship with User: Many-to-one (Many files, one User)
-    public string UserId { get; set; }
-    public ApplicationUser User { get; set; }
+    // public string? UserId { get; set; }
+    // public ApplicationUser User { get; set; }
 
 }

@@ -25,25 +25,25 @@ public class FileDeckDbContext : DbContext
         modelBuilder.Entity<FileEntity>(entity =>
         {
             entity.ToTable("Files");
-            entity.HasKey(e => e.Id);
+            entity.HasKey(file => file.Id);
 
             // Configure the relationship with Folder:
-            entity.HasOne(e => e.Folder)
-                .WithMany(f => f.Files)
-                .HasForeignKey(e => e.FolderId)
-                .OnDelete(DeleteBehavior.SetNull); // When a folder is deleted: set FolderId to null
+            entity.HasOne(file => file.Folder)          // Each file can belong to one folder
+                .WithMany(folder => folder.Files)       // Each folder can have many files
+                .HasForeignKey(file => file.FolderId)   // FolderId is the foreign key
+                .OnDelete(DeleteBehavior.SetNull);      // When a folder is deleted: set FolderId to null
         });
 
         modelBuilder.Entity<FolderEntity>(entity =>
         {
             entity.ToTable("Folders");
-            entity.HasKey(e => e.Id);
+            entity.HasKey(folder => folder.Id);
 
             // Configure the self-referencing relationship (folders can contain folders)
-            entity.HasOne(e => e.ParentFolder)
-                .WithMany(f => f.SubFolders)
-                .HasForeignKey(e => e.ParentFolderId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent deleting a folder if it contains subfolders
+            entity.HasOne(folder => folder.ParentFolder)            // Each folder can have one parent folder 
+                .WithMany(parentFolder => parentFolder.SubFolders)  // Each parentfolder can have many subfolders
+                .HasForeignKey(folder => folder.ParentFolderId)     // ParentFolderId is the foreign key
+                .OnDelete(DeleteBehavior.Restrict);                 // Prevent deleting a folder if it contains subfolders
         });
     }
 

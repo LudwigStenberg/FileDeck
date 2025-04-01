@@ -27,7 +27,7 @@ public class Program
         (Creates metadata: like a map of the API landscape) */
         builder.Services.AddEndpointsApiExplorer();
 
-        // Adds the service that generates the Swagger document (JSON file that describes the API)
+        // Adds the Swagger documentation service (JSON file that describes the API)
         builder.Services.AddSwaggerGen(config =>
         {
             config.SwaggerDoc("v1", new OpenApiInfo

@@ -52,7 +52,9 @@ public class Program
 
             // User settings
             options.User.RequireUniqueEmail = true;
-        });
+        })
+        .AddEntityFrameworkStores<FileDeckDbContext>()
+        .AddDefaultTokenProviders();
 
         var app = builder.Build();
 
@@ -66,6 +68,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
 

@@ -9,6 +9,8 @@ using FileDeck.api.Models;
 using Microsoft.AspNetCore.Identity;
 using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
+using FileDeck.api.Services;
+using FileDeck.api.Repositories;
 
 namespace FileDeck.api;
 

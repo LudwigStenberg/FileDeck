@@ -4,6 +4,7 @@ using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
+namespace FileDeck.api.Repositories;
 public class FolderRepository : IFolderRepository
 {
 

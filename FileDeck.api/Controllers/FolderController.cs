@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
-using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

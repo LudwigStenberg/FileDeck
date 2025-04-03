@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
@@ -7,6 +6,7 @@ using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
 
+namespace FileDeck.api.Services;
 public class FolderService : IFolderService
 {
     private readonly IFolderRepository folderRepository;

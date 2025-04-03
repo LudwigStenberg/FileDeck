@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
+using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
 
@@ -16,7 +17,6 @@ public class FolderService : IFolderService
     }
     public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId)
     {
-        // Validate folder name and format
         if (string.IsNullOrWhiteSpace(folderDto.Name))
         {
             throw new ArgumentException("Folder name cannot be empty.");
@@ -33,20 +33,40 @@ public class FolderService : IFolderService
             throw new ArgumentException("Folder name contains invalid characters.");
         }
 
-        // ParentFolderId? Verify it's correct and that it belongs to this user
+
         if (folderDto.ParentFolderId != null)
         {
-            // Call the repository layer to check:
-            // if the FolderId exists
-            // If it belongs to the user
+            bool parentFolderExists = await folderRepository.FolderExistsAsync(folderDto.ParentFolderId.Value, userId);
+
+            if (!parentFolderExists)
+            {
+                throw new ArgumentException("Parent folder does not exist or you do not have access to it.");
+            }
         }
 
 
         // Build the FolderEntity that will be saved/persisted to the database
-        // Call the FolderRepository.CreateFolderAsync 
-        // Map the result to a FolderResponseDto
-        // Return success?? with the dto
+        var newFolder = new FolderEntity
+        {
+            Name = folderDto.Name,
+            ParentFolderId = folderDto.ParentFolderId,
+            UserId = userId,
+            CreatedDate = DateTime.UtcNow,
+            LastModifiedDate = DateTime.UtcNow,
+            IsDeleted = false
+        };
 
-        return folderResponseDto;
+        var savedFolder = await folderRepository.CreateFolderAsync(newFolder);
+
+        // Use the saved folder to map our response which is to be sent to the controller
+        var folderResponse = new FolderResponseDto
+        {
+            Id = savedFolder.Id,
+            Name = savedFolder.Name,
+            ParentFolderId = savedFolder.ParentFolderId,
+            CreatedDate = savedFolder.CreatedDate
+        };
+
+        return folderResponse;
     }
 }

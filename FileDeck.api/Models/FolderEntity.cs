@@ -12,7 +12,7 @@ public class FolderEntity
 
 
     // Relationship to other Folders (self-referencing)
-    public int? ParentFolderId { get; set; } // FK, nullable for root folders 
+    public int? ParentFolderId { get; set; } // FK, null means that it is a "root" folder
     public FolderEntity? ParentFolder { get; set; } // NavProp to parent
     public ICollection<FolderEntity> SubFolders { get; set; } = new List<FolderEntity>(); // NavProp to children
 

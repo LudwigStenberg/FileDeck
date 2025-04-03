@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
@@ -64,6 +65,25 @@ public class FolderService : IFolderService
             Name = savedFolder.Name,
             ParentFolderId = savedFolder.ParentFolderId,
             CreatedDate = savedFolder.CreatedDate
+        };
+
+        return folderResponse;
+    }
+
+    public async Task<FolderResponseDto?> GetFolderByIdAsync(int folderId)
+    {
+        var folder = await folderRepository.GetFolderById(folderId);
+        if (folder == null)
+        {
+            return null;
+        }
+
+        var folderResponse = new FolderResponseDto
+        {
+            Id = folder.Id,
+            Name = folder.Name,
+            ParentFolderId = folder.ParentFolderId,
+            CreatedDate = folder.CreatedDate
         };
 
         return folderResponse;

@@ -1,0 +1,22 @@
+meta {
+  name: Create Folder
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5298/api/folder
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "My Test Folder",
+    "parentFolderId": null
+  }
+}

@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
 using Microsoft.AspNetCore.Identity;
+using FileDeck.api.Repositories.Interfaces;
+using FileDeck.api.Services.Interfaces;
 
 namespace FileDeck.api;
 
@@ -21,24 +23,6 @@ public class Program
             builder.Configuration.GetConnectionString("DefaultConnection"),
             npgsqlOptions => npgsqlOptions.MigrationsAssembly("FileDeck.api")
         ));
-
-        // Add services to the container:
-        builder.Services.AddControllers();
-
-        /* Enables API Endpoints Discovery - Helps Swagger work
-        (Creates metadata: like a map of the API landscape) */
-        builder.Services.AddEndpointsApiExplorer();
-
-        // Adds the Swagger documentation service (JSON file that describes the API)
-        builder.Services.AddSwaggerGen(config =>
-        {
-            config.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "My API",
-                Version = "v1",
-                Description = "An API to perform file storage operations",
-            });
-        });
 
         // Add Identity services:
         builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
@@ -55,6 +39,27 @@ public class Program
         })
         .AddEntityFrameworkStores<FileDeckDbContext>()
         .AddDefaultTokenProviders();
+
+        builder.Services.AddScoped<IFolderRepository, FolderRepository>();
+        builder.Services.AddScoped<IFolderService, FolderService>();
+
+        // Add services to the container:
+        builder.Services.AddControllers();
+        // Enables API Endpoints Discovery - Helps Swagger work
+        // (Creates metadata: like a map of the API landscape)
+        builder.Services.AddEndpointsApiExplorer();
+
+        // Adds the Swagger documentation service (JSON file that describes the API)
+        builder.Services.AddSwaggerGen(config =>
+        {
+            config.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "My API",
+                Version = "v1",
+                Description = "An API to perform file storage operations",
+            });
+        });
+
 
         var app = builder.Build();
 

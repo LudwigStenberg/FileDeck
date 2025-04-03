@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 
 namespace FileDeck.api.Models;
-public class ApplicationUser : IdentityUser
+public class UserEntity : IdentityUser
 {
     // Virtual is for lazy-loading in Entity Framework Core
     public virtual ICollection<FileEntity> Files { get; set; } = new List<FileEntity>();

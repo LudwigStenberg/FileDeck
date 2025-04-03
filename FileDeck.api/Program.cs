@@ -41,7 +41,7 @@ public class Program
         });
 
         // Add Identity services:
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
         {
             //Password settings
             options.Password.RequireDigit = true;

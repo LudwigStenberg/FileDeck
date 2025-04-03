@@ -20,6 +20,6 @@ public class FileEntity
 
     // Relationship with User: Many-to-one (Many files, one User)
     public string UserId { get; set; } = null!;
-    public ApplicationUser User { get; set; } = null!;
+    public UserEntity User { get; set; } = null!;
 
 }

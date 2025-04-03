@@ -21,5 +21,5 @@ public class FolderEntity
 
     // Relationship to User (many-to-one, many folders - one user)
     public string UserId { get; set; } = null!; // FK
-    public ApplicationUser User { get; set; } = null!; // NavProp
+    public UserEntity User { get; set; } = null!; // NavProp
 }

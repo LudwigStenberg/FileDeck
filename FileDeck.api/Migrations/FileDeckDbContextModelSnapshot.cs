@@ -22,7 +22,7 @@ namespace FileDeck.api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("FileDeck.api.Models.ApplicationUser", b =>
+            modelBuilder.Entity("FileDeck.api.Models.UserEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -310,7 +310,7 @@ namespace FileDeck.api.Migrations
                         .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("FileDeck.api.Models.ApplicationUser", "User")
+                    b.HasOne("FileDeck.api.Models.UserEntity", "User")
                         .WithMany("Files")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -328,7 +328,7 @@ namespace FileDeck.api.Migrations
                         .HasForeignKey("ParentFolderId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("FileDeck.api.Models.ApplicationUser", "User")
+                    b.HasOne("FileDeck.api.Models.UserEntity", "User")
                         .WithMany("Folders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +350,7 @@ namespace FileDeck.api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("FileDeck.api.Models.ApplicationUser", null)
+                    b.HasOne("FileDeck.api.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -359,7 +359,7 @@ namespace FileDeck.api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("FileDeck.api.Models.ApplicationUser", null)
+                    b.HasOne("FileDeck.api.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -374,7 +374,7 @@ namespace FileDeck.api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FileDeck.api.Models.ApplicationUser", null)
+                    b.HasOne("FileDeck.api.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,14 +383,14 @@ namespace FileDeck.api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("FileDeck.api.Models.ApplicationUser", null)
+                    b.HasOne("FileDeck.api.Models.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FileDeck.api.Models.ApplicationUser", b =>
+            modelBuilder.Entity("FileDeck.api.Models.UserEntity", b =>
                 {
                     b.Navigation("Files");
 

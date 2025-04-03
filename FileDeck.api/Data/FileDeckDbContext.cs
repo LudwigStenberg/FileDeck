@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileDeck.api.Data;
-public class FileDeckDbContext : IdentityDbContext<ApplicationUser>
+public class FileDeckDbContext : IdentityDbContext<UserEntity>
 {
     // DbSet properties - represents the tables in the database
     public DbSet<FileEntity> Files { get; set; }

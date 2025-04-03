@@ -26,7 +26,7 @@ public class FolderController : ControllerBase
 
     // Retrieve Folder
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetFolderById(int id)
+    public async Task<IActionResult> GetFolderByIdAsync(int id)
     {
         return null;
     }

@@ -13,6 +13,7 @@ public class FolderService : IFolderService
     {
         this.folderRepository = folderRepository;
     }
+
     public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId)
     {
         if (string.IsNullOrWhiteSpace(folderDto.Name))

@@ -9,10 +9,10 @@ using FileDeck.api.Services.Interfaces;
 public class FolderService : IFolderService
 {
 
-    private readonly
-        public FolderService(IFolderRepository folderRepository)
+    private readonly IFolderRepository folderRepository;
+    public FolderService(IFolderRepository folderRepository)
     {
-
+        this.folderRepository = folderRepository;
     }
     public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId)
     {

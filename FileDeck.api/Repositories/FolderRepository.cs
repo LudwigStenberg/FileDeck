@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 public class FolderRepository : IFolderRepository
 {
@@ -19,5 +20,11 @@ public class FolderRepository : IFolderRepository
         await context.SaveChangesAsync();
 
         return folder;
+    }
+
+    public async Task<bool> FolderExistsAsync(int parentFolderId, string userId)
+    {
+        return await context.Folders
+            .AnyAsync(f => f.Id == parentFolderId && f.UserId == userId && !f.IsDeleted);
     }
 }

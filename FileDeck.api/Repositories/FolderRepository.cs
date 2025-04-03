@@ -13,7 +13,7 @@ public class FolderRepository : IFolderRepository
         this.context = context;
     }
 
-    public async Task<FolderEntity> CreateFolder(FolderEntity folder)
+    public async Task<FolderEntity> CreateFolderAsync(FolderEntity folder)
     {
         context.Folders.Add(folder);
         await context.SaveChangesAsync();

@@ -17,17 +17,31 @@ public class FolderController : ControllerBase
         this.folderService = folderService;
     }
 
-    // Create Folder
+    // Creates a new folder
     [HttpPost]
     public async Task<IActionResult> CreateFolderAsync([FromBody] CreateFolderDto folderDto)
     {
-        return null; // temporary
+        var newFolder = await folderService.CreateFolderAsync(folderDto, "userId");
+
+        // This references the GET method for the Location Header
+        return CreatedAtAction(
+            nameof(GetFolderByIdAsync), // Name of the GET method
+            new { id = newFolder.Id },  // Route parameters for the GET method
+            newFolder                   // The Response body
+        );
     }
 
-    // Retrieve Folder
+    // Returns an existing folder
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFolderByIdAsync(int id)
     {
-        return null;
+        var folder = await folderService.GetFolderByIdAsync(id);
+
+        if (folder == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(folder);
     }
 }

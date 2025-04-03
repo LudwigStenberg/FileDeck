@@ -1,4 +1,3 @@
-
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using FileDeck.api.Services.Interfaces;
 
 public class FolderService : IFolderService
 {
-
     private readonly IFolderRepository folderRepository;
     public FolderService(IFolderRepository folderRepository)
     {

@@ -3,10 +3,17 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
+using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
 
 public class FolderService : IFolderService
 {
+
+    private readonly
+        public FolderService(IFolderRepository folderRepository)
+    {
+
+    }
     public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId)
     {
         // Validate folder name and format
@@ -27,6 +34,13 @@ public class FolderService : IFolderService
         }
 
         // ParentFolderId? Verify it's correct and that it belongs to this user
+        if (folderDto.ParentFolderId != null)
+        {
+            // Call the repository layer to check:
+            // if the FolderId exists
+            // If it belongs to the user
+        }
+
 
         // Build the FolderEntity that will be saved/persisted to the database
         // Call the FolderRepository.CreateFolderAsync 

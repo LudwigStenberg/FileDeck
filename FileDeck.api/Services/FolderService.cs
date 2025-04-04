@@ -59,7 +59,7 @@ public class FolderService : IFolderService
         var savedFolder = await folderRepository.CreateFolderAsync(newFolder);
 
         // Use the saved folder to map our response which is to be sent to the controller
-        var folderResponse = new FolderResponseDto
+        var FolderResponseDto = new FolderResponseDto
         {
             Id = savedFolder.Id,
             Name = savedFolder.Name,
@@ -67,7 +67,7 @@ public class FolderService : IFolderService
             CreatedDate = savedFolder.CreatedDate
         };
 
-        return folderResponse;
+        return FolderResponseDto;
     }
 
     public async Task<FolderResponseDto?> GetFolderByIdAsync(int folderId)
@@ -78,7 +78,7 @@ public class FolderService : IFolderService
             return null;
         }
 
-        var folderResponse = new FolderResponseDto
+        var FolderResponseDto = new FolderResponseDto
         {
             Id = folder.Id,
             Name = folder.Name,
@@ -86,6 +86,6 @@ public class FolderService : IFolderService
             CreatedDate = folder.CreatedDate
         };
 
-        return folderResponse;
+        return FolderResponseDto;
     }
 }

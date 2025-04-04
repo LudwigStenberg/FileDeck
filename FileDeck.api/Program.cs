@@ -11,6 +11,7 @@ using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
 using FileDeck.api.Services;
 using FileDeck.api.Repositories;
+using FileDeck.api.Settings;
 
 namespace FileDeck.api;
 
@@ -25,6 +26,10 @@ public class Program
             builder.Configuration.GetConnectionString("DefaultConnection"),
             npgsqlOptions => npgsqlOptions.MigrationsAssembly("FileDeck.api")
         ));
+
+        builder.Services.Configure<JwtSettings>(
+            builder.Configuration.GetSection("JwtSettings"));
+
 
         // Add Identity services:
         builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
@@ -61,7 +66,6 @@ public class Program
                 Description = "An API to perform file storage operations",
             });
         });
-
 
         var app = builder.Build();
 

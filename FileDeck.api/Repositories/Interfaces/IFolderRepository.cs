@@ -7,7 +7,7 @@ namespace FileDeck.api.Repositories.Interfaces;
 public interface IFolderRepository
 {
     Task<FolderEntity> CreateFolderAsync(FolderEntity folder);
-    Task<FolderEntity?> GetFolderById(int folderId);
+    Task<FolderEntity?> GetFolderByIdAsync(int folderId);
     Task<bool> FolderExistsAsync(int parentFolderId, string userId);
 
 }

@@ -24,4 +24,6 @@ public class AuthController : ControllerBase
         this.tokenService = tokenService;
     }
 
+    // [HttpPost("register")]
+
 }

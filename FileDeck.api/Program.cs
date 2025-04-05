@@ -49,6 +49,7 @@ public class Program
 
         builder.Services.AddScoped<IFolderRepository, FolderRepository>();
         builder.Services.AddScoped<IFolderService, FolderService>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
 
         // Add services to the container:
         builder.Services.AddControllers();

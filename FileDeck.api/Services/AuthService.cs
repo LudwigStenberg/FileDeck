@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs.Auth;
+using FileDeck.api.Models;
 using FileDeck.api.Repositories;
 using FileDeck.api.Services.Interfaces;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Identity;
 
 namespace FileDeck.api.Services;
 
@@ -40,7 +44,33 @@ public class AuthService : IAuthService
             };
         }
 
-        throw new ArgumentException();
+        // Create the user:
+        var newUser = new UserEntity
+        {
+            UserName = registerDto.Username,
+            Email = registerDto.Email
+        };
+
+        IdentityResult result = await authRepository.CreateUserAsync(newUser, registerDto.Password);
+
+        if (result.Succeeded)
+        {
+            return new RegisterResponseDto
+            {
+                Succeeded = true,
+                UserId = newUser.Id,
+                Username = newUser.UserName ?? string.Empty,
+                Email = newUser.Email ?? string.Empty,
+            };
+        }
+        else
+        {
+            return new RegisterResponseDto
+            {
+                Succeeded = false,
+                Errors = result.Errors.Select(error => error.Description).ToList()
+            };
+        }
     }
 
     public async Task<LoginResponseDto> LoginUserAsync(LoginRequestDto loginDto)

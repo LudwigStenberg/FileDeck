@@ -72,7 +72,7 @@ public class FolderService : IFolderService
 
     public async Task<FolderResponseDto?> GetFolderByIdAsync(int folderId)
     {
-        var folder = await folderRepository.GetFolderById(folderId);
+        var folder = await folderRepository.GetFolderByIdAsync(folderId);
         if (folder == null)
         {
             return null;

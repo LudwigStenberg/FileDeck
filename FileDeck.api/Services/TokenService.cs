@@ -22,7 +22,6 @@ public class TokenService : ITokenService
     public string GenerateToken(UserEntity user)
     {
         // Create a security key using the secret from JwtSettings
-        // What is it called "Symmetric"?
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey));
 
         // Create signing credentials using the security key and algorithm

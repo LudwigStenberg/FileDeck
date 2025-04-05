@@ -1,5 +1,6 @@
-
 using System;
+
+namespace FileDeck.api.DTOs.Auth;
 
 public class LoginResponseDto
 {

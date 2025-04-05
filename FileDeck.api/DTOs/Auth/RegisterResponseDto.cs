@@ -1,5 +1,6 @@
-
 using System.Collections.Generic;
+
+namespace FileDeck.api.DTOs.Auth;
 
 public class RegisterResponseDto
 {

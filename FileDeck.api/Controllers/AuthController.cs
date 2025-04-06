@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
 
         if (result.Succeeded)
         {
-            return CreatedAtAction(nameof(?))
+            return CreatedAtAction(nameof(GetUserById), new { id = result.UserId }, result);
         }
 
         return BadRequest(result);

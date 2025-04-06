@@ -47,7 +47,7 @@ public class AuthService : IAuthService
         // Create the user:
         var newUser = new UserEntity
         {
-            UserName = registerDto.Username,
+            UserName = registerDto.Email,
             Email = registerDto.Email
         };
 
@@ -75,6 +75,40 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponseDto> LoginUserAsync(LoginRequestDto loginDto)
     {
-        throw new ArgumentException();
+        var user = await authRepository.FindUserByEmailAsync(loginDto.Email);
+
+        // Check Email:
+        if (user == null)
+        {
+            return new LoginResponseDto
+            {
+                Succeeded = false,
+                Errors = new List<string> { "The email or password is incorrect" }
+            };
+        }
+
+        // Check Password:
+        var result = await authRepository.CheckPasswordSignInAsync(user, loginDto.Password);
+
+        if (result.Succeeded)
+        {
+            var token = tokenService.GenerateToken(user);
+
+            return new LoginResponseDto
+            {
+                Succeeded = true,
+                Token = token,
+                Expiration = DateTime.UtcNow.AddMinutes(240),
+                UserId = user.Id,
+                Username = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty
+            };
+        }
+
+        return new LoginResponseDto
+        {
+            Succeeded = false,
+            Errors = new List<string> { "The email or password is incorrect" }
+        };
     }
 }

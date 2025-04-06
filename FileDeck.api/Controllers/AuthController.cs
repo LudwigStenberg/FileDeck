@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using Npgsql.Replication;
 
 namespace FileDeck.api.Controllers;
@@ -50,6 +51,7 @@ public class AuthController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize]
+    // Should this be async as well? (Good practice to have either none or all actions async?)
     public async Task<IActionResult> GetUserById(string id)
     {
         // Get the current user from the token
@@ -68,5 +70,24 @@ public class AuthController : ControllerBase
         }
 
         return Ok(new { user.Id, user.Email });
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginUserAsync(LoginRequestDto loginDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await authService.LoginUserAsync(loginDto);
+
+
+        if (result.Succeeded)
+        {
+            return Ok(result);
+        }
+
+        return Unauthorized(result);
     }
 }

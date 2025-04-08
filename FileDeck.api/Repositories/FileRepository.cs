@@ -1,14 +1,23 @@
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FileDeck.api.Data;
 using FileDeck.api.Models;
 
 namespace FileDeck.api.Repositories;
 public class FileRepository : IFileRepository
 {
-    public Task<FileEntity> CreateFileAsync(FileEntity file)
+    private readonly FileDeckDbContext context;
+    public FileRepository(FileDeckDbContext context)
     {
-        throw new System.NotImplementedException();
+        this.context = context;
+    }
+    public async Task<FileEntity> CreateFileAsync(FileEntity file)
+    {
+        context.Files.Add(file);
+        await context.SaveChangesAsync();
+        return file;
     }
 
     public Task<FileEntity?> GetFileByIdAsync(int fileId, string userId)

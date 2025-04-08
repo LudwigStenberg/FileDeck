@@ -1,13 +1,12 @@
 ## Task List
-1. Bruno or Scalar?
-2. Switch from Swagger to OpenAPI
-
+1. - [X] Bruno or Scalar? Both.
+2. - [X] Switch from Swagger to OpenAPI
+2. - [X] Try/Catch - repository or service?
 
 
 
 
 ## Implementing Identity Core
-
 Phase 1: Authentication Setup
 
 Create JwtSettings configuration in appsettings.json
@@ -28,3 +27,5 @@ Phase 3: User Management (if time permits)
 Implement password reset
 Implement user profile management
 Add role-based authorization (if needed)
+
+

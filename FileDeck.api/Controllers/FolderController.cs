@@ -49,7 +49,7 @@ public class FolderController : ControllerBase
         {
             return Unauthorized(new { message = "User ID not found in token" });
         }
-        var folder = await folderService.GetFolderByIdAsync(id);
+        var folder = await folderService.GetFolderByIdAsync(id, userId);
 
         if (folder == null)
         {

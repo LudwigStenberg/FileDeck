@@ -36,7 +36,7 @@ public class FolderController : ControllerBase
 
         // This references the GET method for the Location Header
         return CreatedAtAction(
-            nameof(GetFolderByIdAsync), // Name of the GET method
+            nameof(GetFolderById), // Name of the GET method
             new { id = newFolder.Id },  // Route parameters for the GET method
             newFolder                   // The Response body
         );
@@ -45,7 +45,7 @@ public class FolderController : ControllerBase
     // Returns an existing folder
     [HttpGet("{id}")]
     [Authorize]
-    public async Task<IActionResult> GetFolderByIdAsync(int id)
+    public async Task<IActionResult> GetFolderById(int id)
     {
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId))

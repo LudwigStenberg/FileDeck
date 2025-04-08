@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
+using Scalar.AspNetCore;
 
 namespace FileDeck.api;
 
@@ -82,27 +83,16 @@ public class Program
         // Enables API Endpoints Discovery - Helps Swagger work
         // (Creates metadata: like a map of the API landscape)
         builder.Services.AddEndpointsApiExplorer();
-
-        // Adds the Swagger documentation service (JSON file that describes the API)
-        builder.Services.AddSwaggerGen(config =>
-        {
-            config.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "My API",
-                Version = "v1",
-                Description = "An API to perform file storage operations",
-            });
-        });
+        builder.Services.AddOpenApi(); // default is v1
 
         var app = builder.Build();
+
+        app.MapOpenApi();
 
         // Configure the HTTP request pipeline (Add Middleware)
         if (app.Environment.IsDevelopment())
         {
-            //Enable Swagger UI in development:
-            app.UseSwagger();
-            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "File Storage Api v1")
-            );
+            app.MapScalarApiReference();
         }
 
         app.UseHttpsRedirection();
@@ -110,6 +100,8 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
 
+
+        app.MapGet("/", () => "Hello World");
         // Start the application
         app.Run();
     }

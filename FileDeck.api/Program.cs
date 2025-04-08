@@ -71,9 +71,11 @@ public class Program
             };
         });
 
-        builder.Services.AddScoped<IFolderRepository, FolderRepository>();
-        builder.Services.AddScoped<IFolderService, FolderService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<IFolderService, FolderService>();
+        builder.Services.AddScoped<IFolderRepository, FolderRepository>();
+        builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
         // Add services to the container:
         builder.Services.AddControllers();

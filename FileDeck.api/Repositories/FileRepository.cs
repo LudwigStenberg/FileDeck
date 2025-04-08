@@ -36,9 +36,22 @@ public class FileRepository : IFileRepository
             .Where(f => f.FolderId == folderId && f.UserId == userId && !f.IsDeleted)
             .ToListAsync();
     }
-    public Task<bool> DeleteFileAsync(int fileId, string userId)
+    public async Task<bool> DeleteFileAsync(int fileId, string userId)
     {
-        throw new System.NotImplementedException();
+        var file = await context.Files
+            .SingleOrDefaultAsync(f => f.Id == fileId && f.UserId == userId && !f.IsDeleted);
+
+        if (file == null)
+        {
+            return false; // File not found (or already deleted)
+        }
+
+        file.IsDeleted = true;
+        file.LastModifiedDate = DateTime.UtcNow;
+
+        int affectedRows = await context.SaveChangesAsync();
+
+        return affectedRows > 0;
     }
 
     public Task<bool> FileExistsAsync(int fileId, string userId)

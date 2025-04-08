@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileDeck.api.Repositories;
 public class FileRepository : IFileRepository
@@ -20,9 +21,11 @@ public class FileRepository : IFileRepository
         return file;
     }
 
-    public Task<FileEntity?> GetFileByIdAsync(int fileId, string userId)
+    public async Task<FileEntity?> GetFileByIdAsync(int fileId, string userId)
     {
-        throw new System.NotImplementedException();
+        return await context.Files
+            .AsNoTracking()
+            .SingleOrDefaultAsync(f => f.Id == fileId && f.UserId == userId && !f.IsDeleted);
     }
 
     public Task<IEnumerable<FileEntity>> GetFilesInFolderAsync()

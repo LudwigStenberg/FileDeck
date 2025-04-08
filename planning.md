@@ -1,7 +1,7 @@
 ## Task List
 1. - [X] Bruno or Scalar? Both.
 2. - [X] Switch from Swagger to OpenAPI
-2. - [X] Try/Catch - repository or service?
+2. - [ ] Try/Catch - repository or service layer?
 
 
 

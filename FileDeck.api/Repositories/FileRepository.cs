@@ -54,8 +54,8 @@ public class FileRepository : IFileRepository
         return affectedRows > 0;
     }
 
-    public Task<bool> FileExistsAsync(int fileId, string userId)
+    public async Task<bool> FileExistsAsync(int fileId, string userId)
     {
-        throw new System.NotImplementedException();
+        return await context.Files.AnyAsync(f => f.Id == fileId && f.UserId == userId && !f.IsDeleted);
     }
 }

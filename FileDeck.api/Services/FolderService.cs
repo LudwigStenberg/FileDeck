@@ -17,6 +17,8 @@ public class FolderService : IFolderService
 
     public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId)
     {
+        Console.WriteLine($"Service - User ID from token: '{userId}'");
+
         if (string.IsNullOrWhiteSpace(folderDto.Name))
         {
             throw new ArgumentException("Folder name cannot be empty.");

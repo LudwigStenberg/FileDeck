@@ -1,3 +1,4 @@
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
@@ -28,6 +29,8 @@ public class FolderController : ControllerBase
         {
             return Unauthorized(new { message = "User ID not foud in token" });
         }
+
+        Console.WriteLine($"Controller - User ID from token: '{userId}'");
 
         var newFolder = await folderService.CreateFolderAsync(folderDto, userId);
 

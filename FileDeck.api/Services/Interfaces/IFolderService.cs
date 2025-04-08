@@ -6,6 +6,6 @@ namespace FileDeck.api.Services.Interfaces;
 public interface IFolderService
 {
     Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId);
-    Task<FolderResponseDto?> GetFolderByIdAsync(int folderId);
+    Task<FolderResponseDto?> GetFolderByIdAsync(int folderId, string userId);
 
 }

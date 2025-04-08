@@ -29,8 +29,9 @@ public class FolderRepository : IFolderRepository
             .AnyAsync(f => f.Id == parentFolderId && f.UserId == userId && !f.IsDeleted);
     }
 
-    public async Task<FolderEntity?> GetFolderByIdAsync(int folderId)
+    public async Task<FolderEntity?> GetFolderByIdAsync(int folderId, string userId)
     {
-        return await context.Folders.SingleOrDefaultAsync(f => f.Id == folderId && !f.IsDeleted);
+        return await context.Folders
+            .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
     }
 }

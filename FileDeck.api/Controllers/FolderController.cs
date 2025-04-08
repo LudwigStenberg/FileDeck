@@ -44,6 +44,11 @@ public class FolderController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetFolderByIdAsync(int id)
     {
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
         var folder = await folderService.GetFolderByIdAsync(id);
 
         if (folder == null)

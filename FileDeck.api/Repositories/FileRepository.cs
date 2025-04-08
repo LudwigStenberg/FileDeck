@@ -1,6 +1,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
@@ -28,11 +30,12 @@ public class FileRepository : IFileRepository
             .SingleOrDefaultAsync(f => f.Id == fileId && f.UserId == userId && !f.IsDeleted);
     }
 
-    public Task<IEnumerable<FileEntity>> GetFilesInFolderAsync()
+    public async Task<IEnumerable<FileEntity>> GetFilesInFolderAsync(int folderId, string userId)
     {
-        throw new System.NotImplementedException();
+        return await context.Files
+            .Where(f => f.FolderId == folderId && f.UserId == userId && !f.IsDeleted)
+            .ToListAsync();
     }
-
     public Task<bool> DeleteFileAsync(int fileId, string userId)
     {
         throw new System.NotImplementedException();

@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
 using FileDeck.api.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -18,9 +20,16 @@ public class FolderController : ControllerBase
 
     // Creates a new folder
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateFolderAsync([FromBody] CreateFolderDto folderDto)
     {
-        var newFolder = await folderService.CreateFolderAsync(folderDto, "userId");
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not foud in token" });
+        }
+
+        var newFolder = await folderService.CreateFolderAsync(folderDto, userId);
 
         // This references the GET method for the Location Header
         return CreatedAtAction(
@@ -32,6 +41,7 @@ public class FolderController : ControllerBase
 
     // Returns an existing folder
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> GetFolderByIdAsync(int id)
     {
         var folder = await folderService.GetFolderByIdAsync(id);

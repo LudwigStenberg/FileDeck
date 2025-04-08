@@ -4,8 +4,19 @@ meta {
   seq: 3
 }
 
-get {
+post {
   url: http://localhost:5298/api/auth/login
-  body: none
+  body: json
   auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "Email": "test@example.com",
+    "Password": "Password123!"
+  }
 }

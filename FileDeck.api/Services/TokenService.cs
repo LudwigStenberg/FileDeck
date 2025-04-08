@@ -22,10 +22,12 @@ public class TokenService : ITokenService
     public string GenerateToken(UserEntity user)
     {
         // Create a security key using the secret from JwtSettings
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey));
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtSettings.SecretKey));
 
         // Create signing credentials using the security key and algorithm
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
 
         // Create claims that will be included in the token
         var claims = new List<Claim>

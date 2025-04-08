@@ -5,19 +5,19 @@ meta {
 }
 
 post {
-  url: https://localhost:5298/api/auth/register
+  url: http://localhost:5298/api/auth/register
   body: json
   auth: inherit
 }
 
 headers {
-  Content-Type: application/json
+  Content-Type:  application/json
 }
 
 body:json {
   {
     "Email": "test@example.com",
-    "Password": "password123!",
-    "ConfirmPassword": "password123!"
+    "Password": "Password123!",
+    "ConfirmPassword": "Password123!"
   }
 }

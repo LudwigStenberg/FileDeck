@@ -8,6 +8,7 @@ public class FileResponseDto
     public string ContentType { get; set; } = string.Empty;
     public long Size { get; set; }
     public DateTime UploadDate { get; set; }
+    public DateTime LastModifiedDate { get; set; }
     public int? FolderId { get; set; }
 
     // Potentially add string URL to download the file?

@@ -11,7 +11,7 @@ public interface IFileService
 
     Task<FileDownloadDto> DownloadFileAsync(int fileId, string userId);
 
-    Task<IEnumerable<FileMetadataDto>> GetFilesInFolderAsync(int folderId, string userId);
+    Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId);
 
     Task<bool> DeleteFileAsync(int fileId, string userId); // Soft delete
 

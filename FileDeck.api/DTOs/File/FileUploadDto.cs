@@ -1,6 +1,8 @@
 using System;
 
 namespace FileDeck.api.DTOs;
+
+// For sending files to the server
 public class FileUploadDto
 {
     public required string Name { get; set; }

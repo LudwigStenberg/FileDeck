@@ -48,6 +48,20 @@ public class FileController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetFileByIdAsync(int fileId)
     {
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID Not found in token" });
+        }
+
+        var file = await fileService.GetFileByIdAsync(fileId, userId);
+
+        if (file == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(file);
     }
 }

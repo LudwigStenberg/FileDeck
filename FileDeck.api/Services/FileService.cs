@@ -39,7 +39,7 @@ public class FileService : IFileService
             bool folderExists = await folderRepository.FolderExistsAsync(fileUpload.FolderId.Value, userId);
             if (!folderExists)
             {
-                throw new ArgumentException("The specified folder does not existo r you don't have access to it");
+                throw new ArgumentException("The specified folder does not exist or you don't have access to it");
             }
         }
 
@@ -67,6 +67,27 @@ public class FileService : IFileService
             UploadDate = savedFile.UploadDate,
             LastModifiedDate = savedFile.LastModifiedDate,
             FolderId = savedFile.FolderId
+        };
+    }
+
+    public async Task<FileResponseDto?> GetFileByIdAsync(int fileId, string userId)
+    {
+        var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);
+
+        if (fileEntity == null)
+        {
+            return null;
+        }
+
+        return new FileResponseDto
+        {
+            Id = fileEntity.Id,
+            Name = fileEntity.Name,
+            ContentType = fileEntity.ContentType,
+            Size = fileEntity.Size,
+            UploadDate = fileEntity.UploadDate,
+            LastModifiedDate = fileEntity.LastModifiedDate,
+            FolderId = fileEntity.FolderId
         };
     }
 

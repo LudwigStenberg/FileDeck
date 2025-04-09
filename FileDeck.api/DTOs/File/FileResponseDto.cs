@@ -13,4 +13,3 @@ public class FileResponseDto
 
     // Potentially add string URL to download the file?
 }
-

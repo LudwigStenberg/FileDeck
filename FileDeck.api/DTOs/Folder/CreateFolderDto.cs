@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace FileDeck.api.DTOs;
 
 public class CreateFolderDto

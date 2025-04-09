@@ -4,7 +4,13 @@
 2. - [ ] Try/Catch - repository or service layer?
 3. - [ ] Global Exception Handler
 4. - [ ] Logging
-5. - [ ] 
+5. - [ ] File size limitations - to prevent overload?
+6. - [ ] Dedicated validation class for File/Folder validation?
+         
+         
+         
+FileService - improvements
+- Validate file type
 
 
 

@@ -2,6 +2,9 @@
 1. - [X] Bruno or Scalar? Both.
 2. - [X] Switch from Swagger to OpenAPI
 2. - [ ] Try/Catch - repository or service layer?
+3. - [ ] Global Exception Handler
+4. - [ ] Logging
+5. - [ ] 
 
 
 

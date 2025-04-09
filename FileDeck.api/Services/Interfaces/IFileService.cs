@@ -15,6 +15,6 @@ public interface IFileService
 
     Task<bool> DeleteFileAsync(int fileId, string userId); // Soft delete
 
-    Task<bool> FileExistsAsaync(int fileId, string userId);
+    Task<bool> FileExistsAsync(int fileId, string userId);
 }
 

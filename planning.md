@@ -6,11 +6,12 @@
 4. - [ ] Logging
 5. - [ ] File size limitations - to prevent overload?
 6. - [ ] Dedicated validation class for File/Folder validation?
-         
+7. - [ ] Add ModelState validation to relevant endpoints.         
          
          
 FileService - improvements
 - Validate file type
+
 
 
 

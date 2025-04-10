@@ -39,14 +39,14 @@ public class FileController : ControllerBase
         var newFile = await fileService.UploadFileAsync(fileUpload, userId);
 
         return CreatedAtAction(
-            nameof(GetFileByIdAsync),
+            nameof(GetFileById),
             new { id = newFile.Id },
             newFile);
     }
 
     [HttpGet("{id}")]
     [Authorize]
-    public async Task<IActionResult> GetFileByIdAsync(int id)
+    public async Task<IActionResult> GetFileById(int id)
     {
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

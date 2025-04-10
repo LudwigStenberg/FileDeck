@@ -85,4 +85,24 @@ public class FileController : ControllerBase
 
         return File(file.Content, file.ContentType, file.Name);
     }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteFileAsync(int id)
+    {
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
+
+        var result = await fileService.DeleteFileAsync(id, userId);
+
+        if (!result)
+        {
+            NotFound(result);
+        }
+
+        return Ok(result);
+    }
 }

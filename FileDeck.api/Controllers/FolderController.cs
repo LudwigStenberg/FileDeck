@@ -2,6 +2,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
+using FileDeck.api.Services;
 using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,11 @@ namespace FileDeck.api.Controllers;
 public class FolderController : ControllerBase
 {
     private readonly IFolderService folderService;
-    public FolderController(IFolderService folderService)
+    private readonly IFileService fileService;
+    public FolderController(IFolderService folderService, IFileService fileService)
     {
         this.folderService = folderService;
+        this.fileService = fileService;
     }
 
     // Creates a new folder
@@ -60,5 +63,20 @@ public class FolderController : ControllerBase
         }
 
         return Ok(folder);
+    }
+
+    [HttpGet("{folderId}/files")]
+    [Authorize]
+    public async Task<IActionResult> GetFilesInFolder(int folderId)
+    {
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
+
+        var files = await fileService.GetFilesInFolderAsync(folderId, userId);
+
+        return Ok(files);
     }
 }

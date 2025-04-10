@@ -46,16 +46,16 @@ public class FileController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize]
-    public async Task<IActionResult> GetFileByIdAsync(int fileId)
+    public async Task<IActionResult> GetFileByIdAsync(int id)
     {
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID Not found in token" });
+            return Unauthorized(new { message = "User ID not found in token" });
         }
 
-        var file = await fileService.GetFileByIdAsync(fileId, userId);
+        var file = await fileService.GetFileByIdAsync(id, userId);
 
         if (file == null)
         {
@@ -63,5 +63,26 @@ public class FileController : ControllerBase
         }
 
         return Ok(file);
+    }
+
+    [HttpGet("{id}/download")]
+    [Authorize]
+    public async Task<IActionResult> DownloadFileAsync(int id)
+    {
+        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
+
+        var file = await fileService.DownloadFileAsync(id, userId);
+
+        if (file == null)
+        {
+            return NotFound();
+        }
+
+        return File(file.Content, file.ContentType, file.Name);
     }
 }

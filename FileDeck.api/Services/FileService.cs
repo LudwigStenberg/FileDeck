@@ -133,9 +133,15 @@ public class FileService : IFileService
         }).ToList();
     }
 
-    public Task<bool> DeleteFileAsync(int fileId, string userId)
+    public async Task<bool> DeleteFileAsync(int fileId, string userId)
     {
-        throw new System.NotImplementedException();
+        bool fileExists = await fileRepository.FileExistsAsync(fileId, userId);
+        if (!fileExists)
+        {
+            return false;
+        }
+
+        return await fileRepository.DeleteFileAsync(fileId, userId);
     }
 
     public Task<bool> FileExistsAsync(int fileId, string userId)

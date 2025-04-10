@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
@@ -109,9 +110,27 @@ public class FileService : IFileService
         };
     }
 
-    public Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)
+    public async Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)
     {
-        throw new System.NotImplementedException();
+        bool folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
+
+        if (!folderExists)
+        {
+            return Enumerable.Empty<FileResponseDto>();
+        }
+
+        var files = await fileRepository.GetFilesInFolderAsync(folderId, userId);
+
+        return files.Select(file => new FileResponseDto
+        {
+            Id = file.Id,
+            Name = file.Name,
+            ContentType = file.ContentType,
+            Size = file.Size,
+            UploadDate = file.UploadDate,
+            LastModifiedDate = file.LastModifiedDate,
+            FolderId = file.FolderId
+        }).ToList();
     }
 
     public Task<bool> DeleteFileAsync(int fileId, string userId)

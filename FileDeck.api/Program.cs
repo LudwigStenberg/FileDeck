@@ -76,8 +76,9 @@ public class Program
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IFolderService, FolderService>();
         builder.Services.AddScoped<IFileService, FileService>();
-        builder.Services.AddScoped<IFolderRepository, FolderRepository>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+        builder.Services.AddScoped<IFolderRepository, FolderRepository>();
+        builder.Services.AddScoped<IFileRepository, FileRepository>();
 
         // Add services to the container:
         builder.Services.AddControllers();

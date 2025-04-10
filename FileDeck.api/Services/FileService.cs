@@ -91,9 +91,22 @@ public class FileService : IFileService
         };
     }
 
-    public Task<FileDownloadDto> DownloadFileAsync(int fileId, string userId)
+    public async Task<FileDownloadDto?> DownloadFileAsync(int fileId, string userId)
     {
-        throw new System.NotImplementedException();
+        var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);
+
+        if (fileEntity == null)
+        {
+            return null;
+        }
+
+        return new FileDownloadDto
+        {
+            Id = fileEntity.Id,
+            Name = fileEntity.Name,
+            ContentType = fileEntity.ContentType,
+            Content = fileEntity.Content
+        };
     }
 
     public Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)

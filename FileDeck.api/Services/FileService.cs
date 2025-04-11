@@ -74,7 +74,7 @@ public class FileService : IFileService
             Size = savedFile.Size,
             UploadDate = savedFile.UploadDate,
             LastModifiedDate = savedFile.LastModifiedDate,
-            FolderId = savedFile.FolderIdP
+            FolderId = savedFile.FolderId
         };
     }
 

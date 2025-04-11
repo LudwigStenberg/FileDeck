@@ -5,21 +5,28 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
+using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories;
 using FileDeck.api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace FileDeck.api.Services;
 public class FileService : IFileService
 {
     private readonly IFolderRepository folderRepository;
     private readonly IFileRepository fileRepository;
+    private readonly ILogger logger;
 
-    public FileService(IFolderRepository folderRepository, IFileRepository fileRepository)
+    public FileService(
+        IFolderRepository folderRepository,
+        IFileRepository fileRepository,
+        ILogger logger)
     {
         this.folderRepository = folderRepository;
         this.fileRepository = fileRepository;
+        this.logger = logger;
     }
 
     /// <summary>
@@ -31,22 +38,31 @@ public class FileService : IFileService
     /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if a folder associated with the file, doesn't exist.</exception>
     public async Task<FileResponseDto> UploadFileAsync(FileUploadDto fileUpload, string userId)
     {
+        logger.LogInformation("File upload initiated for user {UserId}: {FileName}, {FileSize} bytes",
+            userId, fileUpload.Name, fileUpload.Content.Length);
+
         if (fileUpload.Name.Length > 50)
         {
+            logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",
+                fileUpload.Name.Length, userId);
             throw new ArgumentException("File name cannot be longer than 50 characters");
         }
 
         string invalidChars = "\\/:*?\"<>|";
         if (fileUpload.Name.Any(invalidChars.Contains))
         {
+            logger.LogWarning("File upload rejected: invalid characters in filename for user {UserId}", userId);
             throw new ArgumentException("Folder name contains invalid characters");
         }
 
         if (fileUpload.FolderId.HasValue)
         {
+            logger.LogDebug("Checking if folder {FolderId} exists for user {UserId}", fileUpload.FolderId.Value, userId);
             bool folderExists = await folderRepository.FolderExistsAsync(fileUpload.FolderId.Value, userId);
             if (!folderExists)
             {
+                logger.LogWarning("File upload rejected: specified folder {FolderId} does not exist for user {UserId}",
+                    fileUpload.FolderId.Value, userId);
                 throw new ArgumentException("The specified folder does not exist or you don't have access to it");
             }
         }
@@ -64,7 +80,12 @@ public class FileService : IFileService
             IsDeleted = false
         };
 
+        logger.LogDebug("Saving new file to database: {FileName}, {ContentType}, {FileSize} bytes",
+            fileUpload.Name, fileUpload.ContentType, fileUpload.Content.Length);
         var savedFile = await fileRepository.CreateFileAsync(newFile);
+
+        logger.LogInformation("File successfully uploaded: ID={FileId}, {FileName} by user {UserId}",
+            savedFile.Id, savedFile.Name, userId);
 
         return new FileResponseDto
         {

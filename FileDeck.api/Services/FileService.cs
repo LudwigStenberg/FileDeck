@@ -108,13 +108,17 @@ public class FileService : IFileService
     /// <returns>A FileResponseDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
     public async Task<FileResponseDto?> GetFileByIdAsync(int fileId, string userId)
     {
+        logger.LogInformation("File retrieval initiated for user {UserId}. File: {FileId}", userId, fileId);
         var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);
 
         if (fileEntity == null)
         {
+            logger.LogWarning("File with ID {FileId} for user {UserId} could not be found.", fileId, userId);
             return null;
         }
 
+        logger.LogInformation("File {FileId} successfully retrieved for user {UserId} - {FileName}",
+            fileId, userId, fileEntity.Name);
         return new FileResponseDto
         {
             Id = fileEntity.Id,

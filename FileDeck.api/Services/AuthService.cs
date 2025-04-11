@@ -22,6 +22,12 @@ public class AuthService : IAuthService
         this.tokenService = tokenService;
     }
 
+    /// <summary>
+    /// Registers new user in the system based on the provided registration information.
+    /// </summary>
+    /// <param name="registerDto">The registration information including email and password.</param>
+    /// <returns>A RegisterResponseDto object containing the result of the registration attempt
+    // including success status and any error messages if registration failed.</returns>
     public async Task<RegisterResponseDto> RegisterUserAsync(RegisterRequestDto registerDto)
     {
         // Check if passwords match:
@@ -74,6 +80,11 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Signs in an existing user based on the provided login information.
+    /// </summary>
+    /// <param name="loginDto">The login information including email and password.</param>
+    /// <returns>A LoginResponseDto object containing the result of the login attempt including success status, potential errors and a newly generated token if the attempt is successful.</returns>
     public async Task<LoginResponseDto> LoginUserAsync(LoginRequestDto loginDto)
     {
         var user = await authRepository.FindUserByEmailAsync(loginDto.Email);

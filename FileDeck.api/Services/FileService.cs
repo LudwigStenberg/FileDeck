@@ -135,7 +135,7 @@ public class FileService : IFileService
     /// </summary>
     /// <param name="folderId">The folder ID of the folder containing the files.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
-    /// <returns></returns>
+    /// <returns>A list of FileResponseDto objects if the request is successful; otherwise it returns an empty enumerable. </returns>
     public async Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)
     {
         bool folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
@@ -159,6 +159,12 @@ public class FileService : IFileService
         }).ToList();
     }
 
+    /// <summary>
+    /// Deletes a specific file by means of a soft-delete.
+    /// </summary>
+    /// <param name="fileId">The ID of the file to be deleted.</param>
+    /// <param name="userId">The ID of the user requesting to delete the file and who should have access to it.</param>
+    /// <returns>A boolean value to indicate whether the operation was a success or a failure.</returns>
     public async Task<bool> DeleteFileAsync(int fileId, string userId)
     {
         bool fileExists = await fileRepository.FileExistsAsync(fileId, userId);

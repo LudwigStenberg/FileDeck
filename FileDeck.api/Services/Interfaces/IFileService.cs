@@ -17,7 +17,5 @@ public interface IFileService
     Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId);
 
     Task<bool> DeleteFileAsync(int fileId, string userId); // Soft delete
-
-    Task<bool> FileExistsAsync(int fileId, string userId);
 }
 

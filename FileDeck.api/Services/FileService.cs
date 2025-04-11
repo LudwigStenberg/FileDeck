@@ -74,7 +74,7 @@ public class FileService : IFileService
             Size = savedFile.Size,
             UploadDate = savedFile.UploadDate,
             LastModifiedDate = savedFile.LastModifiedDate,
-            FolderId = savedFile.FolderId
+            FolderId = savedFile.FolderIdP
         };
     }
 
@@ -175,10 +175,4 @@ public class FileService : IFileService
 
         return await fileRepository.DeleteFileAsync(fileId, userId);
     }
-
-    public Task<bool> FileExistsAsync(int fileId, string userId)
-    {
-        throw new System.NotImplementedException();
-    }
-
 }

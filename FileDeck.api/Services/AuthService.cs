@@ -71,7 +71,8 @@ public class AuthService : IAuthService
 
         if (result.Succeeded)
         {
-            logger.LogDebug("Attempting to create new user with email {Email}", registerDto.Email);
+            logger.LogDebug("User registered successfully: {UserId}, {Email}",
+                             newUser.Id, newUser.Email);
             return new RegisterResponseDto
             {
                 Succeeded = true,
@@ -99,11 +100,12 @@ public class AuthService : IAuthService
     /// <returns>A LoginResponseDto object containing the result of the login attempt including success status, potential errors and a newly generated token if the attempt is successful.</returns>
     public async Task<LoginResponseDto> LoginUserAsync(LoginRequestDto loginDto)
     {
+        logger.LogInformation("User login attempt for email: {Email}", loginDto.Email);
         var user = await authRepository.FindUserByEmailAsync(loginDto.Email);
 
-        // Check Email:
         if (user == null)
         {
+            logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", loginDto.Email);
             return new LoginResponseDto
             {
                 Succeeded = false,
@@ -111,12 +113,15 @@ public class AuthService : IAuthService
             };
         }
 
-        // Check Password:
+        logger.LogDebug("Attempting to validate password for email: {Email}", loginDto.Email);
         var result = await authRepository.CheckPasswordSignInAsync(user, loginDto.Password);
 
         if (result.Succeeded)
         {
+            logger.LogInformation("User password successfully checked for email: {Email}. Generating token...", loginDto.Email);
             var token = tokenService.GenerateToken(user);
+
+            logger.LogInformation("User successfully logged in: {UserId}, {Email}", user.Id, user.Email);
 
             return new LoginResponseDto
             {
@@ -129,6 +134,7 @@ public class AuthService : IAuthService
             };
         }
 
+        logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", loginDto.Email);
         return new LoginResponseDto
         {
             Succeeded = false,

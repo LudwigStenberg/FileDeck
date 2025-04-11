@@ -216,13 +216,11 @@ public class FileService : IFileService
 
         if (result)
         {
-            logger.LogInformation("File {FileId} sucessfully removed for user {UserId}", fileId, userId);
-
+            logger.LogInformation("File {FileId} successfully removed for user {UserId}", fileId, userId);
         }
         else
         {
             logger.LogWarning("File {FileId} deletion failed for user {UserId} during database operation", fileId, userId);
-
         }
 
         return result;

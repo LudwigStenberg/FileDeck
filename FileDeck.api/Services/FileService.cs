@@ -106,6 +106,12 @@ public class FileService : IFileService
         };
     }
 
+    /// <summary>
+    /// Retrieves and downloads a file from the database.
+    /// </summary>
+    /// <param name="fileId">The ID of the file to be downloaded.</param>
+    /// <param name="userId">The ID of the user associated with and requesting the file.</param>
+    /// <returns>A FileDownloadDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
     public async Task<FileDownloadDto?> DownloadFileAsync(int fileId, string userId)
     {
         var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);

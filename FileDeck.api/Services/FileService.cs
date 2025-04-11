@@ -26,7 +26,7 @@ public class FileService : IFileService
     /// Uploads a file to the database for the provided user.
     /// </summary>
     /// <param name="fileUpload">The DTO that contains the information on the new file.</param>
-    /// <param name="userId">The user ID used to authorize and make sure that the file is associated with the right user.</param>
+    /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponseDto which contains information on the newly uploaded file.</returns>
     /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if a folder associated with the file, doesn't exist.</exception>
     public async Task<FileResponseDto> UploadFileAsync(FileUploadDto fileUpload, string userId)
@@ -83,7 +83,7 @@ public class FileService : IFileService
     /// Retrieves a file based on the file ID provided.
     /// </summary>
     /// <param name="fileId">The ID of the file to be retrieved.</param>
-    /// <param name="userId">The ID of the user associated with the file.</param>
+    /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponseDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
     public async Task<FileResponseDto?> GetFileByIdAsync(int fileId, string userId)
     {
@@ -110,7 +110,7 @@ public class FileService : IFileService
     /// Retrieves and downloads a file from the database.
     /// </summary>
     /// <param name="fileId">The ID of the file to be downloaded.</param>
-    /// <param name="userId">The ID of the user associated with and requesting the file.</param>
+    /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileDownloadDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
     public async Task<FileDownloadDto?> DownloadFileAsync(int fileId, string userId)
     {
@@ -130,6 +130,12 @@ public class FileService : IFileService
         };
     }
 
+    /// <summary>
+    /// Retrieves information on the files within a specific folder.
+    /// </summary>
+    /// <param name="folderId">The folder ID of the folder containing the files.</param>
+    /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
+    /// <returns></returns>
     public async Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)
     {
         bool folderExists = await folderRepository.FolderExistsAsync(folderId, userId);

@@ -15,6 +15,13 @@ public class FolderService : IFolderService
         this.folderRepository = folderRepository;
     }
 
+    /// <summary>
+    /// Creates a new folder based on the information provided in the input DTO.
+    /// </summary>
+    /// <param name="folderDto">The DTO used to create the new folder. Contains the name and the ID of the parent folder, if there is one.</param>
+    /// <param name="userId">The ID of the user requesting the folder to be created and who will have access to it.</param>
+    /// <returns>A FolderResponseDto with additional data that was created during construction.</returns>
+    /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if the parent folder doesn't exist despite folderDto.ParentFolderId being populated.</exception>
     public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId)
     {
         Console.WriteLine($"Service - User ID from token: '{userId}'");
@@ -72,6 +79,12 @@ public class FolderService : IFolderService
         return FolderResponseDto;
     }
 
+    /// <summary>
+    /// Retrieves a specific folder and its information.
+    /// </summary>
+    /// <param name="folderId">The ID of the folder to be retrieved.</param>
+    /// <param name="userId">The ID of the user requesting the folder and who will have access to it.</param>
+    /// <returns>A FolderResponseDto which contains the information on the folder that has been retrieved. If no folder is found, returns null.</returns>
     public async Task<FolderResponseDto?> GetFolderByIdAsync(int folderId, string userId)
     {
         var folder = await folderRepository.GetFolderByIdAsync(folderId, userId);

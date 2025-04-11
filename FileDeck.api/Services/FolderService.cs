@@ -73,9 +73,9 @@ public class FolderService : IFolderService
         };
 
         logger.LogDebug("Attempting to create the new folder {FolderName} for user {UserId}", folderDto.Name, userId);
+
         var savedFolder = await folderRepository.CreateFolderAsync(newFolder);
 
-        // Use the saved folder to map our response which is to be sent to the controller
         var folderResponseDto = new FolderResponseDto
         {
             Id = savedFolder.Id,
@@ -85,6 +85,7 @@ public class FolderService : IFolderService
         };
 
         logger.LogInformation("Folder {FolderName} (ID: {FolderId})for user {UserId} successfully created", folderDto.Name, savedFolder.Id, userId);
+
         return folderResponseDto;
     }
 
@@ -96,13 +97,16 @@ public class FolderService : IFolderService
     /// <returns>A FolderResponseDto which contains the information on the folder that has been retrieved. If no folder is found, returns null.</returns>
     public async Task<FolderResponseDto?> GetFolderByIdAsync(int folderId, string userId)
     {
+        logger.LogInformation("Retrieval of folder {FolderId} for user {UserId} initiated", folderId, userId);
+
         var folder = await folderRepository.GetFolderByIdAsync(folderId, userId);
         if (folder == null)
         {
+            logger.LogWarning("Folder retrieval failed. The folder {FolderId} could not be found for user {UserId}", folderId, userId);
             return null;
         }
 
-        var FolderResponseDto = new FolderResponseDto
+        var folderResponseDto = new FolderResponseDto
         {
             Id = folder.Id,
             Name = folder.Name,
@@ -110,6 +114,9 @@ public class FolderService : IFolderService
             CreatedDate = folder.CreatedDate
         };
 
-        return FolderResponseDto;
+        logger.LogInformation("Folder retrieval successful for user {UserId}. Folder {FolderId}, {FolderName} was found.",
+            userId, folderId, folder.Name);
+
+        return folderResponseDto;
     }
 }

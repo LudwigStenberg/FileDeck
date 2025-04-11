@@ -19,6 +19,12 @@ public class TokenService : ITokenService
     {
         this.jwtSettings = jwtSettings.Value;
     }
+
+    /// <summary>
+    /// Generates a new JWT token for authenticated user access.
+    /// </summary>
+    /// <param name="user">The user entity for which to generate the token.</param>
+    /// <returns>A JWT token string containing the user identity claims, expiration date, and signature.</returns>
     public string GenerateToken(UserEntity user)
     {
         // Create a security key using the secret from JwtSettings

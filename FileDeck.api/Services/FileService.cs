@@ -78,6 +78,13 @@ public class FileService : IFileService
         };
     }
 
+
+    /// <summary>
+    /// Retrieves a file based on the file ID provided.
+    /// </summary>
+    /// <param name="fileId">The ID of the file to be retrieved.</param>
+    /// <param name="userId">The ID of the user associated with the file.</param>
+    /// <returns>A FileResponseDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
     public async Task<FileResponseDto?> GetFileByIdAsync(int fileId, string userId)
     {
         var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);

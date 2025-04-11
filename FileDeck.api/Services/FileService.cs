@@ -22,6 +22,13 @@ public class FileService : IFileService
         this.fileRepository = fileRepository;
     }
 
+    /// <summary>
+    /// Uploads a file to the database for the provided user.
+    /// </summary>
+    /// <param name="fileUpload">The DTO that contains the information on the new file.</param>
+    /// <param name="userId">The user ID used to authorize and make sure that the file is associated with the right user.</param>
+    /// <returns>A FileResponseDto which contains information on the newly uploaded file.</returns>
+    /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if a folder associated with the file, doesn't exist.</exception>
     public async Task<FileResponseDto> UploadFileAsync(FileUploadDto fileUpload, string userId)
     {
         if (fileUpload.Name.Length > 50)

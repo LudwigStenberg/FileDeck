@@ -1,22 +1,20 @@
 ## Task List
-1. - [X] Bruno or Scalar? Both.
-2. - [X] Switch from Swagger to OpenAPI
-2. - [ ] Try/Catch - repository or service layer?
-3. - [ ] Global Exception Handler
-4. - [ ] Logging
-5. - [ ] File size limitations - to prevent overload?
-6. - [ ] Dedicated validation class for File/Folder validation?
-7. - [ ] Add ModelState validation to relevant endpoints.         
-         
-         
+
+1. - [x] Bruno or Scalar? Both.
+2. - [x] Switch from Swagger to OpenAPI
+3. - [ ] Try/Catch - repository or service layer?
+4. - [x] Global Exception Handler
+5. - [ ] Logging
+6. - [ ] File size limitations - to prevent overload?
+7. - [ ] Dedicated validation class for File/Folder validation?
+8. - [ ] Add ModelState validation to relevant endpoints.
+
 FileService - improvements
+
 - Validate file type
 
-
-
-
-
 ## Implementing Identity Core
+
 Phase 1: Authentication Setup
 
 Create JwtSettings configuration in appsettings.json
@@ -37,5 +35,3 @@ Phase 3: User Management (if time permits)
 Implement password reset
 Implement user profile management
 Add role-based authorization (if needed)
-
-

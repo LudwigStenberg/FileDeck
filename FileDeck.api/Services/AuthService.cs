@@ -9,6 +9,7 @@ using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace FileDeck.api.Services;
 
@@ -16,10 +17,15 @@ public class AuthService : IAuthService
 {
     private readonly IAuthRepository authRepository;
     private readonly ITokenService tokenService;
-    public AuthService(IAuthRepository authRepository, ITokenService tokenService)
+    private readonly ILogger logger;
+    public AuthService(
+        IAuthRepository authRepository,
+        ITokenService tokenService,
+        ILogger logger)
     {
         this.authRepository = authRepository;
         this.tokenService = tokenService;
+        this.logger = logger;
     }
 
     /// <summary>
@@ -30,9 +36,12 @@ public class AuthService : IAuthService
     // including success status and any error messages if registration failed.</returns>
     public async Task<RegisterResponseDto> RegisterUserAsync(RegisterRequestDto registerDto)
     {
-        // Check if passwords match:
+        logger.LogInformation("User registration attempt for email: {Email}", registerDto.Email);
+
+
         if (registerDto.Password != registerDto.ConfirmPassword)
         {
+            logger.LogWarning("Registration failed: passwords do not match for {Email}", registerDto.Email);
             return new RegisterResponseDto
             {
                 Succeeded = false,
@@ -40,10 +49,10 @@ public class AuthService : IAuthService
             };
         }
 
-        // Check if the email is already in use:
         var existingUser = await authRepository.FindUserByEmailAsync(registerDto.Email);
         if (existingUser != null)
         {
+            logger.LogWarning("Registration failed: email {Email} is already in use", registerDto.Email);
             return new RegisterResponseDto
             {
                 Succeeded = false,
@@ -51,17 +60,18 @@ public class AuthService : IAuthService
             };
         }
 
-        // Create the user:
         var newUser = new UserEntity
         {
             UserName = registerDto.Email,
             Email = registerDto.Email
         };
 
+        logger.LogDebug("Attempting to create new user with email: {Email}", registerDto.Email);
         IdentityResult result = await authRepository.CreateUserAsync(newUser, registerDto.Password);
 
         if (result.Succeeded)
         {
+            logger.LogDebug("Attempting to create new user with email {Email}", registerDto.Email);
             return new RegisterResponseDto
             {
                 Succeeded = true,
@@ -72,6 +82,8 @@ public class AuthService : IAuthService
         }
         else
         {
+            logger.LogWarning("User registration failed for {Email}. Errors: {Errors}",
+                            registerDto.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
             return new RegisterResponseDto
             {
                 Succeeded = false,

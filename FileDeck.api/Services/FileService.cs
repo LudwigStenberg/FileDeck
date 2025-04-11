@@ -113,7 +113,7 @@ public class FileService : IFileService
 
         if (fileEntity == null)
         {
-            logger.LogWarning("File with ID {FileId} for user {UserId} could not be found.", fileId, userId);
+            logger.LogWarning("File {FileId} for user {UserId} could not be found.", fileId, userId);
             return null;
         }
 
@@ -139,13 +139,16 @@ public class FileService : IFileService
     /// <returns>A FileDownloadDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
     public async Task<FileDownloadDto?> DownloadFileAsync(int fileId, string userId)
     {
+        logger.LogInformation("File download initiated for user: {UserId}. File: {FileId}", userId, fileId);
         var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);
 
         if (fileEntity == null)
         {
+            logger.LogWarning("File download for user {UserId} failed. File: {FileId} could not be found.", userId, fileId);
             return null;
         }
 
+        logger.LogInformation("File {FileId} successfully downloaded for user {UserId} - {FileName}", fileId, userId, fileEntity.Name);
         return new FileDownloadDto
         {
             Id = fileEntity.Id,
@@ -163,16 +166,24 @@ public class FileService : IFileService
     /// <returns>A list of FileResponseDto objects if the request is successful; otherwise it returns an empty enumerable. </returns>
     public async Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)
     {
+        logger.LogInformation("Retrieval of files in folder {FolderId} initiated by user {UserId}", folderId, userId);
         bool folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
 
         if (!folderExists)
         {
+            logger.LogWarning("File retrieval failed: the folder {FolderId} does not exist for user {UserId}", folderId, userId);
             return Enumerable.Empty<FileResponseDto>();
         }
 
+        logger.LogDebug("Folder {FolderId} was found. Retrieving the files within for user {UserId}", folderId, userId);
         var files = await fileRepository.GetFilesInFolderAsync(folderId, userId);
 
-        return files.Select(file => new FileResponseDto
+        var filesList = files.ToList();
+
+        logger.LogInformation("Successfully retrieved {FileCount} files from folder {FolderId} for user {UserId}",
+            filesList.Count, folderId, userId);
+
+        return filesList.Select(file => new FileResponseDto
         {
             Id = file.Id,
             Name = file.Name,
@@ -181,7 +192,7 @@ public class FileService : IFileService
             UploadDate = file.UploadDate,
             LastModifiedDate = file.LastModifiedDate,
             FolderId = file.FolderId
-        }).ToList();
+        });
     }
 
     /// <summary>
@@ -192,12 +203,28 @@ public class FileService : IFileService
     /// <returns>A boolean value to indicate whether the operation was a success or a failure.</returns>
     public async Task<bool> DeleteFileAsync(int fileId, string userId)
     {
+        logger.LogInformation("Deletion of file {FileId} initiated for user {UserId}", fileId, userId);
+
         bool fileExists = await fileRepository.FileExistsAsync(fileId, userId);
         if (!fileExists)
         {
+            logger.LogWarning("File deletion failed. File {FileId} could not be found for user {UserId}", fileId, userId);
             return false;
         }
 
-        return await fileRepository.DeleteFileAsync(fileId, userId);
+        bool result = await fileRepository.DeleteFileAsync(fileId, userId);
+
+        if (result)
+        {
+            logger.LogInformation("File {FileId} sucessfully removed for user {UserId}", fileId, userId);
+
+        }
+        else
+        {
+            logger.LogWarning("File {FileId} deletion failed for user {UserId} during database operation", fileId, userId);
+
+        }
+
+        return result;
     }
 }

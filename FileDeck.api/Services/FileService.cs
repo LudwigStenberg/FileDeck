@@ -17,12 +17,12 @@ public class FileService : IFileService
 {
     private readonly IFolderRepository folderRepository;
     private readonly IFileRepository fileRepository;
-    private readonly ILogger logger;
+    private readonly ILogger<FileService> logger;
 
     public FileService(
         IFolderRepository folderRepository,
         IFileRepository fileRepository,
-        ILogger logger)
+        ILogger<FileService> logger)
     {
         this.folderRepository = folderRepository;
         this.fileRepository = fileRepository;

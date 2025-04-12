@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using FileDeck.api.Models;
 using FileDeck.api.Settings;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,10 +15,12 @@ public class TokenService : ITokenService
 {
 
     private readonly JwtSettings jwtSettings;
+    private readonly ILogger<TokenService> logger;
 
-    public TokenService(IOptions<JwtSettings> jwtSettings)
+    public TokenService(IOptions<JwtSettings> jwtSettings, ILogger<TokenService> logger)
     {
         this.jwtSettings = jwtSettings.Value;
+        this.logger = logger;
     }
 
     /// <summary>
@@ -27,7 +30,8 @@ public class TokenService : ITokenService
     /// <returns>A JWT token string containing the user identity claims, expiration date, and signature.</returns>
     public string GenerateToken(UserEntity user)
     {
-        // Create a security key using the secret from JwtSettings
+        logger.LogInformation("Initiated token generation for user {UserId}", user.Id);
+
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(jwtSettings.SecretKey));
 
@@ -57,6 +61,7 @@ public class TokenService : ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
+        logger.LogInformation("Token successfully generated for user {UserId}", user.Id);
         return tokenHandler.WriteToken(token);
     }
 }

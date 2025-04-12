@@ -11,8 +11,8 @@ namespace FileDeck.api.Services;
 public class FolderService : IFolderService
 {
     private readonly IFolderRepository folderRepository;
-    private readonly ILogger logger;
-    public FolderService(IFolderRepository folderRepository, ILogger logger)
+    private readonly ILogger<FolderService> logger;
+    public FolderService(IFolderRepository folderRepository, ILogger<FolderService> logger)
     {
         this.folderRepository = folderRepository;
         this.logger = logger;

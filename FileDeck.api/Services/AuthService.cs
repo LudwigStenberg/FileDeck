@@ -17,11 +17,11 @@ public class AuthService : IAuthService
 {
     private readonly IAuthRepository authRepository;
     private readonly ITokenService tokenService;
-    private readonly ILogger logger;
+    private readonly ILogger<AuthService> logger;
     public AuthService(
         IAuthRepository authRepository,
         ITokenService tokenService,
-        ILogger logger)
+        ILogger<AuthService> logger)
     {
         this.authRepository = authRepository;
         this.tokenService = tokenService;

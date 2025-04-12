@@ -62,6 +62,7 @@ public class TokenService : ITokenService
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
         logger.LogInformation("Token successfully generated for user {UserId}", user.Id);
+
         return tokenHandler.WriteToken(token);
     }
 }

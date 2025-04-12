@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +16,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
 using Scalar.AspNetCore;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace FileDeck.api;
 
@@ -90,6 +91,20 @@ public class Program
         var app = builder.Build();
 
         app.MapOpenApi();
+
+        app.UseExceptionHandler(options =>
+        {
+            options.Run(async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                context.Response.ContentType = "application/json";
+                var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = exception?.Message ?? "An unexpected error occured"
+                });
+            });
+        });
 
         // Configure the HTTP request pipeline (Add Middleware)
         if (app.Environment.IsDevelopment())

@@ -53,6 +53,7 @@ public class FolderService : IFolderService
         if (folderDto.ParentFolderId != null)
         {
             logger.LogDebug("Checking if parent folder {ParentFolderId} exists for user {UserId}", folderDto.ParentFolderId, userId);
+
             bool parentFolderExists = await folderRepository.FolderExistsAsync(folderDto.ParentFolderId.Value, userId);
 
             if (!parentFolderExists)

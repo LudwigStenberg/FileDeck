@@ -140,6 +140,7 @@ public class FileService : IFileService
     public async Task<FileDownloadDto?> DownloadFileAsync(int fileId, string userId)
     {
         logger.LogInformation("File download initiated for user: {UserId}. File: {FileId}", userId, fileId);
+
         var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);
 
         if (fileEntity == null)
@@ -149,6 +150,7 @@ public class FileService : IFileService
         }
 
         logger.LogInformation("File {FileId} successfully downloaded for user {UserId} - {FileName}", fileId, userId, fileEntity.Name);
+
         return new FileDownloadDto
         {
             Id = fileEntity.Id,
@@ -167,6 +169,7 @@ public class FileService : IFileService
     public async Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)
     {
         logger.LogInformation("Retrieval of files in folder {FolderId} initiated by user {UserId}", folderId, userId);
+
         bool folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
 
         if (!folderExists)
@@ -176,6 +179,7 @@ public class FileService : IFileService
         }
 
         logger.LogDebug("Folder {FolderId} was found. Retrieving the files within for user {UserId}", folderId, userId);
+
         var files = await fileRepository.GetFilesInFolderAsync(folderId, userId);
 
         var filesList = files.ToList();

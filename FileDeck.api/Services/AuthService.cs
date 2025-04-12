@@ -6,8 +6,6 @@ using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories;
 using FileDeck.api.Services.Interfaces;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -42,6 +40,7 @@ public class AuthService : IAuthService
         if (registerDto.Password != registerDto.ConfirmPassword)
         {
             logger.LogWarning("Registration failed: passwords do not match for {Email}", registerDto.Email);
+
             return new RegisterResponseDto
             {
                 Succeeded = false,
@@ -53,6 +52,7 @@ public class AuthService : IAuthService
         if (existingUser != null)
         {
             logger.LogWarning("Registration failed: email {Email} is already in use", registerDto.Email);
+
             return new RegisterResponseDto
             {
                 Succeeded = false,
@@ -73,6 +73,7 @@ public class AuthService : IAuthService
         {
             logger.LogDebug("User registered successfully: {UserId}, {Email}",
                              newUser.Id, newUser.Email);
+
             return new RegisterResponseDto
             {
                 Succeeded = true,
@@ -85,6 +86,7 @@ public class AuthService : IAuthService
         {
             logger.LogWarning("User registration failed for {Email}. Errors: {Errors}",
                             registerDto.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
+
             return new RegisterResponseDto
             {
                 Succeeded = false,
@@ -101,11 +103,13 @@ public class AuthService : IAuthService
     public async Task<LoginResponseDto> LoginUserAsync(LoginRequestDto loginDto)
     {
         logger.LogInformation("User login attempt for email: {Email}", loginDto.Email);
+
         var user = await authRepository.FindUserByEmailAsync(loginDto.Email);
 
         if (user == null)
         {
             logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", loginDto.Email);
+
             return new LoginResponseDto
             {
                 Succeeded = false,
@@ -114,11 +118,13 @@ public class AuthService : IAuthService
         }
 
         logger.LogDebug("Attempting to validate password for email: {Email}", loginDto.Email);
+
         var result = await authRepository.CheckPasswordSignInAsync(user, loginDto.Password);
 
         if (result.Succeeded)
         {
             logger.LogInformation("User password successfully checked for email: {Email}. Generating token...", loginDto.Email);
+
             var token = tokenService.GenerateToken(user);
 
             logger.LogInformation("User successfully logged in: {UserId}, {Email}", user.Id, user.Email);
@@ -135,6 +141,7 @@ public class AuthService : IAuthService
         }
 
         logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", loginDto.Email);
+
         return new LoginResponseDto
         {
             Succeeded = false,

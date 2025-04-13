@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
@@ -35,5 +36,28 @@ public class FolderRepository : IFolderRepository
     {
         return await context.Folders
             .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
+    }
+
+    public async Task<bool> RenameFolderAsync(int folderId, string newName, string userId)
+    {
+        var folder = await context.Folders
+            .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
+
+        if (folder == null)
+        {
+            return false;
+        }
+
+        folder.Name = newName;
+        folder.LastModifiedDate = DateTime.UtcNow;
+
+        int affectedRows = await context.SaveChangesAsync();
+
+        return affectedRows > 0;
+    }
+
+    public async Task<bool> DeleteFolderAsync(int folderId, string userId)
+    {
+        return true;
     }
 }

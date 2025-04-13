@@ -120,4 +120,15 @@ public class FolderService : IFolderService
 
         return folderResponseDto;
     }
+
+    public async Task<bool> RenameFolderAsync(int folderId, string userId)
+    {
+
+        return true;
+    }
+
+    public async Task<bool> DeleteFolderAsync(int folderId, string userId)
+    {
+        return true;
+    }
 }

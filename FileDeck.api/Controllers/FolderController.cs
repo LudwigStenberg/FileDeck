@@ -46,16 +46,16 @@ public class FolderController : ControllerBase
     }
 
     // Returns an existing folder
-    [HttpGet("{id}")]
+    [HttpGet("{folderId}")]
     [Authorize]
-    public async Task<IActionResult> GetFolderById(int id)
+    public async Task<IActionResult> GetFolderById(int folderId)
     {
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId))
         {
             return Unauthorized(new { message = "User ID not found in token" });
         }
-        var folder = await folderService.GetFolderByIdAsync(id, userId);
+        var folder = await folderService.GetFolderByIdAsync(folderId, userId);
 
         if (folder == null)
         {
@@ -78,5 +78,12 @@ public class FolderController : ControllerBase
         var files = await fileService.GetFilesInFolderAsync(folderId, userId);
 
         return Ok(files);
+    }
+
+    [HttpPut("{folderId}/rename")]
+    [Authorize]
+    public async Task<IActionResult> RenameFolderAsync(int folderId, string newName)
+    {
+
     }
 }

@@ -121,9 +121,47 @@ public class FolderService : IFolderService
         return folderResponseDto;
     }
 
-    public async Task<bool> RenameFolderAsync(int folderId, string userId)
+    public async Task<bool> RenameFolderAsync(int folderId, string newName, string userId)
     {
+        logger.LogInformation("Folder renaming initiated for user {UserId}, {FolderId}", userId, folderId);
 
+        bool folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
+
+        if (!folderExists)
+        {
+            logger.LogWarning("Folder renaming failed. The folder {FolderId} could not be found for user {UserId}", userId, folderId);
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            logger.LogWarning("Folder renaming failed for user {UserId}. Empty folder name provided", userId);
+            throw new ArgumentException("Folder name cannot be empty.");
+        }
+
+        if (newName.Length > 50)
+        {
+            logger.LogWarning("Folder renaming failed for user {UserId}. Name too long ({NameLength} chars)",
+                userId, newName.Length);
+            throw new ArgumentException("Folder name cannot be longer than 50 characters.");
+        }
+
+        string invalidChars = "\\/:*?\"<>|";
+        if (newName.Any(invalidChars.Contains))
+        {
+            logger.LogWarning("Folder renaming failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, newName);
+            throw new ArgumentException("Folder name contains invalid characters.");
+        }
+
+        var result = await folderRepository.RenameFolderAsync(folderId, newName, userId);
+
+        if (!result)
+        {
+            logger.LogWarning("Folder renaming failed for user {UserId}. The folder {FolderId} could not be renamed.", userId, folderId);
+            return false;
+        }
+
+        logger.LogInformation("Folder {FolderId} renaming successful for user {UserId}. Renamed to {FolderName}", folderId, userId, newName);
         return true;
     }
 

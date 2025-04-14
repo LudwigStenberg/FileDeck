@@ -123,7 +123,7 @@ public class FolderService : IFolderService
 
     public async Task<bool> RenameFolderAsync(int folderId, RenameFolderRequest request, string userId)
     {
-        logger.LogInformation("Folder renaming initiated for user {UserId}, {FolderId}", userId, folderId);
+        logger.LogInformation("Folder renaming initiated for user {UserId}. ID of folder to be renamed: {FolderId}", userId, folderId);
 
         bool folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
 
@@ -153,9 +153,9 @@ public class FolderService : IFolderService
             throw new ArgumentException("Folder name contains invalid characters.");
         }
 
-        var result = await folderRepository.RenameFolderAsync(folderId, request.NewName, userId);
+        var success = await folderRepository.RenameFolderAsync(folderId, request.NewName, userId);
 
-        if (!result)
+        if (!success)
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. The folder {FolderId} could not be renamed.", userId, folderId);
             return false;
@@ -167,6 +167,24 @@ public class FolderService : IFolderService
 
     public async Task<bool> DeleteFolderAsync(int folderId, string userId)
     {
+        logger.LogInformation("Folder deletion initiated for user {UserId}. ID of folder to be deleted: {FolderId}", userId, folderId);
+        var folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
+
+        if (!folderExists)
+        {
+            logger.LogWarning("Folder deletion failed for user {UserId}. Folder with ID: {FolderId} could not be found", userId, folderId);
+            return false;
+        }
+
+        bool success = await folderRepository.DeleteFolderAsync(folderId, userId);
+
+        if (!success)
+        {
+            logger.LogWarning("Folder deletion failed for user {UserId}. Folder with ID {FolderId} could not be deleted.", userId, folderId);
+            return false;
+        }
+
+        logger.LogInformation("Folder deletion successful for user {UserId} successful. Folder with ID {folderId} removed", userId, folderId);
         return true;
     }
 }

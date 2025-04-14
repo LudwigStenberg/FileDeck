@@ -58,6 +58,20 @@ public class FolderRepository : IFolderRepository
 
     public async Task<bool> DeleteFolderAsync(int folderId, string userId)
     {
-        return true;
+        var folder = await context.Folders
+            .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
+
+        if (folder == null)
+        {
+            return false;
+        }
+
+        folder.IsDeleted = true;
+        folder.LastModifiedDate = DateTime.UtcNow;
+
+        int affectedRows = await context.SaveChangesAsync();
+
+        return affectedRows > 0;
+
     }
 }

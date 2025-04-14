@@ -121,7 +121,7 @@ public class FolderService : IFolderService
         return folderResponseDto;
     }
 
-    public async Task<bool> RenameFolderAsync(int folderId, string newName, string userId)
+    public async Task<bool> RenameFolderAsync(int folderId, RenameFolderRequest request, string userId)
     {
         logger.LogInformation("Folder renaming initiated for user {UserId}, {FolderId}", userId, folderId);
 
@@ -133,27 +133,27 @@ public class FolderService : IFolderService
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(newName))
+        if (string.IsNullOrWhiteSpace(request.NewName))
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Empty folder name provided", userId);
             throw new ArgumentException("Folder name cannot be empty.");
         }
 
-        if (newName.Length > 50)
+        if (request.NewName.Length > 50)
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Name too long ({NameLength} chars)",
-                userId, newName.Length);
+                userId, request.NewName.Length);
             throw new ArgumentException("Folder name cannot be longer than 50 characters.");
         }
 
         string invalidChars = "\\/:*?\"<>|";
-        if (newName.Any(invalidChars.Contains))
+        if (request.NewName.Any(invalidChars.Contains))
         {
-            logger.LogWarning("Folder renaming failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, newName);
+            logger.LogWarning("Folder renaming failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.NewName);
             throw new ArgumentException("Folder name contains invalid characters.");
         }
 
-        var result = await folderRepository.RenameFolderAsync(folderId, newName, userId);
+        var result = await folderRepository.RenameFolderAsync(folderId, request.NewName, userId);
 
         if (!result)
         {
@@ -161,7 +161,7 @@ public class FolderService : IFolderService
             return false;
         }
 
-        logger.LogInformation("Folder {FolderId} renaming successful for user {UserId}. Renamed to {FolderName}", folderId, userId, newName);
+        logger.LogInformation("Folder {FolderId} renaming successful for user {UserId}. Renamed to {FolderName}", folderId, userId, request.NewName);
         return true;
     }
 

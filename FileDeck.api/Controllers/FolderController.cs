@@ -27,7 +27,7 @@ public class FolderController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateFolderAsync([FromBody] CreateFolderDto folderDto)
     {
-        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
             return Unauthorized(new { message = "User ID not foud in token" });
@@ -50,7 +50,7 @@ public class FolderController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetFolderById(int folderId)
     {
-        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
             return Unauthorized(new { message = "User ID not found in token" });
@@ -69,7 +69,7 @@ public class FolderController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetFilesInFolder(int folderId)
     {
-        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
             return Unauthorized(new { message = "User ID not found in token" });
@@ -82,8 +82,29 @@ public class FolderController : ControllerBase
 
     [HttpPut("{folderId}/rename")]
     [Authorize]
-    public async Task<IActionResult> RenameFolderAsync(int folderId, string newName)
+    public async Task<IActionResult> RenameFolderAsync(int folderId, [FromBody] RenameFolderRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        bool success = await folderService.RenameFolderAsync(folderId, request, userId);
+
+        if (success)
+        {
+            return Ok(new { message = "Folder renamed successfully" });
+        }
+        else
+        {
+            return NotFound(new { message = "Folder not found or failed" });
+        }
     }
 }

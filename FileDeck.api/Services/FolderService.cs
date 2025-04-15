@@ -173,6 +173,12 @@ public class FolderService : IFolderService
         return true;
     }
 
+    /// <summary>
+    /// Deletes a specific folder in addition to its content (subfolders and files) using soft deletion.
+    /// </summary>
+    /// <param name="folderId">The ID of the folder to be removed.</param>
+    /// <param name="userId">The ID of the user requesting the deletion and who has access to it.</param>
+    /// <returns>A boolean to indicate a successful or unsuccessful operation.</returns>
     public async Task<bool> DeleteFolderAsync(int folderId, string userId)
     {
         logger.LogInformation("Folder deletion initiated for user {UserId}. ID of folder to be deleted: {FolderId}", userId, folderId);
@@ -192,7 +198,7 @@ public class FolderService : IFolderService
             return false;
         }
 
-        logger.LogInformation("Folder deletion successful for user {UserId} successful. Folder with ID {folderId} removed", userId, folderId);
+        logger.LogInformation("Folder deletion for user {UserId} successful. Folder with ID {FolderId} removed", userId, folderId);
         return true;
     }
 }

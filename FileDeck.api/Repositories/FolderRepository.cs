@@ -126,11 +126,4 @@ public class FolderRepository : IFolderRepository
         return result;
 
     }
-    // Skapa private helper method
-    // Rekursiv?
-    // Ta in ett folderId (ParentFolderId)
-    // Hitta alla children som har ParentFolderId
-    // Hitta alla grandchildren igen 
-    // Anropa sig själv
-
 }

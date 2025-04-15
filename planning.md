@@ -9,6 +9,7 @@
 7. - [ ] Dedicated validation class for File/Folder validation?
 8. - [ ] Add ModelState validation to relevant endpoints.
 9. - [x] Add empty constructors to entities
+10. - [] ? FileEntity: Change int? FolderId to non-nullable? (Everything belongs to a folder, even root)
 
 FileService - improvements
 

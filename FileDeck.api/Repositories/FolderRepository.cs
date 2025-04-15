@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileDeck.api.Repositories;
@@ -71,18 +72,42 @@ public class FolderRepository : IFolderRepository
                 return false;
             }
 
+            var childFolders = await GetAllChildFolderAsync(folderId, userId);
+            foreach (var childfolder in childFolders)
+            {
+                childfolder.IsDeleted = true;
+                childfolder.LastModifiedDate = DateTime.UtcNow;
+            }
 
+            var folderIds = childFolders.Select(f => f.Id).ToList();
+            folderIds.Add(folderId);
+
+            var files = await context.Files
+                .Where(f => f.FolderId.HasValue && folderIds.Contains(f.FolderId.Value) && f.UserId == userId && !f.IsDeleted)
+                .ToListAsync();
+
+            foreach (var file in files)
+            {
+                file.IsDeleted = true;
+                file.LastModifiedDate = DateTime.UtcNow;
+            }
+
+            int affectedRows = await context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return affectedRows > 0;
 
         }
-        catch (System.Exception)
+        catch (Exception)
         {
-
-            throw;
+            await transaction.RollbackAsync();
         }
 
+        return false;
     }
 
-    private async Task<List<FolderEntity> GetAllChildFolderAsync(int parentFolderId, string userId)
+    private async Task<List<FolderEntity>> GetAllChildFolderAsync(int parentFolderId, string userId)
     {
         var result = new List<FolderEntity>();
 

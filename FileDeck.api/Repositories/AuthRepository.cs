@@ -7,7 +7,6 @@ namespace FileDeck.api.Repositories;
 
 public class AuthRepository : IAuthRepository
 {
-
     private readonly UserManager<UserEntity> userManager;
     private readonly SignInManager<UserEntity> signInManager;
     public AuthRepository(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager)

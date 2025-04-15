@@ -93,7 +93,7 @@ public class FolderController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized();
+            return Unauthorized(new { message = "User ID not found in token" });
         }
 
         bool success = await folderService.RenameFolderAsync(folderId, request, userId);
@@ -104,7 +104,30 @@ public class FolderController : ControllerBase
         }
         else
         {
-            return NotFound(new { message = "Folder not found or failed" });
+            return NotFound(new { message = "Folder not found or operation failed" });
+        }
+    }
+
+    [HttpDelete("{folderId}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteFolderAsync(int folderId)
+    {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        bool success = await folderService.DeleteFolderAsync(folderId, userId);
+
+        if (success)
+        {
+            return NoContent();
+        }
+        else
+        {
+            return NotFound(new { message = "Folder not found or operation failed" });
         }
     }
 }

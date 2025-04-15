@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.Data;
@@ -58,20 +59,38 @@ public class FolderRepository : IFolderRepository
 
     public async Task<bool> DeleteFolderAsync(int folderId, string userId)
     {
-        var folder = await context.Folders
-            .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
+        using var transaction = await context.Database.BeginTransactionAsync();
 
-        if (folder == null)
+        try
         {
-            return false;
+            var folder = await context.Folders
+                .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId);
+            
+            if (folder == null)
+            {
+                return false;
+            }
+
+            
+
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
         }
 
-        folder.IsDeleted = true;
-        folder.LastModifiedDate = DateTime.UtcNow;
-
-        int affectedRows = await context.SaveChangesAsync();
-
-        return affectedRows > 0;
-
     }
+
+    private async Task<List<FolderEntity> GetAllChildFolderAsync(int parentFolderId, string userId)
+    {
+        var result = new List<FolderEntity>();
+    }
+    // Skapa private helper method
+    // Rekursiv?
+    // Ta in ett folderId (ParentFolderId)
+    // Hitta alla children som har ParentFolderId
+    // Hitta alla grandchildren igen 
+    // Anropa sig själv
+
 }

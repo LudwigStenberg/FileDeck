@@ -22,4 +22,6 @@ public class FileEntity
     public string UserId { get; set; } = null!;
     public UserEntity User { get; set; } = null!;
 
+    private FileEntity() { }
+
 }

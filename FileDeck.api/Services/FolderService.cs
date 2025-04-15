@@ -121,6 +121,14 @@ public class FolderService : IFolderService
         return folderResponseDto;
     }
 
+    /// <summary>
+    /// Renames a specific folder.
+    /// </summary>
+    /// <param name="folderId">The ID of the folder to be renamed.</param>
+    /// <param name="request">The DTO containing the new name.</param>
+    /// <param name="userId">The ID of the user requesting the renaming and who has access to it.</param>
+    /// <returns>A boolean to indicate a successful or unsuccessful operation.</returns>
+    /// <exception cref="ArgumentException">The exceptions thrown when one of the arguments do not meet the validation requirements.</exception>
     public async Task<bool> RenameFolderAsync(int folderId, RenameFolderRequest request, string userId)
     {
         logger.LogInformation("Folder renaming initiated for user {UserId}. ID of folder to be renamed: {FolderId}", userId, folderId);

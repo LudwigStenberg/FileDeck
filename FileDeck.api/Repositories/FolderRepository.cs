@@ -65,18 +65,18 @@ public class FolderRepository : IFolderRepository
         {
             var folder = await context.Folders
                 .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId);
-            
+
             if (folder == null)
             {
                 return false;
             }
 
-            
+
 
         }
         catch (System.Exception)
         {
-            
+
             throw;
         }
 
@@ -85,6 +85,21 @@ public class FolderRepository : IFolderRepository
     private async Task<List<FolderEntity> GetAllChildFolderAsync(int parentFolderId, string userId)
     {
         var result = new List<FolderEntity>();
+
+        var directChildren = await context.Folders
+            .Where(f => f.ParentFolderId == parentFolderId && f.UserId == userId && !f.IsDeleted)
+            .ToListAsync();
+
+        result.AddRange(directChildren);
+
+        foreach (FolderEntity child in directChildren)
+        {
+            var grandChildren = await GetAllChildFolderAsync(child.Id, userId);
+            result.AddRange(grandChildren);
+        }
+
+        return result;
+
     }
     // Skapa private helper method
     // Rekursiv?

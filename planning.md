@@ -8,6 +8,7 @@
 6. - [ ] File size limitations - to prevent overload?
 7. - [ ] Dedicated validation class for File/Folder validation?
 8. - [ ] Add ModelState validation to relevant endpoints.
+9. - [x] Add empty constructors to entities
 
 FileService - improvements
 

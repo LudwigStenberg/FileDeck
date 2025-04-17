@@ -10,6 +10,7 @@
 8. - [ ] Add ModelState validation to relevant endpoints.
 9. - [x] Add empty constructors to entities
 10. - [] ? FileEntity: Change int? FolderId to non-nullable? (Everything belongs to a folder, even root)
+11. - [] Add 'Dto' suffix to all DTOs for consistency in codebase.
 
 FileService - improvements
 

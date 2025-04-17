@@ -11,5 +11,5 @@ export interface FolderResponseDto {
   id: number;
   name: string;
   parentFolderId?: number;
-  CreatedDate: string;
+  createdDate: string;
 }

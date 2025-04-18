@@ -1,5 +1,10 @@
 import api from "./api";
-import { CreateFolderDto, RenameFolderDto, FolderResponseDto } from "../types";
+import {
+  CreateFolderDto,
+  RenameFolderDto,
+  FolderResponseDto,
+  FileResponseDto,
+} from "../types";
 
 // Create folder
 export const createFolder = async (
@@ -10,6 +15,22 @@ export const createFolder = async (
 };
 
 // Get Folder
+export const getFolderById = async (
+  folderId: number
+): Promise<FolderResponseDto> => {
+  const response = await api.get<FolderResponseDto>(`/folder/${folderId}`);
+  return response.data;
+};
+
 // Get files in folder
+export const getFilesInFolder = async (
+  folderId: number
+): Promise<FileResponseDto[]> => {
+  const response = await api.get<FileResponseDto[]>(
+    `/folder/${folderId}/files`
+  );
+  return response.data;
+};
+
 // Rename folder
 // Delete folder

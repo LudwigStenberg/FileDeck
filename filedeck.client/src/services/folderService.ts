@@ -33,4 +33,17 @@ export const getFilesInFolder = async (
 };
 
 // Rename folder
+
+export const renameFolder = async (
+  folderId: number,
+  renameData: RenameFolderDto
+): Promise<boolean> => {
+  const response = await api.put<{ message: string }>(
+    `/folder/${folderId}/rename`,
+    renameData
+  );
+
+  return response.status === 200;
+};
+
 // Delete folder

@@ -48,7 +48,7 @@ export const renameFolder = async (
 
 // Delete folder
 export const deleteFolder = async (folderId: number): Promise<boolean> => {
-  const response = await api.delete(`/folder/${folderId}`);
+  const response = await api.delete<boolean>(`/folder/${folderId}`);
 
   return response.status === 204;
 };

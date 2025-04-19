@@ -8,3 +8,9 @@ export const uploadFile = async (
 
   return response.data;
 };
+
+export const getFileById = async (fileId: number): Promise<FileResponseDto> => {
+  const response = await api.get<FileResponseDto>(`/file/${fileId}`);
+
+  return response.data;
+};

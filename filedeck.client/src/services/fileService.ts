@@ -14,3 +14,25 @@ export const getFileById = async (fileId: number): Promise<FileResponseDto> => {
 
   return response.data;
 };
+
+export const downloadFile = async (fileId: number): Promise<void> => {
+  const response = await api.get(`/file/${fileId}/download`, {
+    responseType: "blob",
+  });
+
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+
+  const link = document.createElement("a");
+  link.href = url;
+
+  const contentDisposition = response.headers["content-disposition"];
+  const fileName = contentDisposition
+    ? contentDisposition.split("filename=")[1].replace(/"g/g, "")
+    : `file-${fileId}`;
+
+  link.setAttribute("download", fileName);
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};

@@ -86,9 +86,9 @@ public class FileController : ControllerBase
         return File(file.Content, file.ContentType, file.Name);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{fileId}")]
     [Authorize]
-    public async Task<IActionResult> DeleteFileAsync(int id)
+    public async Task<IActionResult> DeleteFileAsync(int fileId)
     {
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId))
@@ -96,13 +96,13 @@ public class FileController : ControllerBase
             return Unauthorized(new { message = "User ID not found in token" });
         }
 
-        var result = await fileService.DeleteFileAsync(id, userId);
+        var result = await fileService.DeleteFileAsync(fileId, userId);
 
         if (!result)
         {
             NotFound(result);
         }
 
-        return Ok(result);
+        return NoContent();
     }
 }

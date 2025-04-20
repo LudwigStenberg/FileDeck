@@ -4,8 +4,18 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 
 import "./index.css";
 import App from "./App.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
-const router = createBrowserRouter([]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+
+  {
+    path: "/register",
+  },
+]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

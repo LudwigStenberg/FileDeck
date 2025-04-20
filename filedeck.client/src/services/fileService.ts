@@ -27,7 +27,7 @@ export const downloadFile = async (fileId: number): Promise<void> => {
 
   const contentDisposition = response.headers["content-disposition"];
   const fileName = contentDisposition
-    ? contentDisposition.split("filename=")[1].replace(/"g/g, "")
+    ? contentDisposition.split("filename=")[1].replace(/"/g, "")
     : `file-${fileId}`;
 
   link.setAttribute("download", fileName);

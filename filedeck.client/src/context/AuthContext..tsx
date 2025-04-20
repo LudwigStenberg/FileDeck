@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { LoginRequestDto, RegisterRequestDto } from "../types";
+import * as authService from "../services/authService";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -32,4 +33,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     setIsLoading(false);
   }, []);
+
+  const login = async (loginData: LoginRequestDto): Promise<boolean> => {
+    try {
+      const response = await authService.login(loginData);
+
+      if (response.succeeded) {
+        setIsAuthenticated(true);
+        setUserId(response.userId);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error("Login error:", error);
+      return false;
+    }
+  };
 };

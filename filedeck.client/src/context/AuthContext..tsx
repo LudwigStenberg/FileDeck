@@ -62,4 +62,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return false;
     }
   };
+
+  const logout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    setUserId(null);
+  };
 };

@@ -40,5 +40,5 @@ export const downloadFile = async (fileId: number): Promise<void> => {
 export const deleteFile = async (fileId: number): Promise<boolean> => {
   const response = await api.delete(`/file/${fileId}`);
 
-  return response.status === 200;
+  return response.status === 204;
 };

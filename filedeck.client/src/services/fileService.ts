@@ -36,3 +36,9 @@ export const downloadFile = async (fileId: number): Promise<void> => {
   link.click();
   document.body.removeChild(link);
 };
+
+export const deleteFile = async (fileId: number): Promise<boolean> => {
+  const response = await api.delete(`/file/${fileId}`);
+
+  return response.status === 200;
+};

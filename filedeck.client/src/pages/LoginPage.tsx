@@ -1,3 +1,5 @@
+import "../index.css";
+
 export default function LoginPage() {
-  return <div>Login Page</div>;
+  return <h1>Login Page</h1>;
 }

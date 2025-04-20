@@ -50,4 +50,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return false;
     }
   };
+
+  const register = async (
+    registerData: RegisterRequestDto
+  ): Promise<boolean> => {
+    try {
+      const response = await authService.register(registerData);
+      return response.succeeded;
+    } catch (error) {
+      console.error("Registration error:", error);
+      return false;
+    }
+  };
 };

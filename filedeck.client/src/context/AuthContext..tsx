@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { LoginRequestDto, RegisterRequestDto } from "../types";
 import * as authService from "../services/authService";
 
@@ -68,4 +74,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthenticated(false);
     setUserId(null);
   };
+
+  const contextValue: AuthContextType = {
+    isAuthenticated,
+    userId,
+    isLoading,
+    login,
+    register,
+    logout,
+  };
+
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return context;
 };

@@ -25,7 +25,7 @@ public class FolderController : ControllerBase
     // Creates a new folder
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateFolderAsync([FromBody] CreateFolderDto folderDto)
+    public async Task<IActionResult> CreateFolder([FromBody] CreateFolderDto folderDto)
     {
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
@@ -82,7 +82,7 @@ public class FolderController : ControllerBase
 
     [HttpPut("{folderId}/rename")]
     [Authorize]
-    public async Task<IActionResult> RenameFolderAsync(int folderId, [FromBody] RenameFolderRequest request)
+    public async Task<IActionResult> RenameFolder(int folderId, [FromBody] RenameFolderRequest request)
     {
         if (!ModelState.IsValid)
         {
@@ -110,7 +110,7 @@ public class FolderController : ControllerBase
 
     [HttpDelete("{folderId}")]
     [Authorize]
-    public async Task<IActionResult> DeleteFolderAsync(int folderId)
+    public async Task<IActionResult> DeleteFolder(int folderId)
     {
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

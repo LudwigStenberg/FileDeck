@@ -22,9 +22,8 @@ public class FileController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> UploadFileAsync(FileUploadDto fileUpload)
+    public async Task<IActionResult> UploadFile(FileUploadDto fileUpload)
     {
-        // Is it a good idea to use this here? 
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
@@ -67,7 +66,7 @@ public class FileController : ControllerBase
 
     [HttpGet("{id}/download")]
     [Authorize]
-    public async Task<IActionResult> DownloadFileAsync(int id)
+    public async Task<IActionResult> DownloadFile(int id)
     {
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -88,7 +87,7 @@ public class FileController : ControllerBase
 
     [HttpDelete("{fileId}")]
     [Authorize]
-    public async Task<IActionResult> DeleteFileAsync(int fileId)
+    public async Task<IActionResult> DeleteFile(int fileId)
     {
         string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId))

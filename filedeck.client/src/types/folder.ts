@@ -1,4 +1,4 @@
-export interface CreateFolderDto {
+export interface CreateFolderRequest {
   name: string;
   parentFolderId?: number;
 }

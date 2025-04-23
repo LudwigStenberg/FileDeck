@@ -25,7 +25,7 @@ public class FolderService : IFolderService
     /// <param name="userId">The ID of the user requesting the folder to be created and who will have access to it.</param>
     /// <returns>A FolderResponseDto with additional data that was created during construction.</returns>
     /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if the parent folder doesn't exist despite folderDto.ParentFolderId being populated.</exception>
-    public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderDto folderDto, string userId)
+    public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderRequest folderDto, string userId)
     {
         logger.LogInformation("Initiated creation of folder with name {FolderName} by user {UserId}", folderDto.Name, userId);
 

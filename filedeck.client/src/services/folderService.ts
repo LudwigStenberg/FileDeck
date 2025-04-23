@@ -1,6 +1,6 @@
 import api from "./api";
 import {
-  CreateFolderDto,
+  CreateFolderRequest,
   RenameFolderDto,
   FolderResponseDto,
   FileResponseDto,
@@ -8,7 +8,7 @@ import {
 
 // Create folder
 export const createFolder = async (
-  folderData: CreateFolderDto
+  folderData: CreateFolderRequest
 ): Promise<FolderResponseDto> => {
   const response = await api.post<FolderResponseDto>("/folder", folderData);
   return response.data;

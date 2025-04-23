@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FileDeck.api.DTOs;
 
-public class CreateFolderDto
+public class CreateFolderRequest
 {
     public required string Name { get; set; }
     public int? ParentFolderId { get; set; }

@@ -25,7 +25,7 @@ public class FolderController : ControllerBase
     // Creates a new folder
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateFolder([FromBody] CreateFolderDto folderDto)
+    public async Task<IActionResult> CreateFolder([FromBody] CreateFolderRequest request)
     {
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
@@ -35,7 +35,7 @@ public class FolderController : ControllerBase
 
         Console.WriteLine($"Controller - User ID from token: '{userId}'");
 
-        var newFolder = await folderService.CreateFolderAsync(folderDto, userId);
+        var newFolder = await folderService.CreateFolderAsync(request, userId);
 
         // This references the GET method for the Location Header
         return CreatedAtAction(

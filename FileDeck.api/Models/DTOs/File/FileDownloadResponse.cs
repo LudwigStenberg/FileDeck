@@ -2,7 +2,7 @@
 using System;
 
 namespace FileDeck.api.DTOs;
-public class FileDownloadDto
+public class FileDownloadResponse
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

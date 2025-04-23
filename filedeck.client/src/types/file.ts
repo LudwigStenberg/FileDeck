@@ -5,7 +5,7 @@ export interface FileUploadDto {
   folderId?: number;
 }
 
-export interface FileDownloadDto {
+export interface FileDownloadResponse {
   id: number;
   name: string;
   contentType: string;

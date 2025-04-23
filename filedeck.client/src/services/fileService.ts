@@ -1,5 +1,5 @@
 import api from "./api";
-import { FileUploadDto, FileDownloadDto, FileResponseDto } from "../types";
+import { FileUploadDto, FileDownloadResponse, FileResponseDto } from "../types";
 
 export const uploadFile = async (
   fileData: FileUploadDto

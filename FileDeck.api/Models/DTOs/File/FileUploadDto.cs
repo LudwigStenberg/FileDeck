@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FileDeck.api.DTOs;
 
-// For sending files to the server
 public class FileUploadDto
 {
     [Required]
@@ -12,6 +11,6 @@ public class FileUploadDto
     [Required]
     public required string ContentType { get; set; }
     public byte[] Content { get; set; } = Array.Empty<byte>();
-    public int? FolderId { get; set; } // Needed if file should be within a folder
+    public int? FolderId { get; set; }
 
 }

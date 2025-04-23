@@ -136,8 +136,8 @@ public class FileService : IFileService
     /// </summary>
     /// <param name="fileId">The ID of the file to be downloaded.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
-    /// <returns>A FileDownloadDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
-    public async Task<FileDownloadDto?> DownloadFileAsync(int fileId, string userId)
+    /// <returns>A FileDownloadResponse containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
+    public async Task<FileDownloadResponse?> DownloadFileAsync(int fileId, string userId)
     {
         logger.LogInformation("File download initiated for user: {UserId}. File: {FileId}", userId, fileId);
 
@@ -151,7 +151,7 @@ public class FileService : IFileService
 
         logger.LogInformation("File {FileId} successfully downloaded for user {UserId} - {FileName}", fileId, userId, fileEntity.Name);
 
-        return new FileDownloadDto
+        return new FileDownloadResponse
         {
             Id = fileEntity.Id,
             Name = fileEntity.Name,

@@ -12,7 +12,7 @@ public interface IFileService
 
     Task<FileResponseDto?> GetFileByIdAsync(int fileId, string userId);
 
-    Task<FileDownloadDto?> DownloadFileAsync(int fileId, string userId);
+    Task<FileDownloadResponse?> DownloadFileAsync(int fileId, string userId);
 
     Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId);
 

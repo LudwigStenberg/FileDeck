@@ -22,7 +22,7 @@ public class FileController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> UploadFile(FileUploadDto fileUpload)
+    public async Task<IActionResult> UploadFile(FileUploadRequest fileUpload)
     {
         if (!ModelState.IsValid)
         {

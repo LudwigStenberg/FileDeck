@@ -36,7 +36,7 @@ public class FileService : IFileService
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponse which contains information on the newly uploaded file.</returns>
     /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if a folder associated with the file, doesn't exist.</exception>
-    public async Task<FileResponse> UploadFileAsync(FileUploadDto fileUpload, string userId)
+    public async Task<FileResponse> UploadFileAsync(FileUploadRequest fileUpload, string userId)
     {
         logger.LogInformation("File upload initiated for user {UserId}: {FileName}, {FileSize} bytes",
             userId, fileUpload.Name, fileUpload.Content.Length);

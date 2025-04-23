@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FileDeck.api.DTOs;
 
-public class FileUploadDto
+public class FileUploadRequest
 {
     [Required]
     [StringLength(50, MinimumLength = 1)]

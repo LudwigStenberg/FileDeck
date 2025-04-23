@@ -23,9 +23,9 @@ public class FolderService : IFolderService
     /// </summary>
     /// <param name="folderDto">The DTO used to create the new folder. Contains the name and the ID of the parent folder, if there is one.</param>
     /// <param name="userId">The ID of the user requesting the folder to be created and who will have access to it.</param>
-    /// <returns>A FolderResponseDto with additional data that was created during construction.</returns>
+    /// <returns>A FolderResponse with additional data that was created during construction.</returns>
     /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if the parent folder doesn't exist despite folderDto.ParentFolderId being populated.</exception>
-    public async Task<FolderResponseDto> CreateFolderAsync(CreateFolderRequest folderDto, string userId)
+    public async Task<FolderResponse> CreateFolderAsync(CreateFolderRequest folderDto, string userId)
     {
         logger.LogInformation("Initiated creation of folder with name {FolderName} by user {UserId}", folderDto.Name, userId);
 
@@ -77,7 +77,7 @@ public class FolderService : IFolderService
 
         var savedFolder = await folderRepository.CreateFolderAsync(newFolder);
 
-        var folderResponseDto = new FolderResponseDto
+        var FolderResponse = new FolderResponse
         {
             Id = savedFolder.Id,
             Name = savedFolder.Name,
@@ -87,7 +87,7 @@ public class FolderService : IFolderService
 
         logger.LogInformation("Folder {FolderName} (ID: {FolderId})for user {UserId} successfully created", folderDto.Name, savedFolder.Id, userId);
 
-        return folderResponseDto;
+        return FolderResponse;
     }
 
     /// <summary>
@@ -95,8 +95,8 @@ public class FolderService : IFolderService
     /// </summary>
     /// <param name="folderId">The ID of the folder to be retrieved.</param>
     /// <param name="userId">The ID of the user requesting the folder and who will have access to it.</param>
-    /// <returns>A FolderResponseDto which contains the information on the folder that has been retrieved. If no folder is found, returns null.</returns>
-    public async Task<FolderResponseDto?> GetFolderByIdAsync(int folderId, string userId)
+    /// <returns>A FolderResponse which contains the information on the folder that has been retrieved. If no folder is found, returns null.</returns>
+    public async Task<FolderResponse?> GetFolderByIdAsync(int folderId, string userId)
     {
         logger.LogInformation("Retrieval of folder {FolderId} for user {UserId} initiated", folderId, userId);
 
@@ -107,7 +107,7 @@ public class FolderService : IFolderService
             return null;
         }
 
-        var folderResponseDto = new FolderResponseDto
+        var FolderResponse = new FolderResponse
         {
             Id = folder.Id,
             Name = folder.Name,
@@ -118,7 +118,7 @@ public class FolderService : IFolderService
         logger.LogInformation("Folder retrieval successful for user {UserId}. Folder {FolderId}, {FolderName} was found.",
             userId, folderId, folder.Name);
 
-        return folderResponseDto;
+        return FolderResponse;
     }
 
     /// <summary>

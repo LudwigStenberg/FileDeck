@@ -2,23 +2,23 @@ import api from "./api";
 import {
   CreateFolderRequest,
   RenameFolderDto,
-  FolderResponseDto,
+  FolderResponse,
   FileResponseDto,
 } from "../types";
 
 // Create folder
 export const createFolder = async (
   folderData: CreateFolderRequest
-): Promise<FolderResponseDto> => {
-  const response = await api.post<FolderResponseDto>("/folder", folderData);
+): Promise<FolderResponse> => {
+  const response = await api.post<FolderResponse>("/folder", folderData);
   return response.data;
 };
 
 // Get Folder
 export const getFolderById = async (
   folderId: number
-): Promise<FolderResponseDto> => {
-  const response = await api.get<FolderResponseDto>(`/folder/${folderId}`);
+): Promise<FolderResponse> => {
+  const response = await api.get<FolderResponse>(`/folder/${folderId}`);
   return response.data;
 };
 

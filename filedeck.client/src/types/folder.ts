@@ -7,7 +7,7 @@ export interface RenameFolderDto {
   newName: string;
 }
 
-export interface FolderResponseDto {
+export interface FolderResponse {
   id: number;
   name: string;
   parentFolderId?: number;

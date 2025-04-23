@@ -12,7 +12,7 @@ export interface FileDownloadResponse {
   content: Uint8Array | ArrayBuffer;
 }
 
-export interface FileResponseDto {
+export interface FileResponse {
   id: number;
   name: string;
   contentType: string;

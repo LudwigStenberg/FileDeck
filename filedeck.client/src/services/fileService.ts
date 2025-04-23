@@ -1,16 +1,16 @@
 import api from "./api";
-import { FileUploadDto, FileDownloadResponse, FileResponseDto } from "../types";
+import { FileUploadDto, FileDownloadResponse, FileResponse } from "../types";
 
 export const uploadFile = async (
   fileData: FileUploadDto
-): Promise<FileResponseDto> => {
-  const response = await api.post<FileResponseDto>("/file", fileData);
+): Promise<FileResponse> => {
+  const response = await api.post<FileResponse>("/file", fileData);
 
   return response.data;
 };
 
-export const getFileById = async (fileId: number): Promise<FileResponseDto> => {
-  const response = await api.get<FileResponseDto>(`/file/${fileId}`);
+export const getFileById = async (fileId: number): Promise<FileResponse> => {
+  const response = await api.get<FileResponse>(`/file/${fileId}`);
 
   return response.data;
 };

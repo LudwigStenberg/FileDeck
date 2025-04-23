@@ -1,7 +1,7 @@
 using System;
 
 namespace FileDeck.api.DTOs;
-public class FileResponseDto
+public class FileResponse
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

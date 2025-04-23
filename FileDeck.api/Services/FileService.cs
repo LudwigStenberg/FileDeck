@@ -34,9 +34,9 @@ public class FileService : IFileService
     /// </summary>
     /// <param name="fileUpload">The DTO that contains the information on the new file.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
-    /// <returns>A FileResponseDto which contains information on the newly uploaded file.</returns>
+    /// <returns>A FileResponse which contains information on the newly uploaded file.</returns>
     /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if a folder associated with the file, doesn't exist.</exception>
-    public async Task<FileResponseDto> UploadFileAsync(FileUploadDto fileUpload, string userId)
+    public async Task<FileResponse> UploadFileAsync(FileUploadDto fileUpload, string userId)
     {
         logger.LogInformation("File upload initiated for user {UserId}: {FileName}, {FileSize} bytes",
             userId, fileUpload.Name, fileUpload.Content.Length);
@@ -87,7 +87,7 @@ public class FileService : IFileService
         logger.LogInformation("File successfully uploaded: ID={FileId}, {FileName} by user {UserId}",
             savedFile.Id, savedFile.Name, userId);
 
-        return new FileResponseDto
+        return new FileResponse
         {
             Id = savedFile.Id,
             Name = savedFile.Name,
@@ -105,8 +105,8 @@ public class FileService : IFileService
     /// </summary>
     /// <param name="fileId">The ID of the file to be retrieved.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
-    /// <returns>A FileResponseDto containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
-    public async Task<FileResponseDto?> GetFileByIdAsync(int fileId, string userId)
+    /// <returns>A FileResponse containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
+    public async Task<FileResponse?> GetFileByIdAsync(int fileId, string userId)
     {
         logger.LogInformation("File retrieval initiated for user {UserId}. File: {FileId}", userId, fileId);
         var fileEntity = await fileRepository.GetFileByIdAsync(fileId, userId);
@@ -119,7 +119,7 @@ public class FileService : IFileService
 
         logger.LogInformation("File {FileId} successfully retrieved for user {UserId} - {FileName}",
             fileId, userId, fileEntity.Name);
-        return new FileResponseDto
+        return new FileResponse
         {
             Id = fileEntity.Id,
             Name = fileEntity.Name,
@@ -165,8 +165,8 @@ public class FileService : IFileService
     /// </summary>
     /// <param name="folderId">The folder ID of the folder containing the files.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
-    /// <returns>A list of FileResponseDto objects if the request is successful; otherwise it returns an empty enumerable. </returns>
-    public async Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId)
+    /// <returns>A list of FileResponse objects if the request is successful; otherwise it returns an empty enumerable. </returns>
+    public async Task<IEnumerable<FileResponse>> GetFilesInFolderAsync(int folderId, string userId)
     {
         logger.LogInformation("Retrieval of files in folder {FolderId} initiated by user {UserId}", folderId, userId);
 
@@ -175,7 +175,7 @@ public class FileService : IFileService
         if (!folderExists)
         {
             logger.LogWarning("File retrieval failed: the folder {FolderId} does not exist for user {UserId}", folderId, userId);
-            return Enumerable.Empty<FileResponseDto>();
+            return Enumerable.Empty<FileResponse>();
         }
 
         logger.LogDebug("Folder {FolderId} was found. Retrieving the files within for user {UserId}", folderId, userId);
@@ -187,7 +187,7 @@ public class FileService : IFileService
         logger.LogInformation("Successfully retrieved {FileCount} files from folder {FolderId} for user {UserId}",
             filesList.Count, folderId, userId);
 
-        return filesList.Select(file => new FileResponseDto
+        return filesList.Select(file => new FileResponse
         {
             Id = file.Id,
             Name = file.Name,

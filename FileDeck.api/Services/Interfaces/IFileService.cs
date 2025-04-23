@@ -8,13 +8,13 @@ namespace FileDeck.api.Services;
 
 public interface IFileService
 {
-    Task<FileResponseDto> UploadFileAsync(FileUploadDto fileUpload, string userId);
+    Task<FileResponse> UploadFileAsync(FileUploadDto fileUpload, string userId);
 
-    Task<FileResponseDto?> GetFileByIdAsync(int fileId, string userId);
+    Task<FileResponse?> GetFileByIdAsync(int fileId, string userId);
 
     Task<FileDownloadResponse?> DownloadFileAsync(int fileId, string userId);
 
-    Task<IEnumerable<FileResponseDto>> GetFilesInFolderAsync(int folderId, string userId);
+    Task<IEnumerable<FileResponse>> GetFilesInFolderAsync(int folderId, string userId);
 
     Task<bool> DeleteFileAsync(int fileId, string userId); // Soft delete
 }

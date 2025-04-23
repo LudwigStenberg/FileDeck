@@ -3,7 +3,7 @@ import {
   CreateFolderRequest,
   RenameFolderDto,
   FolderResponse,
-  FileResponseDto,
+  FileResponse,
 } from "../types";
 
 // Create folder
@@ -25,8 +25,8 @@ export const getFolderById = async (
 // Get files in folder
 export const getFilesInFolder = async (
   folderId: number
-): Promise<FileResponseDto[]> => {
-  const response = await api.get<FileResponseDto[]>(
+): Promise<FileResponse[]> => {
+  const response = await api.get<FileResponse[]>(
     `/folder/${folderId}/files`
   );
   return response.data;

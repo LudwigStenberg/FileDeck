@@ -5,15 +5,15 @@ import {
   useEffect,
   useState,
 } from "react";
-import { LoginRequestDto, RegisterRequestDto } from "../types";
+import { LoginRequest, RegisterRequest } from "../types";
 import * as authService from "../services/authService";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   userId: string | null;
   isLoading: boolean;
-  login: (data: LoginRequestDto) => Promise<boolean>;
-  register: (data: RegisterRequestDto) => Promise<boolean>;
+  login: (data: LoginRequest) => Promise<boolean>;
+  register: (data: RegisterRequest) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (loginData: LoginRequestDto): Promise<boolean> => {
+  const login = async (loginData: LoginRequest): Promise<boolean> => {
     try {
       const response = await authService.login(loginData);
 
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const register = async (
-    registerData: RegisterRequestDto
+    registerData: RegisterRequest
   ): Promise<boolean> => {
     try {
       const response = await authService.register(registerData);
@@ -85,7 +85,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

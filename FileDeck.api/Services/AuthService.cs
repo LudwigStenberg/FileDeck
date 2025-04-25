@@ -30,9 +30,9 @@ public class AuthService : IAuthService
     /// Registers new user in the system based on the provided registration information.
     /// </summary>
     /// <param name="registerDto">The registration information including email and password.</param>
-    /// <returns>A RegisterResponseDto object containing the result of the registration attempt
+    /// <returns>A RegisterResponse object containing the result of the registration attempt
     // including success status and any error messages if registration failed.</returns>
-    public async Task<RegisterResponseDto> RegisterUserAsync(RegisterRequestDto registerDto)
+    public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest registerDto)
     {
         logger.LogInformation("User registration attempt for email: {Email}", registerDto.Email);
 
@@ -41,7 +41,7 @@ public class AuthService : IAuthService
         {
             logger.LogWarning("Registration failed: passwords do not match for {Email}", registerDto.Email);
 
-            return new RegisterResponseDto
+            return new RegisterResponse
             {
                 Succeeded = false,
                 Errors = new List<string> { "Passwords do not match" }
@@ -53,7 +53,7 @@ public class AuthService : IAuthService
         {
             logger.LogWarning("Registration failed: email {Email} is already in use", registerDto.Email);
 
-            return new RegisterResponseDto
+            return new RegisterResponse
             {
                 Succeeded = false,
                 Errors = new List<string> { "Email is already in use" }
@@ -74,7 +74,7 @@ public class AuthService : IAuthService
             logger.LogDebug("User registered successfully: {UserId}, {Email}",
                              newUser.Id, newUser.Email);
 
-            return new RegisterResponseDto
+            return new RegisterResponse
             {
                 Succeeded = true,
                 UserId = newUser.Id,
@@ -87,7 +87,7 @@ public class AuthService : IAuthService
             logger.LogWarning("User registration failed for {Email}. Errors: {Errors}",
                             registerDto.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
 
-            return new RegisterResponseDto
+            return new RegisterResponse
             {
                 Succeeded = false,
                 Errors = result.Errors.Select(error => error.Description).ToList()
@@ -99,8 +99,8 @@ public class AuthService : IAuthService
     /// Signs in an existing user based on the provided login information.
     /// </summary>
     /// <param name="loginDto">The login information including email and password.</param>
-    /// <returns>A LoginResponseDto object containing the result of the login attempt including success status, potential errors and a newly generated token if the attempt is successful.</returns>
-    public async Task<LoginResponseDto> LoginUserAsync(LoginRequestDto loginDto)
+    /// <returns>A LoginResponse object containing the result of the login attempt including success status, potential errors and a newly generated token if the attempt is successful.</returns>
+    public async Task<LoginResponse> LoginUserAsync(LoginRequest loginDto)
     {
         logger.LogInformation("User login attempt for email: {Email}", loginDto.Email);
 
@@ -110,7 +110,7 @@ public class AuthService : IAuthService
         {
             logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", loginDto.Email);
 
-            return new LoginResponseDto
+            return new LoginResponse
             {
                 Succeeded = false,
                 Errors = new List<string> { "The email or password is incorrect" }
@@ -129,7 +129,7 @@ public class AuthService : IAuthService
 
             logger.LogInformation("User successfully logged in: {UserId}, {Email}", user.Id, user.Email);
 
-            return new LoginResponseDto
+            return new LoginResponse
             {
                 Succeeded = true,
                 Token = token,
@@ -142,7 +142,7 @@ public class AuthService : IAuthService
 
         logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", loginDto.Email);
 
-        return new LoginResponseDto
+        return new LoginResponse
         {
             Succeeded = false,
             Errors = new List<string> { "The email or password is incorrect" }

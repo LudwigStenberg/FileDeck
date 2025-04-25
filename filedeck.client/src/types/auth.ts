@@ -1,10 +1,10 @@
-export interface RegisterRequestDto {
+export interface RegisterRequest {
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-export interface RegisterResponseDto {
+export interface RegisterResponse {
   succeeded: boolean;
   userId: string;
   username: string;
@@ -12,12 +12,12 @@ export interface RegisterResponseDto {
   errors: string[];
 }
 
-export interface LoginRequestDto {
+export interface LoginRequest {
   email: string;
   password: string;
 }
 
-export interface LoginResponseDto {
+export interface LoginResponse {
   succeeded: boolean;
   token: string;
   expiration: string;

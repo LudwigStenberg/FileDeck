@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FileDeck.api.DTOs.Auth;
 
-public class RegisterRequestDto
+public class RegisterRequest
 {
     [Required]
     [EmailAddress]

@@ -1,16 +1,16 @@
 import api from "./api";
 import {
-  RegisterRequestDto,
-  RegisterResponseDto,
-  LoginRequestDto,
-  LoginResponseDto,
+  RegisterRequest,
+  RegisterResponse,
+  LoginRequest,
+  LoginResponse,
 } from "../types";
 
 // Register User
 export const register = async (
-  registerData: RegisterRequestDto
-): Promise<RegisterResponseDto> => {
-  const response = await api.post<RegisterResponseDto>(
+  registerData: RegisterRequest
+): Promise<RegisterResponse> => {
+  const response = await api.post<RegisterResponse>(
     "/auth/register",
     registerData
   );
@@ -19,9 +19,9 @@ export const register = async (
 
 // Login
 export const login = async (
-  loginData: LoginRequestDto
-): Promise<LoginResponseDto> => {
-  const response = await api.post<LoginResponseDto>("auth/login", loginData);
+  loginData: LoginRequest
+): Promise<LoginResponse> => {
+  const response = await api.post<LoginResponse>("auth/login", loginData);
 
   if (response.data.succeeded && response.data.token) {
     localStorage.setItem("token", response.data.token);

@@ -31,10 +31,10 @@ export default function RegisterPage() {
     
     if (success)
     {
-      navigate("/dashboard");
+      navigate("/login");
     } else {
       setError("Registration failed. Please try again.")
-    }
+    } 
   } catch (error) {
     console.error("Registration error:", error);
     setError("An error occurred during registration. Please try again.")
@@ -52,7 +52,7 @@ export default function RegisterPage() {
       <Register onSubmit={handleRegister} isLoading={isLoading}/>
 
       <p>
-        Already have an account? <Link to="/">Login here</Link>
+        Already have an account? <Link to="/Login">Login here</Link>
       </p>
     </div>
   )

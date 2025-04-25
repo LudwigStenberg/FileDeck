@@ -5,7 +5,7 @@ namespace FileDeck.api.DTOs.Auth;
 
 public class RegisterRequest
 {
-    [Required]
+     [Required]
     [EmailAddress]
     public required string Email { get; set; }
 

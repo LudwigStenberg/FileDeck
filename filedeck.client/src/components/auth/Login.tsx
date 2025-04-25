@@ -15,7 +15,7 @@ export function Login({onSubmit, isLoading = false }: LoginProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="auth-form"onSubmit={handleSubmit}>
             <div className="form-group">
                 <label htmlFor="email">Email:</label>
                 <input 
@@ -23,7 +23,8 @@ export function Login({onSubmit, isLoading = false }: LoginProps) {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required 
+                required
+                placeholder="your@email.com"
                 />
             </div>
             <div className="form-group">
@@ -34,9 +35,12 @@ export function Login({onSubmit, isLoading = false }: LoginProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                placeholder="••••••••"
                 />
             </div>
-            <button type="submit" disabled={isLoading}>
+            <button 
+                className="auth-submit-button"
+                type="submit" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
             </button>
         </form>

@@ -33,6 +33,16 @@ public class Program
             npgsqlOptions => npgsqlOptions.MigrationsAssembly("FileDeck.api")
         ));
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowReactApp",
+                builder => builder
+                    .WithOrigins("http://localhost:5173")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+        });
+
         builder.Services.Configure<JwtSettings>(
             builder.Configuration.GetSection("JwtSettings"));
 
@@ -90,8 +100,6 @@ public class Program
 
         var app = builder.Build();
 
-        app.MapOpenApi();
-
         app.UseExceptionHandler(options =>
         {
             options.Run(async context =>
@@ -112,14 +120,14 @@ public class Program
             app.MapScalarApiReference();
         }
 
+        app.MapOpenApi();
         app.UseHttpsRedirection();
+        app.UseCors("AllowReactApp");
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
 
 
-        app.MapGet("/", () => "Hello World");
-        // Start the application
         app.Run();
     }
 }

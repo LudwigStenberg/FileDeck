@@ -4,7 +4,6 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 
 import "./index.css";
 
-import HomePage from "./pages/HomePage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";

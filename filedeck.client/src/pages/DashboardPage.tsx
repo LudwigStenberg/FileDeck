@@ -4,5 +4,7 @@ import "../styles/navbar.css";
 
 export default function DashboardPage() {
   return (
-  <Navbar />
+    <div>
+        <Navbar />
+    </div>
 )}

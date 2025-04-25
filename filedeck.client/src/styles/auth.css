@@ -4,8 +4,25 @@
 
 .auth-form {
     margin: 0 auto;
+    max-width: 25rem;
+    padding: 1.25rem;
+}
+
+.auth-form input {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #396798;
 }
 
 .form-group {
     display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
 }

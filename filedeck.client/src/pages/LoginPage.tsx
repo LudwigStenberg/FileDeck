@@ -40,10 +40,6 @@ export default function LoginPage() {
       {error && <div className="error-message">{error}</div>}
 
       <Login onSubmit={handleLogin} isLoading={isLoading}/>
-
-      <p>
-        Don't have an account? <Link to="/register">Register here</Link>
-      </p>
     </div>
   )
 

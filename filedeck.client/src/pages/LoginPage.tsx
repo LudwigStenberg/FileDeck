@@ -34,6 +34,7 @@ export default function LoginPage() {
   return (
     
     <div className="login-page">
+      <img src="" alt="FileDeck Logo" className="app-logo" />
       {error && <div className="error-message">{error}</div>}
       <Login onSubmit={handleLogin} isLoading={isLoading}/>
     </div>

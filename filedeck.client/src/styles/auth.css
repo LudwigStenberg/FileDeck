@@ -3,6 +3,10 @@
 }
 
 .auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
     /* margin: 0 auto;
     border-style: solid;
     border-width: 0.1rem;

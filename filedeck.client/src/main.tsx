@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +24,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardPage />,
-  },
+    element: (
+      <ProtectedRoute>
+        <DashboardPage />,
+      </ProtectedRoute>
+),},
 ]);
 
 createRoot(document.getElementById("root")!).render(

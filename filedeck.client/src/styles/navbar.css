@@ -17,8 +17,25 @@
     list-style: none;
 }
 
+.navbar-list li:hover,
+.logout-button:hover {
+    transform: translateY(-1px);
+}
+
 .navbar-link {
     text-decoration: none;
     color: white;
     padding-right: 1.25rem;
+}
+
+.navbar-right {
+    margin-left: auto;
+}
+
+.logout-button {
+    border-style: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: none;
+    font-weight: 400;
 }

@@ -1,11 +1,13 @@
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import logo from "../assets/logo.png";
 import { logout } from "../services/authService";
+import logo from "../assets/logo.png";
+
+import "../styles/navbar.css";
 
 
 export const Navbar = () => {
-		const  { userId, isAuthenticated, logout } = useAuth();
+		const  {isAuthenticated, logout } = useAuth();
 		const navigate = useNavigate();
 
     return (
@@ -16,7 +18,7 @@ export const Navbar = () => {
 						<li><Link to="/profile" className="navbar-link">Profile</Link></li>
           </ul>
 
-					<div className="user-controls">
+					<div className="navbar-right">
 						{isAuthenticated && (
 							<>
 							<button

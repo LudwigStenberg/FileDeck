@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import "../../styles/auth.css"
+
 interface LoginProps {
     onSubmit: (email: string, password: string) => Promise<void>;
     isLoading?: boolean;

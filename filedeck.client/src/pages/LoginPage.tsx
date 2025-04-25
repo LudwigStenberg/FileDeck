@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { Login } from "../components/auth/Login";
 
 import "../index.css";
+import"../styles/auth.css";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +33,7 @@ export default function LoginPage() {
   };
 
   return (
+    
     <div className="login-page">
       <h1>Login to Your Account</h1>
 

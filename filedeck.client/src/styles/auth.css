@@ -1,0 +1,11 @@
+.login-page {
+    margin: 0 auto;
+}
+
+.auth-form {
+    margin: 0 auto;
+}
+
+.form-group {
+    display: flex;
+}

@@ -23,6 +23,11 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+
+// Manages authentication state (is the user logged in?)
+// Provides authentication methods (login, logout, register)
+// Stores authentication data (tokens, user info)
+// Makes this information available throughout your app
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);

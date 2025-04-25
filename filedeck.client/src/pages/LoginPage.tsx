@@ -20,7 +20,7 @@ export default function LoginPage() {
     try {
       const success = await login({ email, password });
       if (success) {
-        navigate('/');
+        navigate('/dashboard');
       } else {
         setError('Login failed. Please check your credentials.');
       }

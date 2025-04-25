@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, useState } from "react";
+import React, { useState } from "react";
 
 interface LoginProps {
     onSubmit: (email: string, password: string) => Promise<void>;
@@ -21,20 +21,20 @@ export function Login({onSubmit, isLoading = false }: LoginProps) {
                 <input 
                 type="email"
                 id="email"
-                value="{email}"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required 
                 />
             </div>
             <div className="form-group">
-            <label htmlFor="password">Password:</label>
-            <input 
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            />
+                <label htmlFor="password">Password:</label>
+                <input 
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                />
             </div>
             <button type="submit" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}

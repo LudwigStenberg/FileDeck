@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { Login } from "../components/auth/Login";
 
 import"../styles/auth.css";
+import logo from "../assets/logo.png";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,9 +33,8 @@ export default function LoginPage() {
   };
 
   return (
-    
     <div className="login-page">
-      <img src="" alt="FileDeck Logo" className="app-logo" />
+      <img src={logo} alt="FileDeck Logo" className="app-logo" />
       {error && <div className="error-message">{error}</div>}
       <Login onSubmit={handleLogin} isLoading={isLoading}/>
     </div>

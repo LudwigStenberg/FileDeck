@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router";
 import { Register } from "../components/auth/Register";
 import { useAuth } from "../context/AuthContext";
 
+import logo from "../assets/logo.png";
+
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +45,8 @@ export default function RegisterPage() {
 
   return ( 
     <div className="register-page">
-
+      <img src={logo} alt="FileDeck Logo" className="app-logo" />
       {error && <div className="error-message">{error}</div>}
-
       <Register onSubmit={handleRegister} isLoading={isLoading}/>
     </div>
   )

@@ -23,5 +23,4 @@ public class FolderEntity
     public string UserId { get; set; } = null!; // FK
     public UserEntity User { get; set; } = null!; // NavProp
 
-    public FolderEntity() { }
 }

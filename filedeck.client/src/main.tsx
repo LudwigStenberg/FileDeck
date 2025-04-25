@@ -14,16 +14,12 @@ import { AuthProvider } from "./context/AuthContext.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <LoginPage />,
     errorElement: <NotFoundPage />,
   },
   {
     path: "/register",
     element: <RegisterPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
   },
   {
     path: "/dashboard",

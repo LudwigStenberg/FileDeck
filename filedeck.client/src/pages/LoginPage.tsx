@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate} from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { Login } from "../components/auth/Login";
 
@@ -20,7 +20,7 @@ export default function LoginPage() {
     try {
       const success = await login({ email, password });
       if (success) {
-        navigate('/dashboard');
+        navigate('/');
       } else {
         setError('Login failed. Please check your credentials.');
       }

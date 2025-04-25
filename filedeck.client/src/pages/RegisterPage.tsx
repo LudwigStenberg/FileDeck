@@ -31,7 +31,7 @@ export default function RegisterPage() {
     
     if (success)
     {
-      navigate("/login");
+      navigate("/");
     } else {
       setError("Registration failed. Please try again.")
     } 

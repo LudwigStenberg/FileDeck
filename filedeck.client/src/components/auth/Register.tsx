@@ -66,7 +66,7 @@ export function Register({onSubmit, isLoading}: RegisterProps) {
                 {isLoading ? "Registering..." : "Register"}
             </button>
             <p>
-        Already have an account? <Link to="/Login">Login here</Link>
+        Already have an account? <Link to="/">Login here</Link>
       </p>
         </form>
         </div>

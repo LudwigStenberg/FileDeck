@@ -25,9 +25,18 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <ProtectedRoute>
-        <DashboardPage />,
+        <DashboardPage />
       </ProtectedRoute>
 ),},
+{
+  path:"/profile",
+  element: (
+    <ProtectedRoute>
+      <DashboardPage />
+    </ProtectedRoute>
+  )
+
+},
 ]);
 
 createRoot(document.getElementById("root")!).render(

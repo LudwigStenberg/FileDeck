@@ -35,10 +35,8 @@ export default function LoginPage() {
   return (
     
     <div className="login-page">
-      <h1>Login to Your Account</h1>
-
       {error && <div className="error-message">{error}</div>}
-
+      
       <Login onSubmit={handleLogin} isLoading={isLoading}/>
     </div>
   )

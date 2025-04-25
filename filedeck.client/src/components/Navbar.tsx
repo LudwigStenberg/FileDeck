@@ -5,6 +5,12 @@ import logo from "../assets/logo.png";
 export const Navbar = () => {
 
     return (
-        <img src={logo} alt="FileDeck Logo" className="navbar-logo"/>
+        <div className="navbar-container">
+        	<img src={logo} alt="FileDeck Logo" className="navbar-logo"/>
+          <ul className="navbar-list">
+            <li>Dashboard</li>
+						<li>Profile</li>
+          </ul>
+        </div>
     );
 }

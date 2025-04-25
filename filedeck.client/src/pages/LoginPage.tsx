@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { Login } from "../components/auth/Login";
 
-import "../index.css";
 import"../styles/auth.css";
 
 export default function LoginPage() {
@@ -36,7 +35,6 @@ export default function LoginPage() {
     
     <div className="login-page">
       {error && <div className="error-message">{error}</div>}
-      
       <Login onSubmit={handleLogin} isLoading={isLoading}/>
     </div>
   )

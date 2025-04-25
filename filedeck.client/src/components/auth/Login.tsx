@@ -19,10 +19,10 @@ export function Login({onSubmit, isLoading = false }: LoginProps) {
 
     return (
         <div className="auth-container">
-        <h1 className="auth-header">
+            <h1 className="auth-header">
             Login to Your Account
-        </h1>
-            <form className="auth-form"onSubmit={handleSubmit}>
+            </h1>
+            <form className="auth-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input
@@ -47,7 +47,8 @@ export function Login({onSubmit, isLoading = false }: LoginProps) {
                 </div>
                 <button
                     className="auth-submit-button"
-                    type="submit" disabled={isLoading}>
+                    type="submit" 
+                    disabled={isLoading}>
                     {isLoading ? "Logging in..." : "Login"}
                 </button>
                 <p>

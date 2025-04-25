@@ -1,9 +1,7 @@
 import { useState } from "react";
-
-import "../index.css";
-import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router";
 import { Register } from "../components/auth/Register";
+import { useAuth } from "../context/AuthContext";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,15 +43,10 @@ export default function RegisterPage() {
 
   return ( 
     <div className="register-page">
-      <h2>Register a New Account</h2>
 
       {error && <div className="error-message">{error}</div>}
 
       <Register onSubmit={handleRegister} isLoading={isLoading}/>
-
-      <p>
-        Already have an account? <Link to="/Login">Login here</Link>
-      </p>
     </div>
   )
 }

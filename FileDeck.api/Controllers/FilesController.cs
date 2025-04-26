@@ -64,7 +64,7 @@ public class FilesController : ControllerBase
         return Ok(file);
     }
 
-    [HttpGet("/root")]
+    [HttpGet("root")]
     [Authorize]
     public async Task<IActionResult> GetRootFiles()
     {
@@ -75,10 +75,6 @@ public class FilesController : ControllerBase
         }
 
         var rootFiles = await fileService.GetRootFilesAsync(userId);
-        if (rootFiles == null)
-        {
-            return NotFound();
-        }
 
         return Ok(rootFiles);
     }

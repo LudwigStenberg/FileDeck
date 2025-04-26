@@ -45,6 +45,7 @@ public class FileRepository : IFileRepository
             .Where(f => f.FolderId == folderId && f.UserId == userId && !f.IsDeleted)
             .ToListAsync();
     }
+
     public async Task<bool> DeleteFileAsync(int fileId, string userId)
     {
         var file = await context.Files

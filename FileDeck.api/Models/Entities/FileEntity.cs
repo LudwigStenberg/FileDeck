@@ -15,6 +15,7 @@ public class FileEntity
     // Relationship with FolderEntity (Many-to-One)
     // Foreign Key
     public int? FolderId { get; set; } // Can be null to support "root" files (not in any folder)
+
     // Navigation Property
     public FolderEntity? Folder { get; set; }
 

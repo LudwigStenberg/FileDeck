@@ -131,9 +131,22 @@ public class FileService : IFileService
         };
     }
 
-    public async Task<IEnumerable<FileResponse>> GetRootFilesAsync()
+    public async Task<IEnumerable<FileResponse>> GetRootFilesAsync(string userId)
     {
+        var rootFiles = await fileRepository.GetRootFilesAsync(userId);
 
+        var rootFilesList = rootFiles.ToList();
+
+        return rootFilesList.Select(file => new FileResponse
+        {
+            Id = file.Id,
+            Name = file.Name,
+            ContentType = file.ContentType,
+            Size = file.Size,
+            UploadDate = file.UploadDate,
+            LastModifiedDate = file.LastModifiedDate,
+            FolderId = file.FolderId
+        });
     }
 
     /// <summary>

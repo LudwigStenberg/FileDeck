@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FileDeck.api.Data;
+using FileDeck.api.DTOs;
 using FileDeck.api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +30,13 @@ public class FileRepository : IFileRepository
         return await context.Files
             .AsNoTracking()
             .SingleOrDefaultAsync(f => f.Id == fileId && f.UserId == userId && !f.IsDeleted);
+    }
+
+    public async Task<IEnumerable<FileEntity>> GetRootFilesAsync(string userId)
+    {
+        return await context.Files
+            .Where(f => f.FolderId == null && f.UserId == userId && !f.IsDeleted)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<FileEntity>> GetFilesInFolderAsync(int folderId, string userId)

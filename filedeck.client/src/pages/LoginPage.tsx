@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { Login } from "../components/auth/Login";
 
-import"../styles/auth.css";
+import "../styles/auth.css";
 import logo from "../assets/logo.png";
 
 export default function LoginPage() {
@@ -16,17 +16,17 @@ export default function LoginPage() {
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
     setError(null);
-  
+
     try {
       const success = await login({ email, password });
       if (success) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
-        setError('Login failed. Please check your credentials.');
+        setError("Login failed. Please check your credentials.");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      setError('An error occurred during login. Please try again.');
+      console.error("Login error:", error);
+      setError("An error occurred during login. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -36,11 +36,7 @@ export default function LoginPage() {
     <div className="login-page">
       <img src={logo} alt="FileDeck Logo" className="app-logo" />
       {error && <div className="error-message">{error}</div>}
-      <Login onSubmit={handleLogin} isLoading={isLoading}/>
+      <Login onSubmit={handleLogin} isLoading={isLoading} />
     </div>
-  )
-
-
-
-
+  );
 }

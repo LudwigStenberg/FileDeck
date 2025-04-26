@@ -1,7 +1,28 @@
+import { useEffect, useState } from "react";
+import api from "../services/api";
+import * as fileService from "../services/fileService";
+import { FileResponse } from "../types";
+
 export const FileList = () => {
-  // Call getRootFiles to fetch files
-  // Display files in a structured list
-  // How do I handle loading state while files are being fetched?
-  // How do I handle the display when there are no files?
-  // What information do I show for each file?
+  const [files, setFiles] = useState<FileResponse[]>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        setIsLoading(true);
+        const rootFiles = await fileService.getRootFiles();
+        setFiles(rootFiles);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching files:", error);
+        setError("Failed to load files. Please try again later");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFiles();
+  }, []);
 };

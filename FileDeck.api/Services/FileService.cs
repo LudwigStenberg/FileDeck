@@ -131,6 +131,11 @@ public class FileService : IFileService
         };
     }
 
+    public async Task<IEnumerable<FileResponse>> GetRootFilesAsync()
+    {
+
+    }
+
     /// <summary>
     /// Retrieves and downloads a file from the database.
     /// </summary>

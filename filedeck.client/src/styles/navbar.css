@@ -2,7 +2,18 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0 20px;
+  margin-left: 2rem;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right {
+  display: flex;
+  justify-content: end;
+  max-width: 100;
 }
 
 .navbar-logo {
@@ -26,10 +37,6 @@
   text-decoration: none;
   color: white;
   padding-right: 1.25rem;
-}
-
-.navbar-right {
-  margin-left: auto;
 }
 
 .logout-button {

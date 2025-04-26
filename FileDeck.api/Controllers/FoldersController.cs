@@ -12,11 +12,11 @@ namespace FileDeck.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class FolderController : ControllerBase
+public class FoldersController : ControllerBase
 {
     private readonly IFolderService folderService;
     private readonly IFileService fileService;
-    public FolderController(IFolderService folderService, IFileService fileService)
+    public FoldersController(IFolderService folderService, IFileService fileService)
     {
         this.folderService = folderService;
         this.fileService = fileService;

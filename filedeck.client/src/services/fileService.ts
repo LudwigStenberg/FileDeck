@@ -1,32 +1,28 @@
 import api from "./api";
-import {
-  FileUploadRequest,
-  FileDownloadResponse,
-  FileResponse,
-} from "../types";
+import { FileUploadRequest, FileResponse } from "../types";
 
 export const uploadFile = async (
   fileData: FileUploadRequest
 ): Promise<FileResponse> => {
-  const response = await api.post<FileResponse>("/file", fileData);
+  const response = await api.post<FileResponse>("/files", fileData);
 
   return response.data;
 };
 
 export const getFileById = async (fileId: number): Promise<FileResponse> => {
-  const response = await api.get<FileResponse>(`/file/${fileId}`);
+  const response = await api.get<FileResponse>(`/files/${fileId}`);
 
   return response.data;
 };
 
 export const getRootFiles = async (): Promise<FileResponse[]> => {
-  const response = await api.get<FileResponse[]>("/file/root");
+  const response = await api.get<FileResponse[]>("/files/root");
 
   return response.data;
 };
 
 export const downloadFile = async (fileId: number): Promise<void> => {
-  const response = await api.get(`/file/${fileId}/download`, {
+  const response = await api.get(`/files/${fileId}/download`, {
     responseType: "blob",
   });
 
@@ -48,7 +44,7 @@ export const downloadFile = async (fileId: number): Promise<void> => {
 };
 
 export const deleteFile = async (fileId: number): Promise<boolean> => {
-  const response = await api.delete(`/file/${fileId}`);
+  const response = await api.delete(`/files/${fileId}`);
 
   return response.status === 204;
 };

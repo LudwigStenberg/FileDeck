@@ -19,6 +19,12 @@ export const getFileById = async (fileId: number): Promise<FileResponse> => {
   return response.data;
 };
 
+export const getRootFiles = async (): Promise<FileResponse[]> => {
+  const response = await api.get<FileResponse[]>("/file/root");
+
+  return response.data;
+};
+
 export const downloadFile = async (fileId: number): Promise<void> => {
   const response = await api.get(`/file/${fileId}/download`, {
     responseType: "blob",

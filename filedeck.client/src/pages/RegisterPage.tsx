@@ -12,42 +12,44 @@ export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleRegister = async (email: string, password: string, confirmPassword: string) =>{
-    
-    if (password !== confirmPassword){
+  const handleRegister = async (
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => {
+    if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
-  
-  try {
-    const success = await register({
-      email, 
-      password, 
-      confirmPassword
-    });
-    
-    if (success)
-    {
-      navigate("/");
-    } else {
-      setError("Registration failed. Please try again.")
-    } 
-  } catch (error) {
-    console.error("Registration error:", error);
-    setError("An error occurred during registration. Please try again.")
-  } finally {
-    setIsLoading(false);
-  }
+
+    try {
+      const success = await register({
+        email,
+        password,
+        confirmPassword,
+      });
+
+      if (success) {
+        navigate("/");
+      } else {
+        setError("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError("An error occurred during registration. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  return ( 
+  return (
     <div className="register-page">
       <img src={logo} alt="FileDeck Logo" className="app-logo" />
       {error && <div className="error-message">{error}</div>}
-      <Register onSubmit={handleRegister} isLoading={isLoading}/>
+      <Register onSubmit={handleRegister} isLoading={isLoading} />
     </div>
-  )
+  );
 }

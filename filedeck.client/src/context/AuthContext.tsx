@@ -23,7 +23,6 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-
 // Manages authentication state (is the user logged in?)
 // Provides authentication methods (login, logout, register)
 // Stores authentication data (tokens, user info)
@@ -62,9 +61,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const register = async (
-    registerData: RegisterRequest
-  ): Promise<boolean> => {
+  const register = async (registerData: RegisterRequest): Promise<boolean> => {
     try {
       const response = await authService.register(registerData);
       return response.succeeded;
@@ -90,9 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 

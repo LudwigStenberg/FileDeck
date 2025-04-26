@@ -26,9 +26,7 @@ export const getFolderById = async (
 export const getFilesInFolder = async (
   folderId: number
 ): Promise<FileResponse[]> => {
-  const response = await api.get<FileResponse[]>(
-    `/folder/${folderId}/files`
-  );
+  const response = await api.get<FileResponse[]>(`/folder/${folderId}/files`);
   return response.data;
 };
 

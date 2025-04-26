@@ -27,16 +27,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <DashboardPage />
       </ProtectedRoute>
-),},
-{
-  path:"/profile",
-  element: (
-    <ProtectedRoute>
-      <DashboardPage />
-    </ProtectedRoute>
-  )
-
-},
+    ),
+  },
+  {
+    path: "/profile",
+    element: (
+      <ProtectedRoute>
+        <DashboardPage />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(

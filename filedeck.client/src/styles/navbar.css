@@ -1,41 +1,41 @@
 .navbar-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 0 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
 }
 
 .navbar-logo {
-    width: 4rem;
-    border-radius: 0.5rem;
-    border-style: solid;
-    border-color: rgb(80, 80, 80);
+  width: 4rem;
+  border-radius: 0.5rem;
+  border-style: solid;
+  border-color: rgb(80, 80, 80);
 }
 
 .navbar-list {
-    display: flex;
-    list-style: none;
+  display: flex;
+  list-style: none;
 }
 
 .navbar-list li:hover,
 .logout-button:hover {
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .navbar-link {
-    text-decoration: none;
-    color: white;
-    padding-right: 1.25rem;
+  text-decoration: none;
+  color: white;
+  padding-right: 1.25rem;
 }
 
 .navbar-right {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .logout-button {
-    border-style: none;
-    font-size: 0.9rem;
-    cursor: pointer;
-    background: none;
-    font-weight: 400;
+  border-style: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: none;
+  font-weight: 400;
 }

@@ -29,7 +29,7 @@ public class FilesController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
             return Unauthorized(new { message = "User ID not found in token" });
@@ -47,7 +47,7 @@ public class FilesController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetFileById(int id)
     {
-        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
         {
@@ -64,11 +64,30 @@ public class FilesController : ControllerBase
         return Ok(file);
     }
 
+    [HttpGet("/root")]
+    [Authorize]
+    public async Task<IActionResult> GetRootFiles()
+    {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
+
+        var rootFiles = await fileService.GetRootFilesAsync(userId);
+        if (rootFiles == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(rootFiles);
+    }
+
     [HttpGet("{id}/download")]
     [Authorize]
     public async Task<IActionResult> DownloadFile(int id)
     {
-        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
         {
@@ -89,7 +108,7 @@ public class FilesController : ControllerBase
     [Authorize]
     public async Task<IActionResult> DeleteFile(int fileId)
     {
-        string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
             return Unauthorized(new { message = "User ID not found in token" });

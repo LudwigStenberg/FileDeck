@@ -4,7 +4,7 @@ import * as fileService from "../services/fileService";
 import { FileResponse } from "../types";
 
 export const FileList = () => {
-  const [files, setFiles] = useState<FileResponse[]>();
+  const [files, setFiles] = useState<FileResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,4 +25,40 @@ export const FileList = () => {
 
     fetchFiles();
   }, []);
+
+  if (isLoading) {
+    return <div>Loading files...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
+  if (files.length === 0) {
+    return <div>No files found. Upload some files to get started.</div>;
+  }
+
+  return (
+    <div className="file-list">
+      <h2>Your Files</h2>
+      <div className="file-list-header">
+        <span className="file-name">Name</span>
+        <span className="file-type">Type</span>
+        <span className="file-size">Size</span>
+        <span className="file-date">Modified</span>
+      </div>
+      <ul className="file-items">
+        {files.map((file) => (
+          <li key={file.id} className="file-item">
+            <span className="file-name">{file.name}</span>
+            <span className="file-type">{file.contentType}</span>
+            <span className="file-size">{file.size}</span>
+            <span className="file-date">
+              {new Date(file.lastModifiedDate).toLocaleDateString()}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };

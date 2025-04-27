@@ -5,6 +5,7 @@ using FileDeck.api.DTOs;
 using FileDeck.api.Services;
 using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -78,6 +79,17 @@ public class FoldersController : ControllerBase
         var files = await fileService.GetFilesInFolderAsync(folderId, userId);
 
         return Ok(files);
+    }
+
+    [HttpGet("{folderId}/subfolders")]
+    [Authorize]
+    public async Task<IActionResult> GetSubfolders(int folderId)
+    {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            Unauthorized(new { message = "User ID not found in token" });
+        }
     }
 
     [HttpPut("{folderId}/rename")]

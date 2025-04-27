@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
@@ -119,6 +121,11 @@ public class FolderService : IFolderService
             userId, folderId, folder.Name);
 
         return FolderResponse;
+    }
+
+    public async Task<IEnumerable<FolderResponse>> GetSubfolders()
+    {
+
     }
 
     /// <summary>

@@ -127,7 +127,13 @@ public class FolderService : IFolderService
     {
         var subfolders = await folderRepository.GetSubfoldersAsync(folderId, userId);
 
-
+        return subfolders.Select(folder => new FolderResponse
+        {
+            Id = folder.Id,
+            Name = folder.Name,
+            ParentFolderId = folder.ParentFolderId,
+            CreatedDate = folder.CreatedDate
+        });
     }
 
     /// <summary>

@@ -123,7 +123,7 @@ public class FolderService : IFolderService
         return FolderResponse;
     }
 
-    public async Task<IEnumerable<FolderResponse>> GetSubfolders()
+    public async Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId)
     {
 
     }

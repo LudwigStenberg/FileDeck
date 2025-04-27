@@ -88,8 +88,11 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized(new { message = "User ID not found in token" });
         }
+
+        var subfolders = await folderService.GetSubfoldersAsync(folderId, userId);
+        return Ok(subfolders);
     }
 
     [HttpPut("{folderId}/rename")]

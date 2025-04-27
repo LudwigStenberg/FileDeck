@@ -125,6 +125,8 @@ public class FolderService : IFolderService
 
     public async Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId)
     {
+        var subfolders = await folderRepository.GetSubfoldersAsync(folderId, userId);
+
 
     }
 

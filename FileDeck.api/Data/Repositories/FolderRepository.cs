@@ -40,6 +40,13 @@ public class FolderRepository : IFolderRepository
             .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
     }
 
+    public async Task<IEnumerable<FolderEntity>> GetSubfoldersAsync(int folderId, string userId)
+    {
+        return await context.Folders
+            .Where(f => f.ParentFolderId == folderId && f.UserId == userId && !f.IsDeleted)
+            .ToListAsync();
+    }
+
     public async Task<bool> RenameFolderAsync(int folderId, string newName, string userId)
     {
         var folder = await context.Folders
@@ -72,7 +79,7 @@ public class FolderRepository : IFolderRepository
                 return false;
             }
 
-            var childFolders = await GetAllChildFolderAsync(folderId, userId);
+            var childFolders = await GetAllChildFoldersAsync(folderId, userId);
             foreach (var childfolder in childFolders)
             {
                 childfolder.IsDeleted = true;
@@ -107,7 +114,7 @@ public class FolderRepository : IFolderRepository
         return false;
     }
 
-    private async Task<List<FolderEntity>> GetAllChildFolderAsync(int parentFolderId, string userId)
+    private async Task<List<FolderEntity>> GetAllChildFoldersAsync(int parentFolderId, string userId)
     {
         var result = new List<FolderEntity>();
 
@@ -119,7 +126,7 @@ public class FolderRepository : IFolderRepository
 
         foreach (FolderEntity child in directChildren)
         {
-            var grandChildren = await GetAllChildFolderAsync(child.Id, userId);
+            var grandChildren = await GetAllChildFoldersAsync(child.Id, userId);
             result.AddRange(grandChildren);
         }
 

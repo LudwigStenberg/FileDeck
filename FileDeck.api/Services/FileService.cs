@@ -135,9 +135,7 @@ public class FileService : IFileService
     {
         var rootFiles = await fileRepository.GetRootFilesAsync(userId);
 
-        var rootFilesList = rootFiles.ToList();
-
-        return rootFilesList.Select(file => new FileResponse
+        return rootFiles.Select(file => new FileResponse
         {
             Id = file.Id,
             Name = file.Name,

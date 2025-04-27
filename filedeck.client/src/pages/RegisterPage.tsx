@@ -33,7 +33,12 @@ export default function RegisterPage() {
       });
 
       if (success) {
-        navigate("/");
+        navigate("/", {
+          state: {
+            successMessage:
+              "Registration successful! You can now log in with your credentials.",
+          },
+        });
       } else {
         setError("Registration failed. Please try again.");
       }

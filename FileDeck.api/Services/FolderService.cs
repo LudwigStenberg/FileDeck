@@ -147,6 +147,11 @@ public class FolderService : IFolderService
         });
     }
 
+    /// <summary>
+    /// Retrieves the root folders for a specific user. 
+    /// </summary>
+    /// <param name="userId">The ID of the user requesting the retrieval.</param>
+    /// <returns>A list of FolderResponse DTOs, can be empty.</returns>
     public async Task<IEnumerable<FolderResponse>> GetRootFoldersAsync(string userId)
     {
         logger.LogInformation("Retrieval of root folders initiated for user {UserId}.", userId);

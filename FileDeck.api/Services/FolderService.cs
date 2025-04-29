@@ -128,7 +128,7 @@ public class FolderService : IFolderService
     /// </summary>
     /// <param name="folderId">The ID of the folder to be searched within.</param>
     /// <param name="userId">The ID of the user requesting to see the subfolders and who has access to it.</param>
-    /// <returns>An IEnumerable containing FolderResponse DTOs.</returns>
+    /// <returns>A list containing FolderResponse DTOs. It can be empty.</returns>
     public async Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId)
     {
         logger.LogInformation("Retrieval of subfolders initiated for user {UserId}. ID of the folder to be searched within: {FolderId}", userId, folderId);

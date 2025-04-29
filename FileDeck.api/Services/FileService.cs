@@ -131,11 +131,20 @@ public class FileService : IFileService
         };
     }
 
+    /// <summary>
+    /// Retrieves all the files located in the root.
+    /// </summary>
+    /// <param name="userId">The ID of the user requesting the files and who has access to it.</param>
+    /// <returns>A list containing FileResponse DTOs. It can be empty.</returns>
     public async Task<IEnumerable<FileResponse>> GetRootFilesAsync(string userId)
     {
-        var rootFiles = await fileRepository.GetRootFilesAsync(userId);
+        logger.LogInformation("Retrieval of root files initiated for user {UserId}.", userId);
 
-        return rootFiles.Select(file => new FileResponse
+        var rootFiles = await fileRepository.GetRootFilesAsync(userId);
+        var rootFilesList = rootFiles.ToList();
+
+        logger.LogInformation("Retrieval of root files successful for user {UserId}. Found {FileCount} files.", userId, rootFilesList.Count);
+        return rootFilesList.Select(file => new FileResponse
         {
             Id = file.Id,
             Name = file.Name,

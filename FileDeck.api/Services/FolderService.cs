@@ -123,6 +123,12 @@ public class FolderService : IFolderService
         return FolderResponse;
     }
 
+    /// <summary>
+    /// Retrieves the subfolders within a specific folder.
+    /// </summary>
+    /// <param name="folderId">The ID of the folder to be searched within.</param>
+    /// <param name="userId">The ID of the user requesting to see the subfolders and who has access to it.</param>
+    /// <returns>An IEnumerable containing FolderResponse DTOs.</returns>
     public async Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId)
     {
         var subfolders = await folderRepository.GetSubfoldersAsync(folderId, userId);

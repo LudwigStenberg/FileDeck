@@ -23,6 +23,10 @@ export const getFolderById = async (
 };
 
 // Get root folders
+export const getRootFolders = async (): Promise<FolderResponse[]> => {
+  const response = await api.get<FolderResponse[]>("/folders/root");
+  return response.data;
+};
 
 // Get files in folder
 export const getFilesInFolder = async (

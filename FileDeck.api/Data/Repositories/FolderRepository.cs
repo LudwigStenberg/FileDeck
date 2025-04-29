@@ -49,7 +49,9 @@ public class FolderRepository : IFolderRepository
 
     public async Task<IEnumerable<FolderEntity>> GetRootFoldersAsync(string userId)
     {
-        return
+        return await context.Folders
+            .Where(f => f.ParentFolderId == null && f.UserId == userId && !f.IsDeleted)
+            .ToListAsync();
     }
 
     public async Task<bool> RenameFolderAsync(int folderId, string newName, string userId)

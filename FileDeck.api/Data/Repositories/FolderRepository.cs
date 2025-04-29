@@ -47,6 +47,11 @@ public class FolderRepository : IFolderRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<FolderEntity>> GetRootFoldersAsync(string userId)
+    {
+        return
+    }
+
     public async Task<bool> RenameFolderAsync(int folderId, string newName, string userId)
     {
         var folder = await context.Folders

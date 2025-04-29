@@ -95,7 +95,6 @@ public class FoldersController : ControllerBase
         return Ok(subfolders);
     }
 
-
     [HttpGet("root")]
     [Authorize]
     public async Task<IActionResult> GetRootFolders()
@@ -107,7 +106,7 @@ public class FoldersController : ControllerBase
         }
 
         var rootFolders = await folderService.GetRootFoldersAsync(userId);
-
+        return Ok(rootFolders);
     }
 
     [HttpPut("{folderId}/rename")]

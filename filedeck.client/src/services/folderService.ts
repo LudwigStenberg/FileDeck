@@ -14,13 +14,15 @@ export const createFolder = async (
   return response.data;
 };
 
-// Get Folder
+// Get folder
 export const getFolderById = async (
   folderId: number
 ): Promise<FolderResponse> => {
   const response = await api.get<FolderResponse>(`/folder/${folderId}`);
   return response.data;
 };
+
+// Get root folders
 
 // Get files in folder
 export const getFilesInFolder = async (

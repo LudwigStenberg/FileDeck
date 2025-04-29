@@ -148,6 +148,12 @@ public class FolderService : IFolderService
         });
     }
 
+    public async Task<IEnumerable<FolderResponse>> GetRootFoldersAsync(int userId)
+    {
+
+        return
+    }
+
     /// <summary>
     /// Renames a specific folder.
     /// </summary>

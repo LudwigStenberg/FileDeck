@@ -131,9 +131,15 @@ public class FolderService : IFolderService
     /// <returns>An IEnumerable containing FolderResponse DTOs.</returns>
     public async Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId)
     {
+        logger.LogInformation("Retrieval of subfolders initiated for user {UserId}. ID of the folder to be searched within: {FolderId}", userId, folderId);
+
         var subfolders = await folderRepository.GetSubfoldersAsync(folderId, userId);
 
-        return subfolders.Select(folder => new FolderResponse
+        var subfoldersList = subfolders.ToList();
+
+        logger.LogInformation("Retrieval of subfolders successful for user {UserId}. Found {SubfolderCount}.", userId, subfoldersList.Count);
+
+        return subfoldersList.Select(folder => new FolderResponse
         {
             Id = folder.Id,
             Name = folder.Name,

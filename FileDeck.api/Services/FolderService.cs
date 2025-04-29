@@ -138,7 +138,6 @@ public class FolderService : IFolderService
         var subfoldersList = subfolders.ToList();
 
         logger.LogInformation("Retrieval of subfolders successful for user {UserId}. Found {SubfolderCount}.", userId, subfoldersList.Count);
-
         return subfoldersList.Select(folder => new FolderResponse
         {
             Id = folder.Id,
@@ -148,10 +147,21 @@ public class FolderService : IFolderService
         });
     }
 
-    public async Task<IEnumerable<FolderResponse>> GetRootFoldersAsync(int userId)
+    public async Task<IEnumerable<FolderResponse>> GetRootFoldersAsync(string userId)
     {
+        logger.LogInformation("Retrieval of root folders initiated for user {UserId}.", userId);
+        var rootFolders = await folderRepository.GetRootFoldersAsync(userId);
 
-        return
+        var rootFoldersList = rootFolders.ToList();
+
+        logger.LogInformation("Retrieval of root folders successful for user {UserId}. Found {FolderCount} folders in root.", userId, rootFoldersList.Count);
+        return rootFoldersList.Select(folder => new FolderResponse
+        {
+            Id = folder.Id,
+            Name = folder.Name,
+            ParentFolderId = folder.ParentFolderId,
+            CreatedDate = folder.CreatedDate
+        });
     }
 
     /// <summary>

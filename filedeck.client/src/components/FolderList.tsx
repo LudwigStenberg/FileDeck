@@ -22,5 +22,40 @@ export const FolderList = () => {
         setIsLoading(false);
       }
     };
-  });
+
+    fetchRootFolders();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading folders...</div>;
+  }
+
+  if (error) {
+    return <div className="error-messager">{error}</div>;
+  }
+
+  if (folders.length === 0) {
+    return <div>No folders found. Create a folder to get started.</div>;
+  }
+
+  return (
+    <div className="folder-list">
+      <h2>Your folders</h2>
+      <div className="folder-list-header">
+        <span className="folder-name">Name</span>
+        <span className="folder-created-date">Created</span>
+      </div>
+      <div className="folder-items">
+        {folders.map((folder) => (
+          <li key={folder.id} className="folder-item">
+            <span className="folder-name">{folder.name}</span>
+            <span className="folder-created-date">
+              {new Date(folder.createdDate).toLocaleDateString()}
+            </span>
+          </li>
+        ))}
+        <span className="folder-name"></span>
+      </div>
+    </div>
+  );
 };

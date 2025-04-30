@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { FolderResponse } from "../types";
 import api from "../services/api";
 import * as folderService from "../services/folderService";
+import { FaRegFolder } from "react-icons/fa";
+import "../styles/folder.css";
 
 export const FolderList = () => {
   const [folders, setFolders] = useState<FolderResponse[]>([]);
@@ -42,14 +44,15 @@ export const FolderList = () => {
     <div className="folder-list">
       <h2>Your folders</h2>
       <div className="folder-list-header">
-        <span className="folder-name">Name</span>
-        <span className="folder-created-date">Created</span>
+        <span className="folder-name-header">Name</span>
+        <span className="folder-created-header">Created</span>
       </div>
       <div className="folder-items">
+        <FaRegFolder className="folder-icon" size={20} />
         {folders.map((folder) => (
           <li key={folder.id} className="folder-item">
             <span className="folder-name">{folder.name}</span>
-            <span className="folder-created-date">
+            <span className="folder-created">
               {new Date(folder.createdDate).toLocaleDateString()}
             </span>
           </li>

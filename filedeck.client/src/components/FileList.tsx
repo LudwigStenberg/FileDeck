@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import * as fileService from "../services/fileService";
 import { FileResponse } from "../types";
+import "../styles/file.css";
 
 export const FileList = () => {
   const [files, setFiles] = useState<FileResponse[]>([]);
@@ -35,7 +36,11 @@ export const FileList = () => {
   }
 
   if (files.length === 0) {
-    return <div>No files found. Upload some files to get started.</div>;
+    return (
+      <div className="no-files-found">
+        No files found. Upload some files to get started.
+      </div>
+    );
   }
 
   return (

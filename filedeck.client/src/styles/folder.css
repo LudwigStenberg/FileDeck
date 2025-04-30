@@ -1,0 +1,30 @@
+/* Relating to folder headers */
+.folder-list-header {
+  font-weight: bold;
+}
+
+.folder-list h2 {
+  margin-left: 4rem;
+}
+
+.folder-name-header {
+  margin: 0rem 5rem 0rem 4rem;
+}
+
+/* A specific folder*/
+.folder-icon {
+  margin-top: 0.2rem;
+  margin-left: 2.2rem;
+}
+
+.folder-items {
+  display: flex;
+}
+
+.folder-item {
+  list-style-type: none;
+}
+
+.folder-name {
+  margin: 0rem 4rem 0rem 0.5rem;
+}

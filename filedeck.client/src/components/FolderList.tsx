@@ -42,7 +42,7 @@ export const FolderList = () => {
 
   return (
     <div className="folder-list">
-      <h2>Your folders</h2>
+      <h2>Folders</h2>
       <div className="folder-list-header">
         <span className="folder-name-header">Name</span>
         <span className="folder-created-header">Created</span>

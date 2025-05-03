@@ -15,34 +15,12 @@ export const FolderList = ({
   currentFolderId,
   setCurrentFolderId,
 }: FolderListProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchRootFolders = async () => {
-      try {
-        setIsLoading(true);
-        const rootFolders = await folderService.getRootFolders();
-        setFolders(rootFolders);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching root folders:", error);
-        setError("Failed to load root folders. Please try again later");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchRootFolders();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading folders...</div>;
-  }
-
-  if (error) {
-    return <div className="error-messager">{error}</div>;
-  }
+  const foldersToDisplay = folders.filter(
+    (folder) =>
+      currentFolderId === null
+        ? folder.parentFolderId === null // Root folders
+        : folder.parentFolderId === currentFolderId // Subfolders
+  );
 
   if (folders.length === 0) {
     return <div>No folders found. Create a folder to get started.</div>;

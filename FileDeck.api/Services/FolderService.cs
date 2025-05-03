@@ -125,7 +125,7 @@ public class FolderService : IFolderService
 
     public async Task<IEnumerable<FolderResponse>> GetAllFoldersAsync(string userId)
     {
-        var folders = await folderRepository.GetAllFoldersAsync(string userId);
+        var folders = await folderRepository.GetAllFoldersAsync(userId);
 
         var folderList = folders.ToList();
 
@@ -152,7 +152,7 @@ public class FolderService : IFolderService
 
         var subfolderList = subfolders.ToList();
 
-        logger.LogInformation("Retrieval of subfolders successful for user {UserId}. Found {SubfolderCount}.", userId, subfoldersList.Count);
+        logger.LogInformation("Retrieval of subfolders successful for user {UserId}. Found {SubfolderCount}.", userId, subfolderList.Count);
         return subfolderList.Select(folder => new FolderResponse
         {
             Id = folder.Id,

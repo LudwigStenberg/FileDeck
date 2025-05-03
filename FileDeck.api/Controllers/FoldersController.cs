@@ -78,11 +78,6 @@ public class FoldersController : ControllerBase
 
         var folders = await folderService.GetAllFoldersAsync(userId);
 
-        if (folders == null)
-        {
-            return NotFound();
-        }
-
         return Ok(folders);
     }
 

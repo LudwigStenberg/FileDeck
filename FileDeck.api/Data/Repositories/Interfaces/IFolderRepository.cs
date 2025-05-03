@@ -8,7 +8,7 @@ public interface IFolderRepository
 {
     Task<FolderEntity> CreateFolderAsync(FolderEntity folder);
     Task<FolderEntity?> GetFolderByIdAsync(int folderId, string userId);
-    Task<IEnumerable<FolderEntity>> GetAllFolders(string userId);
+    Task<IEnumerable<FolderEntity>> GetAllFoldersAsync(string userId);
     Task<IEnumerable<FolderEntity>> GetSubfoldersAsync(int folderId, string userId);
     Task<IEnumerable<FolderEntity>> GetRootFoldersAsync(string userId);
     Task<bool> FolderExistsAsync(int parentFolderId, string userId);

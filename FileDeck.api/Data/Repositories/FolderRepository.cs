@@ -28,10 +28,10 @@ public class FolderRepository : IFolderRepository
         return folder;
     }
 
-    public async Task<bool> FolderExistsAsync(int parentFolderId, string userId)
+    public async Task<bool> FolderExistsAsync(int folderId, string userId)
     {
         return await context.Folders
-            .AnyAsync(f => f.Id == parentFolderId && f.UserId == userId && !f.IsDeleted);
+            .AnyAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
     }
 
     public async Task<FolderEntity?> GetFolderByIdAsync(int folderId, string userId)

@@ -169,6 +169,15 @@ public class FolderService : IFolderService
         });
     }
 
+    public async Task<IEnumerable<FolderPathResponse>?> GetFolderPathAsync(int folderId, string userId)
+    {
+        var folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
+        if (!folderExists)
+        {
+            return null;
+        }
+    }
+
     /// <summary>
     /// Renames a specific folder.
     /// </summary>

@@ -10,6 +10,7 @@ public interface IFolderService
     Task<FolderResponse?> GetFolderByIdAsync(int folderId, string userId);
     Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId);
     Task<IEnumerable<FolderResponse>> GetRootFoldersAsync(string userId);
+    Task<IEnumerable<FolderPathResponse>> GetFolderPathAsync(int folderId, string userId);
     Task<bool> RenameFolderAsync(int folderId, RenameFolderRequest request, string userId);
     Task<bool> DeleteFolderAsync(int folderId, string userId);
 }

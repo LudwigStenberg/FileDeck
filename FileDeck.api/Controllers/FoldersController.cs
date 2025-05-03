@@ -109,6 +109,25 @@ public class FoldersController : ControllerBase
         return Ok(rootFolders);
     }
 
+    [HttpGet("{folderId}/path")]
+    [Authorize]
+    public async Task<IActionResult> GetFolderPath(int folderId)
+    {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
+
+        var folderPath = await folderService.GetFolderPathAsync(folderId, userId);
+        if (folderPath == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(folderPath);
+    }
+
     [HttpPut("{folderId}/rename")]
     [Authorize]
     public async Task<IActionResult> RenameFolder(int folderId, [FromBody] RenameFolderRequest request)

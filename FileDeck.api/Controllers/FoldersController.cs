@@ -66,6 +66,26 @@ public class FoldersController : ControllerBase
         return Ok(folder);
     }
 
+    [HttpGet("all")]
+    [Authorize]
+    public async Task<IActionResult> GetAllFolders()
+    {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
+
+        var folders = await folderService.GetAllFoldersAsync(string userId);
+
+        if (folders == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(folders);
+    }
+
     [HttpGet("{folderId}/files")]
     [Authorize]
     public async Task<IActionResult> GetFilesInFolder(int folderId)

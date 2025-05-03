@@ -123,6 +123,21 @@ public class FolderService : IFolderService
         return FolderResponse;
     }
 
+    public async Task<IEnumerable<FolderResponse>> GetAllFoldersAsync(string userId)
+    {
+        var folders = await folderRepository.GetAllFoldersAsync(string userId);
+
+        var folderList = folders.ToList();
+
+        return folderList.Select(folder => new FolderResponse
+        {
+            Id = folder.Id,
+            Name = folder.Name,
+            ParentFolderId = folder.ParentFolderId,
+            CreatedDate = folder.CreatedDate
+        });
+    }
+
     /// <summary>
     /// Retrieves the subfolders within a specific folder.
     /// </summary>
@@ -135,10 +150,10 @@ public class FolderService : IFolderService
 
         var subfolders = await folderRepository.GetSubfoldersAsync(folderId, userId);
 
-        var subfoldersList = subfolders.ToList();
+        var subfolderList = subfolders.ToList();
 
         logger.LogInformation("Retrieval of subfolders successful for user {UserId}. Found {SubfolderCount}.", userId, subfoldersList.Count);
-        return subfoldersList.Select(folder => new FolderResponse
+        return subfolderList.Select(folder => new FolderResponse
         {
             Id = folder.Id,
             Name = folder.Name,

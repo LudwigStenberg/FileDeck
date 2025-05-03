@@ -76,7 +76,7 @@ public class FoldersController : ControllerBase
             return Unauthorized(new { message = "User ID not found in token" });
         }
 
-        var folders = await folderService.GetAllFoldersAsync(string userId);
+        var folders = await folderService.GetAllFoldersAsync(userId);
 
         if (folders == null)
         {

@@ -10,7 +10,7 @@ import {
 export const createFolder = async (
   folderData: CreateFolderRequest
 ): Promise<FolderResponse> => {
-  const response = await api.post<FolderResponse>("/folder", folderData);
+  const response = await api.post<FolderResponse>("/folders", folderData);
   return response.data;
 };
 
@@ -18,7 +18,13 @@ export const createFolder = async (
 export const getFolderById = async (
   folderId: number
 ): Promise<FolderResponse> => {
-  const response = await api.get<FolderResponse>(`/folder/${folderId}`);
+  const response = await api.get<FolderResponse>(`/folders/${folderId}`);
+  return response.data;
+};
+
+// Get all folders
+export const getAllFolders = async (): Promise<FolderResponse[]> => {
+  const response = await api.get<FolderResponse[]>("/folders/all");
   return response.data;
 };
 
@@ -32,7 +38,7 @@ export const getRootFolders = async (): Promise<FolderResponse[]> => {
 export const getFilesInFolder = async (
   folderId: number
 ): Promise<FileResponse[]> => {
-  const response = await api.get<FileResponse[]>(`/folder/${folderId}/files`);
+  const response = await api.get<FileResponse[]>(`/folders/${folderId}/files`);
   return response.data;
 };
 
@@ -43,7 +49,7 @@ export const renameFolder = async (
   renameData: RenameFolderDto
 ): Promise<boolean> => {
   const response = await api.put<{ message: string }>(
-    `/folder/${folderId}/rename`,
+    `/folders/${folderId}/rename`,
     renameData
   );
 
@@ -52,7 +58,7 @@ export const renameFolder = async (
 
 // Delete folder
 export const deleteFolder = async (folderId: number): Promise<boolean> => {
-  const response = await api.delete<boolean>(`/folder/${folderId}`);
+  const response = await api.delete<boolean>(`/folders/${folderId}`);
 
   return response.status === 204;
 };

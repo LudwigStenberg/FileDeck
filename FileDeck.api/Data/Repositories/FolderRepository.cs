@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.Data;
+using FileDeck.api.DTOs;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -39,6 +40,13 @@ public class FolderRepository : IFolderRepository
     {
         return await context.Folders
             .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
+    }
+
+    public async Task<IEnumerable<FolderEntity>> GetAllFoldersAsync(string userId)
+    {
+        return await context.Folders
+            .Where(f => f.UserId == userId && !f.IsDeleted)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<FolderEntity>> GetSubfoldersAsync(int folderId, string userId)

@@ -24,16 +24,16 @@ export default function DashboardPage() {
       } finally {
         setIsLoading(false);
       }
-
-      fetchAllFolders();
     };
+
+    fetchAllFolders();
   }, []);
 
   return (
     <div>
       <Navbar />
       <div className="dashboard-content">
-        {isLoading ?? <div className="loading-message">Loading folders...</div>}
+        {isLoading && <div className="loading-message">Loading folders...</div>}
         {error && <div className="error-message">{error}</div>}
         <FolderList />
         <FileList />

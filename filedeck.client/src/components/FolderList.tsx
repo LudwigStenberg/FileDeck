@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { FolderResponse } from "../types";
-import api from "../services/api";
 import * as folderService from "../services/folderService";
 import { FaRegFolder } from "react-icons/fa";
 import "../styles/folder.css";
@@ -11,8 +10,11 @@ interface FolderListProps {
   setCurrentFolderId: (folderId: number | null) => void;
 }
 
-export const FolderList = () => {
-  const [folders, setFolders] = useState<FolderResponse[]>([]);
+export const FolderList = ({
+  folders,
+  currentFolderId,
+  setCurrentFolderId,
+}: FolderListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

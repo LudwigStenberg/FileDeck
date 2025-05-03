@@ -12,10 +12,29 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [folders, setFolders] = useState<FolderResponse[]>([]);
 
+  useEffect(() => {
+    const fetchAllFolders = async () => {
+      try {
+        setIsLoading(true);
+        const folders = await folderService.getAllFolders();
+        setFolders(folders);
+      } catch (error) {
+        console.error("Error fetching all folders:", error);
+        setError("Failed to load all folders. Please try again later");
+      } finally {
+        setIsLoading(false);
+      }
+
+      fetchAllFolders();
+    };
+  }, []);
+
   return (
     <div>
       <Navbar />
       <div className="dashboard-content">
+        {isLoading ?? <div className="loading-message">Loading folders...</div>}
+        {error && <div className="error-message">{error}</div>}
         <FolderList />
         <FileList />
       </div>

@@ -41,7 +41,7 @@ export default function LoginPage() {
     <div className="login-page">
       <img src={logo} alt="FileDeck Logo" className="app-logo" />
       <h1 className="auth-header">Login to Your Account</h1>
-      {successMessage ?? (
+      {successMessage && (
         <div className="success-message">{successMessage}</div>
       )}
       {error && <div className="error-message">{error}</div>}

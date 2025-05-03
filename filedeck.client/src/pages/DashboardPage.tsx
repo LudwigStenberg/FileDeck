@@ -35,8 +35,12 @@ export default function DashboardPage() {
       <div className="dashboard-content">
         {isLoading && <div className="loading-message">Loading folders...</div>}
         {error && <div className="error-message">{error}</div>}
-        <FolderList />
-        <FileList />
+        <FolderList
+          folders={folders}
+          currentFolderId={currentFolderId}
+          setCurrentFolderId={setCurrentFolderId}
+        />
+        <FileList currentFolderId={currentFolderId} />
       </div>
     </div>
   );

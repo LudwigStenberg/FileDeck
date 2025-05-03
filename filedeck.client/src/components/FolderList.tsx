@@ -5,6 +5,12 @@ import * as folderService from "../services/folderService";
 import { FaRegFolder } from "react-icons/fa";
 import "../styles/folder.css";
 
+interface FolderListProps {
+  folders: FolderResponse[];
+  currentFolderId: number | null;
+  setCurrentFolderId: (folderId: number | null) => void;
+}
+
 export const FolderList = () => {
   const [folders, setFolders] = useState<FolderResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);

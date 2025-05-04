@@ -1,5 +1,22 @@
+/* Navigation Path */
+.navigation-container {
+  display: flex;
+  align-items: center;
+}
+
+.go-up-icon {
+  margin: 0rem 0rem 0rem 2.1rem;
+}
+
+.navigation-path {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
 /* Relating to folder headers */
 .folder-list-header {
+  margin: 2rem 0rem 2rem 0rem;
   font-weight: bold;
 }
 

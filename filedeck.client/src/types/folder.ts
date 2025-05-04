@@ -1,6 +1,6 @@
 export interface CreateFolderRequest {
   name: string;
-  parentFolderId?: number;
+  parentFolderId: number | null;
 }
 
 export interface RenameFolderDto {
@@ -10,6 +10,6 @@ export interface RenameFolderDto {
 export interface FolderResponse {
   id: number;
   name: string;
-  parentFolderId?: number;
+  parentFolderId: number | null;
   createdDate: string;
 }

@@ -5,9 +5,10 @@ import { Navbar } from "../components/Navbar";
 import * as folderService from "../services/folderService";
 import "../styles/navbar.css";
 import { FolderResponse } from "../types";
+import { Breadcrumb } from "../components/Breadcrumb";
 
 export default function DashboardPage() {
-  const [currentFolderId, setCurrentFolderId] = useState<Number | null>(null);
+  const [currentFolderId, setCurrentFolderId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [folders, setFolders] = useState<FolderResponse[]>([]);
@@ -35,12 +36,17 @@ export default function DashboardPage() {
       <div className="dashboard-content">
         {isLoading && <div className="loading-message">Loading folders...</div>}
         {error && <div className="error-message">{error}</div>}
+        <Breadcrumb
+          folders={folders}
+          currentFolderId={currentFolderId as number | null}
+          setCurrentFolderId={setCurrentFolderId}
+        />
         <FolderList
           folders={folders}
           currentFolderId={currentFolderId}
           setCurrentFolderId={setCurrentFolderId}
         />
-        <FileList currentFolderId={currentFolderId} />
+        <FileList />
       </div>
     </div>
   );

@@ -15,17 +15,19 @@ export const FolderList = ({
   currentFolderId,
   setCurrentFolderId,
 }: FolderListProps) => {
-  const foldersToDisplay = folders.filter(
+  const displayedFolders = folders.filter(
     (folder) =>
       currentFolderId === null
         ? folder.parentFolderId === null // Show root folders when at root
         : folder.parentFolderId === currentFolderId // Show subfolders when in a folder
   );
 
+  // Navigate to folder on click
   const handleFolderClick = (folderId: number) => {
     setCurrentFolderId(folderId);
   };
 
+  // Navigate to parent folder
   const handleGoUp = () => {
     if (currentFolderId === null) return;
 
@@ -33,16 +35,15 @@ export const FolderList = ({
     setCurrentFolderId(currentFolder?.parentFolderId ?? null);
   };
 
-  if (folders.length === 0) {
+  if (displayedFolders.length === 0) {
     return <div>No folders found. Create a folder to get started.</div>;
   }
 
   return (
     <div className="folder-list">
       <h2>Folders</h2>
-
       <div className="navigation-container">
-        <IoArrowBack className="go-up-icon" size={25} />
+        <IoArrowBack className="go-up-icon" size={25} onClick={handleGoUp} />
         <span className="navigation-path">Path</span>
       </div>
 
@@ -53,7 +54,7 @@ export const FolderList = ({
       </div>
       <div className="folder-items">
         <FaRegFolder className="folder-icon" size={20} />
-        {foldersToDisplay.map((folder) => (
+        {displayedFolders.map((folder) => (
           <li
             key={folder.id}
             className="folder-item"

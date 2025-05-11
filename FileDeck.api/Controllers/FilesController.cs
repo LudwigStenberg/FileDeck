@@ -1,11 +1,10 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FileDeck.api.DTOs;
-using FileDeck.api.Repositories;
 using FileDeck.api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
+
 
 namespace FileDeck.api.Controllers;
 

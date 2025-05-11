@@ -1,40 +1,13 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
-import * as fileService from "../services/fileService";
 import { FileResponse } from "../types";
 import "../styles/file.css";
 
-export const FileList = () => {
-  const [files, setFiles] = useState<FileResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+interface FileListProps {
+  files: FileResponse[];
+  onFileDeleted: () => void;
+}
 
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        setIsLoading(true);
-        const rootFiles = await fileService.getRootFiles();
-        setFiles(rootFiles);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching files:", error);
-        setError("Failed to load files. Please try again later");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFiles();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading files...</div>;
-  }
-
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
-
+export const FileList = ({ files, onFileDeleted }: FileListProps) => {
   if (files.length === 0) {
     return "";
   }
@@ -57,6 +30,8 @@ export const FileList = () => {
             <span className="file-date">
               {new Date(file.lastModifiedDate).toLocaleDateString()}
             </span>
+            <span className="file-actions"></span>
+            {/* TODO: Add download/delete buttons */}
           </li>
         ))}
       </ul>

@@ -2,7 +2,7 @@ export interface FileUploadRequest {
   name: string;
   contentType: string;
   content: Uint8Array | ArrayBuffer;
-  folderId?: number;
+  folderId?: number | null;
 }
 
 export interface FileDownloadResponse {

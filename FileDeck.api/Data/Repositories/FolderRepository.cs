@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileDeck.api.Data;
-using FileDeck.api.DTOs;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FileDeck.api.Repositories;
 public class FolderRepository : IFolderRepository

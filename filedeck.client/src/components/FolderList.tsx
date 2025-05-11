@@ -56,21 +56,29 @@ export const FolderList = ({
         <span className="folder-name-header">Name</span>
         <span className="folder-created-header">Created</span>
       </div>
+
       <div className="folder-items">
-        <FaRegFolder className="folder-icon" size={20} />
-        {displayedFolders.map((folder) => (
-          <li
-            key={folder.id}
-            className="folder-item"
-            onClick={() => handleFolderClick(folder.id)}
-          >
-            <span className="folder-name">{folder.name}</span>
-            <span className="folder-created">
-              {new Date(folder.createdDate).toLocaleDateString()}
-            </span>
-          </li>
-        ))}
-        <span className="folder-name"></span>
+        {displayedFolders.length > 0 ? (
+          <>
+            <FaRegFolder className="folder-icon" size={20} />
+            {displayedFolders.map((folder) => (
+              <li
+                key={folder.id}
+                className="folder-item"
+                onClick={() => handleFolderClick(folder.id)}
+              >
+                <span className="folder-name">{folder.name}</span>
+                <span className="folder-created">
+                  {new Date(folder.createdDate).toLocaleDateString()}
+                </span>
+              </li>
+            ))}
+          </>
+        ) : (
+          <div className="empty-folder-message">
+            This folder is empty. Create a new folder or upload files.
+          </div>
+        )}
       </div>
     </div>
   );

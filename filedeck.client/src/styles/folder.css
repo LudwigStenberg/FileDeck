@@ -49,3 +49,7 @@
 .folder-created {
   margin-left: 0.3rem;
 }
+
+.empty-folder-message {
+  margin: 0rem 0rem 0rem 3rem;
+}

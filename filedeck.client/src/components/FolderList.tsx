@@ -36,10 +36,6 @@ export const FolderList = ({
     setCurrentFolderId(currentFolder?.parentFolderId ?? null);
   };
 
-  if (displayedFolders.length === 0) {
-    return <div>No folders found. Create a folder to get started.</div>;
-  }
-
   return (
     <div className="folder-list">
       <h2>Folders</h2>

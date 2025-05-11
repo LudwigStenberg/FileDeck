@@ -2,6 +2,10 @@
 .navigation-container {
   display: flex;
   align-items: center;
+  border-style: solid;
+  border-radius: 0.2rem;
+  border-width: 1px;
+  margin-left: 4rem;
 }
 
 .go-up-icon {
@@ -18,10 +22,6 @@
 .folder-list-header {
   margin: 2rem 0rem 2rem 0rem;
   font-weight: bold;
-}
-
-.folder-list h2 {
-  margin-left: 4rem;
 }
 
 .folder-name-header {
@@ -52,4 +52,6 @@
 
 .empty-folder-message {
   margin: 0rem 0rem 0rem 4rem;
+  color: #888;
+  font-style: italic;
 }

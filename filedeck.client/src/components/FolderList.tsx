@@ -38,7 +38,6 @@ export const FolderList = ({
 
   return (
     <div className="folder-list">
-      <h2>Folders</h2>
       <div className="navigation-container">
         <IoArrowBack className="go-up-icon" size={25} onClick={handleGoUp} />
         <span className="navigation-path">

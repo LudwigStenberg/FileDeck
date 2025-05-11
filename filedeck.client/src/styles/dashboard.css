@@ -1,1 +1,7 @@
+.dashboard-content h2 {
+  margin-left: 4rem;
+}
 
+.create-folder-button {
+  margin: 0rem 0rem 2rem 4rem;
+}

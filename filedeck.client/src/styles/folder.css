@@ -9,13 +9,19 @@
 }
 
 .go-up-icon {
-  margin: 0rem 0rem 0rem 2.1rem;
+  margin: 0rem 1rem 0rem 0rem;
+  cursor: pointer;
+}
+
+.go-home-icon {
+  cursor: pointer;
 }
 
 .navigation-path {
   display: flex;
   align-items: center;
   margin-left: 0.5rem;
+  cursor: pointer;
 }
 
 /* Relating to folder headers */

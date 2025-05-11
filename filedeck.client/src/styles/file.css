@@ -5,3 +5,18 @@
 .file-list {
   margin: 2rem 0rem 0rem 2rem;
 }
+
+.file-items {
+  display: flex;
+  list-style: none;
+  margin-left: 0rem;
+}
+
+.file-icon {
+  margin-top: 0.2rem;
+}
+
+.file-name,
+.file-size {
+  margin-right: 2rem;
+}

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { FolderResponse } from "../types";
 import { FaRegFolder } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
+import { GoHome } from "react-icons/go";
+
 import "../styles/folder.css";
 import { Breadcrumb } from "./Breadcrumb";
 
@@ -40,6 +42,11 @@ export const FolderList = ({
     <div className="folder-list">
       <div className="navigation-container">
         <IoArrowBack className="go-up-icon" size={25} onClick={handleGoUp} />
+        <GoHome
+          className="go-home-icon"
+          size={23}
+          onClick={() => setCurrentFolderId(null)}
+        />
         <span className="navigation-path">
           {" "}
           <Breadcrumb
@@ -52,8 +59,6 @@ export const FolderList = ({
 
       <div className="folder-list-header">
         <span></span>
-        <span className="folder-name-header">Name</span>
-        <span className="folder-created-header">Created</span>
       </div>
 
       <div className="folder-items">
@@ -67,9 +72,6 @@ export const FolderList = ({
                 onClick={() => handleFolderClick(folder.id)}
               >
                 <span className="folder-name">{folder.name}</span>
-                <span className="folder-created">
-                  {new Date(folder.createdDate).toLocaleDateString()}
-                </span>
               </li>
             ))}
           </>

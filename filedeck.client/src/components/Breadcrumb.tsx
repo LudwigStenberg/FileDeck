@@ -35,7 +35,7 @@ export const Breadcrumb = ({
         className="breadcrumb-item"
         onClick={() => setCurrentFolderId(null)}
       >
-        Root
+        Home
       </span>
 
       {path.map((folder) => (

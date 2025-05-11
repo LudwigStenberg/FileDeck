@@ -59,11 +59,6 @@ export default function DashboardPage() {
           isOpen={isCreateFolderModalOpen}
         />
 
-        <Breadcrumb
-          folders={folders}
-          currentFolderId={currentFolderId as number | null}
-          setCurrentFolderId={setCurrentFolderId}
-        />
         <FolderList
           folders={folders}
           currentFolderId={currentFolderId}

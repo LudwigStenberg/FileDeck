@@ -3,6 +3,7 @@ import { FolderResponse } from "../types";
 import { FaRegFolder } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import "../styles/folder.css";
+import { Breadcrumb } from "./Breadcrumb";
 
 interface FolderListProps {
   folders: FolderResponse[];
@@ -44,7 +45,14 @@ export const FolderList = ({
       <h2>Folders</h2>
       <div className="navigation-container">
         <IoArrowBack className="go-up-icon" size={25} onClick={handleGoUp} />
-        <span className="navigation-path">Path</span>
+        <span className="navigation-path">
+          {" "}
+          <Breadcrumb
+            folders={folders}
+            currentFolderId={currentFolderId as number | null}
+            setCurrentFolderId={setCurrentFolderId}
+          />
+        </span>
       </div>
 
       <div className="folder-list-header">

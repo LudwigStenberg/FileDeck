@@ -48,7 +48,6 @@ export const FolderList = ({
           onClick={() => setCurrentFolderId(null)}
         />
         <span className="navigation-path">
-          {" "}
           <Breadcrumb
             folders={folders}
             currentFolderId={currentFolderId as number | null}
@@ -64,13 +63,13 @@ export const FolderList = ({
       <div className="folder-items">
         {displayedFolders.length > 0 ? (
           <>
-            <FaRegFolder className="folder-icon" size={20} />
             {displayedFolders.map((folder) => (
               <li
                 key={folder.id}
                 className="folder-item"
                 onClick={() => handleFolderClick(folder.id)}
               >
+                <FaRegFolder className="folder-icon" size={20} />
                 <span className="folder-name">{folder.name}</span>
               </li>
             ))}

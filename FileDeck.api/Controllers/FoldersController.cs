@@ -38,11 +38,10 @@ public class FoldersController : ControllerBase
 
         var newFolder = await folderService.CreateFolderAsync(request, userId);
 
-        // This references the GET method for the Location Header
         return CreatedAtAction(
-            nameof(GetFolderById), // Name of the GET method
-            new { id = newFolder.Id },  // Route parameters for the GET method
-            newFolder                   // The Response body
+            nameof(GetFolderById),
+            new { folderId = newFolder.Id },
+            newFolder
         );
     }
 

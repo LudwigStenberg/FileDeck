@@ -43,7 +43,6 @@ export const getFilesInFolder = async (
 };
 
 // Rename folder
-
 export const renameFolder = async (
   folderId: number,
   renameData: RenameFolderDto

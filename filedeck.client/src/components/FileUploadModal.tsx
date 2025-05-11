@@ -46,10 +46,17 @@ export const FileUploadModal = ({
     try {
       const fileContent = await readFileAsArrayBuffer(selectedFile);
 
+      const base64Content = btoa(
+        new Uint8Array(fileContent).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ""
+        )
+      );
+
       const fileData = {
         name: selectedFile.name,
         contentType: selectedFile.type,
-        content: fileContent,
+        content: base64Content,
         folderId: currentFolderId,
       };
 

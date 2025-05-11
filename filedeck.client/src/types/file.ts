@@ -1,7 +1,7 @@
 export interface FileUploadRequest {
   name: string;
   contentType: string;
-  content: Uint8Array | ArrayBuffer;
+  content: string; // base64
   folderId?: number | null;
 }
 

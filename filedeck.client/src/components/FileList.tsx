@@ -36,11 +36,7 @@ export const FileList = () => {
   }
 
   if (files.length === 0) {
-    return (
-      <div className="no-files-found">
-        No files found. Upload some files to get started.
-      </div>
-    );
+    return "";
   }
 
   return (

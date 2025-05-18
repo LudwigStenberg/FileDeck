@@ -24,7 +24,7 @@ export const FileList = ({ files, onFileDeleted }: FileListProps) => {
   return (
     <div className="file-list">
       <ul className="file-items">
-        <FaRegFileAlt className="file-icon" size={17} />
+        <FaRegFileAlt className="file-icon" size={22} />
         {files.map((file) => (
           <li
             key={file.id}

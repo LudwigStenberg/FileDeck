@@ -1,8 +1,12 @@
-.dashboard-content {
-  margin: 2rem 0rem 0rem 0rem;
+.dashboard-container {
   border-style: solid;
   border-radius: 0.2rem;
   border-width: 1px;
+  min-height: 100vh;
+}
+
+.dashboard-content {
+  margin: 2rem 0rem 0rem 0rem;
   padding: 1rem;
 }
 .dashboard-content h2 {
@@ -10,5 +14,5 @@
 }
 
 .create-folder-button {
-  margin: 0rem 0rem 2rem 4rem;
+  margin: 0rem 1rem 1rem 4rem;
 }

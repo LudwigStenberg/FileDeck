@@ -3,6 +3,7 @@ import { FolderResponse } from "../types";
 import { FaRegFolder } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { GoHome } from "react-icons/go";
+import "../styles/modal.css";
 
 import "../styles/folder.css";
 import { Breadcrumb } from "./Breadcrumb";

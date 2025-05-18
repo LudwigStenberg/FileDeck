@@ -13,7 +13,7 @@
 }
 
 .file-icon {
-  margin: 0.2rem 0.2rem 0rem -0.3rem;
+  margin-top: 0.6rem;
 }
 
 .file-name,
@@ -42,7 +42,8 @@
 
 .preview-button,
 .download-button,
-.cancel-button {
+.cancel-button,
+.submit-button {
   background-color: #1c1c1c;
   color: white;
   border: none;
@@ -50,12 +51,14 @@
   border-radius: 4px;
   cursor: pointer;
   margin-right: 0.5rem;
+  font-weight: 500;
 }
 
 .file-item:hover,
 .download-button:hover,
 .preview-button:hover,
-.cancel-button:hover {
+.cancel-button:hover,
+.submit-button:hover {
   background-color: #333;
 }
 

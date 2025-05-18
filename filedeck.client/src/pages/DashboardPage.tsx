@@ -70,7 +70,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div>
+    <div className="dashboard-container">
       <Navbar />
       <div className="dashboard-content">
         {isLoading && <div className="loading-message">Loading folders...</div>}

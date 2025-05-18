@@ -1,6 +1,7 @@
 using System;
 
 namespace FileDeck.api.DTOs;
+
 public class FileResponse
 {
     public int Id { get; set; }
@@ -10,6 +11,4 @@ public class FileResponse
     public DateTime UploadDate { get; set; }
     public DateTime LastModifiedDate { get; set; }
     public int? FolderId { get; set; }
-
-    // Potentially add string URL to download the file?
 }

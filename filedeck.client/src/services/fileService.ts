@@ -1,6 +1,7 @@
 import api from "./api";
 import { FileUploadRequest, FileResponse } from "../types";
 
+// Upload File
 export const uploadFile = async (
   fileData: FileUploadRequest
 ): Promise<FileResponse> => {
@@ -9,18 +10,7 @@ export const uploadFile = async (
   return response.data;
 };
 
-export const getFileById = async (fileId: number): Promise<FileResponse> => {
-  const response = await api.get<FileResponse>(`/files/${fileId}`);
-
-  return response.data;
-};
-
-export const getRootFiles = async (): Promise<FileResponse[]> => {
-  const response = await api.get<FileResponse[]>("/files/root");
-
-  return response.data;
-};
-
+// Download File
 export const downloadFile = async (fileId: number): Promise<void> => {
   const response = await api.get(`/files/${fileId}/download`, {
     responseType: "blob",
@@ -43,6 +33,30 @@ export const downloadFile = async (fileId: number): Promise<void> => {
   document.body.removeChild(link);
 };
 
+// Preview File
+export const previewFile = async (fileId: number): Promise<Blob> => {
+  const response = await api.get(`/files/${fileId}/download`, {
+    responseType: "blob",
+  });
+
+  return response.data;
+};
+
+// Get File By ID
+export const getFileById = async (fileId: number): Promise<FileResponse> => {
+  const response = await api.get<FileResponse>(`/files/${fileId}`);
+
+  return response.data;
+};
+
+// Get Root Files
+export const getRootFiles = async (): Promise<FileResponse[]> => {
+  const response = await api.get<FileResponse[]>("/files/root");
+
+  return response.data;
+};
+
+// Delete File
 export const deleteFile = async (fileId: number): Promise<boolean> => {
   const response = await api.delete(`/files/${fileId}`);
 

@@ -20,3 +20,76 @@
 .file-size {
   margin-right: 2rem;
 }
+
+/* File Preview */
+
+.file-preview-modal {
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.file-preview-container {
+  margin: 1rem 0;
+}
+
+.file-info {
+  background-color: #2a2a2a;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.preview-button,
+.download-button,
+.cancel-button {
+  background-color: #1c1c1c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.file-item:hover,
+.download-button:hover,
+.preview-button:hover,
+.cancel-button:hover {
+  background-color: #333;
+}
+
+.loading-indicator {
+  margin: 1rem 0;
+  font-style: italic;
+  color: #888;
+}
+
+.preview-content {
+  margin-top: 1rem;
+  border: 1px solid #444;
+  padding: 1rem;
+  border-radius: 4px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.text-preview {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 350px;
+  display: block;
+  margin: 0 auto;
+}
+
+.file-item {
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}

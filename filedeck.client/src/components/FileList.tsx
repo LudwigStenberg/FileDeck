@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FileResponse } from "../types";
 import { FaRegFileAlt } from "react-icons/fa";
-import "../styles/file.css";
+import { FilePreviewModal } from "./FilePreviewModal";
 
 interface FileListProps {
   files: FileResponse[];
@@ -9,6 +9,14 @@ interface FileListProps {
 }
 
 export const FileList = ({ files, onFileDeleted }: FileListProps) => {
+  const [selectedFileId, setSelectedFileId] = useState<number | null>(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+
+  const handleFileClick = (fileId: number) => {
+    setSelectedFileId(fileId);
+    setIsPreviewModalOpen(true);
+  };
+
   if (files.length === 0) {
     return "";
   }
@@ -18,13 +26,24 @@ export const FileList = ({ files, onFileDeleted }: FileListProps) => {
       <ul className="file-items">
         <FaRegFileAlt className="file-icon" size={17} />
         {files.map((file) => (
-          <li key={file.id} className="file-item">
+          <li
+            key={file.id}
+            className="file-item"
+            onClick={() => handleFileClick(file.id)}
+          >
             <span className="file-name">{file.name}</span>
             <span className="file-actions"></span>
-            {/* TODO: Add download/delete buttons */}
           </li>
         ))}
       </ul>
+
+      {selectedFileId && (
+        <FilePreviewModal
+          fileId={selectedFileId}
+          isOpen={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

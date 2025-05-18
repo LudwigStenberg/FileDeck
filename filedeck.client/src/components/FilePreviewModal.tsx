@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FileResponse } from "../types";
 import * as fileService from "../services/fileService";
 import { formatFileSize } from "../utilities/fileUtilities";
+import "../styles/file.css";
 
 interface FilePreviewModalProps {
   fileId: number;

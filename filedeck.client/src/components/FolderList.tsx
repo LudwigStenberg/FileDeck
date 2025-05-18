@@ -75,9 +75,7 @@ export const FolderList = ({
             ))}
           </>
         ) : (
-          <div className="empty-folder-message">
-            This folder is empty. Create a new folder or upload files.
-          </div>
+          <div className="empty-folder-message"></div>
         )}
       </div>
     </div>

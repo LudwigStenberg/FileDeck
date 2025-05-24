@@ -8,7 +8,7 @@ interface FilePreviewModalProps {
   fileId: number;
   onClose: () => void;
   isOpen: boolean;
-  onFileDeleted?: () => void; // New callback prop for notifying parent when file is deleted
+  onFileDeleted?: () => void;
 }
 
 export const FilePreviewModal = ({
@@ -17,7 +17,6 @@ export const FilePreviewModal = ({
   isOpen,
   onFileDeleted,
 }: FilePreviewModalProps) => {
-  // Existing state for file metadata and preview functionality
   const [file, setFile] = useState<FileResponse | null>(null);
   const [fileContent, setFileContent] = useState<Blob | null>(null);
   const [textContent, setTextContent] = useState<string | null>(null);
@@ -27,18 +26,15 @@ export const FilePreviewModal = ({
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // New state for delete functionality - following the same patterns as existing state
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  // Existing useEffect for loading file metadata when modal opens
   useEffect(() => {
     if (isOpen && fileId) {
       loadFileMetadata();
     }
 
-    // Cleanup function to prevent memory leaks from blob URLs
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -46,7 +42,6 @@ export const FilePreviewModal = ({
     };
   }, [isOpen, fileId]);
 
-  // Existing function for loading file metadata - unchanged from your original
   const loadFileMetadata = async () => {
     try {
       setIsLoading(true);
@@ -60,11 +55,9 @@ export const FilePreviewModal = ({
     }
   };
 
-  // Existing preview handler - unchanged from your original implementation
   const handlePreview = async () => {
     if (!file) return;
 
-    // Toggle preview visibility - check old value before toggling
     setIsPreviewVisible(!isPreviewVisible);
 
     // If we're hiding the preview, no need to load content
@@ -82,7 +75,6 @@ export const FilePreviewModal = ({
         const blob = await fileService.previewFile(fileId);
         setFileContent(blob);
 
-        // Handle different content types for preview display
         if (file.contentType === "text/plain") {
           const text = await blob.text();
           setTextContent(text);
@@ -100,48 +92,38 @@ export const FilePreviewModal = ({
     }
   };
 
-  // New delete handler - manages the entire deletion workflow
   const handleDelete = async () => {
-    if (!file) return; // Safety check - same pattern used throughout your existing code
+    if (!file) return;
 
-    // Set loading state and clear any previous error messages
     setIsDeleting(true);
     setDeleteError(null);
 
     try {
-      // Call your existing file service - no changes needed to the service layer
       const success = await fileService.deleteFile(fileId);
 
       if (success) {
-        // Success path - close modal and notify parent to refresh file list
         onClose();
-        // Call the optional callback to let parent component know file was deleted
         onFileDeleted?.();
       } else {
-        // Server responded but deletion failed - show error and allow retry
         setDeleteError("Failed to delete file. Please try again.");
       }
     } catch (error) {
-      // Network error or other exception - provide user-friendly message
       setDeleteError("Unable to delete file. Please check your connection.");
     } finally {
-      // Always re-enable UI when operation completes, whether success or failure
       setIsDeleting(false);
     }
   };
 
-  // Function to handle canceling delete confirmation - resets delete-related state
   const handleCancelDelete = () => {
     setShowDeleteConfirmation(false);
-    setDeleteError(null); // Clear any error messages when canceling
+    setDeleteError(null);
   };
 
-  // Existing download handler - unchanged from your original implementation
   const handleDownload = () => {
     if (!file) return;
 
+    // If content is already loaded, create download from cached content
     if (fileContent) {
-      // If content is already loaded, create download from cached content
       const url = URL.createObjectURL(fileContent);
       const a = document.createElement("a") as HTMLAnchorElement;
 
@@ -152,7 +134,7 @@ export const FilePreviewModal = ({
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } else {
-      // If content not loaded, use the service's download function
+      // If not loaded..
       fileService.downloadFile(fileId);
     }
   };
@@ -165,17 +147,13 @@ export const FilePreviewModal = ({
       <div className="modal-content file-preview-modal">
         <h2>File Preview</h2>
 
-        {/* Show loading state while fetching file information */}
         {isLoading && <div>Loading file information...</div>}
 
-        {/* Show general errors (not delete-specific errors) */}
         {error && <div className="error-message">{error}</div>}
 
-        {/* Main modal content - conditionally render based on whether we're showing delete confirmation */}
         {file && !isLoading && (
           <>
             {showDeleteConfirmation ? (
-              // Delete confirmation interface - replaces normal content
               <div className="delete-confirmation">
                 <h3>Confirm Deletion</h3>
                 <p>
@@ -183,7 +161,6 @@ export const FilePreviewModal = ({
                   <strong>{file.name}</strong>?
                 </p>
 
-                {/* Show delete-specific errors - allows user to retry or cancel */}
                 {deleteError && (
                   <div
                     className="error-message"
@@ -193,18 +170,17 @@ export const FilePreviewModal = ({
                   </div>
                 )}
 
-                {/* Confirmation action buttons */}
                 <div className="confirmation-actions">
                   <button
                     onClick={handleCancelDelete}
-                    disabled={isDeleting} // Disable during deletion to prevent confusion
+                    disabled={isDeleting}
                     className="cancel-button"
                   >
                     No, Cancel
                   </button>
                   <button
                     onClick={handleDelete}
-                    disabled={isDeleting} // Disable during deletion to prevent multiple submissions
+                    disabled={isDeleting}
                     className="delete-button"
                   >
                     {isDeleting ? "Deleting..." : "Yes, Delete"}
@@ -212,7 +188,6 @@ export const FilePreviewModal = ({
                 </div>
               </div>
             ) : (
-              // Normal file preview interface - your existing content unchanged
               <div className="file-preview-container">
                 <div className="file-info">
                   <p>
@@ -284,11 +259,11 @@ export const FilePreviewModal = ({
             >
               Download
             </button>
-            {/* New delete button - triggers confirmation state rather than immediate deletion */}
+            {/* Delete button - triggers confirmation state rather than immediate deletion */}
             <button
               className="delete-button"
               onClick={() => setShowDeleteConfirmation(true)}
-              disabled={isLoading} // Disable if file info is still loading
+              disabled={isLoading}
             >
               Delete
             </button>

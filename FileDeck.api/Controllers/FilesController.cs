@@ -115,7 +115,7 @@ public class FilesController : ControllerBase
 
         if (!result)
         {
-            NotFound(result);
+            return NotFound();
         }
 
         return NoContent();

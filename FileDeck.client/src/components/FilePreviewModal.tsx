@@ -25,6 +25,10 @@ export const FilePreviewModal = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   // Visibility of preview
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+  // For Deletion
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isContentLoading, setIsContentLoading] = useState(false);
@@ -110,6 +114,32 @@ export const FilePreviewModal = ({
     }
   };
 
+  
+  const handleDelete = async () => {
+    if (!file) return;
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const success = await fileService.deleteFile(fileId);
+
+      if (success) {
+        onClose();
+        onFileDeleted?.();
+      } else {
+        setDeleteError("Failed to delete file. Please try again.");
+      }
+    }
+      catch (error) {
+        setDeleteError("Unable to delete file. Please check your connection.");
+      } finally {
+        setIsDeleting(false);
+      }
+  
+
+
+
   if (!isOpen) return null;
 
   return (
@@ -187,6 +217,13 @@ export const FilePreviewModal = ({
           >
             Download
           </button>
+   <button
+    className="delete-button"
+    onClick={() => setShowDeleteConfirmation(true)}
+    disabled={isLoading}
+  >
+    Delete
+  </button>   
         </div>
       </div>
     </div>

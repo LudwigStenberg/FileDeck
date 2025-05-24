@@ -59,8 +59,7 @@
 .download-button:hover,
 .preview-button:hover,
 .cancel-button:hover,
-.submit-button:hover,
-.delete-button:hover {
+.submit-button:hover {
   background-color: #333;
 }
 

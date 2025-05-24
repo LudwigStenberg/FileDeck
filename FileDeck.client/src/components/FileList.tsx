@@ -42,6 +42,7 @@ export const FileList = ({ files, onFileDeleted }: FileListProps) => {
           fileId={selectedFileId}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}
+          onFileDeleted={onFileDeleted}
         />
       )}
     </div>

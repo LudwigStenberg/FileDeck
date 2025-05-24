@@ -43,7 +43,8 @@
 .preview-button,
 .download-button,
 .cancel-button,
-.submit-button {
+.submit-button,
+.delete-button {
   background-color: #1c1c1c;
   color: white;
   border: none;
@@ -58,7 +59,8 @@
 .download-button:hover,
 .preview-button:hover,
 .cancel-button:hover,
-.submit-button:hover {
+.submit-button:hover,
+.delete-button:hover {
   background-color: #333;
 }
 

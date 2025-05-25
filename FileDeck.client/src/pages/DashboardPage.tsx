@@ -61,7 +61,7 @@ export default function DashboardPage() {
     fetchFiles();
   }, [currentFolderId]);
 
-  const handleFolderCreated = () => {
+  const handleFolderChanged = () => {
     fetchAllFolders();
   };
 
@@ -94,7 +94,7 @@ export default function DashboardPage() {
 
         <CreateFolderModal
           currentFolderId={currentFolderId}
-          onFolderCreated={handleFolderCreated}
+          onFolderCreated={handleFolderChanged}
           onClose={() => setIsCreateFolderModalOpen(false)}
           isOpen={isCreateFolderModalOpen}
         />
@@ -109,6 +109,7 @@ export default function DashboardPage() {
           folders={folders}
           currentFolderId={currentFolderId}
           setCurrentFolderId={setCurrentFolderId}
+          onFolderDeleted={handleFolderChanged}
         />
         <FileList files={files} onFileDeleted={fetchFiles} />
       </div>

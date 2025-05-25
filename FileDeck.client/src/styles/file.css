@@ -3,11 +3,12 @@
 }
 
 .file-list {
-  margin: 2rem 0rem 0rem 0rem;
+  margin: 0rem 0rem 0rem 0rem;
 }
 
 .file-items {
   display: flex;
+  flex-direction: column;
   list-style: none;
   margin-left: 0rem;
 }
@@ -59,7 +60,8 @@
 .download-button:hover,
 .preview-button:hover,
 .cancel-button:hover,
-.submit-button:hover {
+.submit-button:hover,
+.delete-button:hover {
   background-color: #333;
 }
 
@@ -92,8 +94,21 @@
 }
 
 .file-item {
-  cursor: pointer;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
   padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+}
+
+.file-item:hover {
+  font-weight: bold;
+}
+
+.file-name {
+  margin-left: 0.5rem;
+  margin-top: 1rem;
+}
+
+.file-name:hover {
+  cursor: pointer;
 }

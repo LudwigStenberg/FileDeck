@@ -4,23 +4,28 @@ import { FaRegFolder } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { GoHome } from "react-icons/go";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { Breadcrumb } from "./Breadcrumb";
 import "../styles/modal.css";
 import "../styles/folder.css";
-import { Breadcrumb } from "./Breadcrumb";
+import * as folderService from "../services/folderService";
 
 interface FolderListProps {
   folders: FolderResponse[];
   currentFolderId: number | null;
   setCurrentFolderId: (folderId: number | null) => void;
+  onFolderDeleted?: () => void;
 }
 
 export const FolderList = ({
   folders,
   currentFolderId,
   setCurrentFolderId,
+  onFolderDeleted,
 }: FolderListProps) => {
   const [folderToDelete, setFolderToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
   const displayedFolders = folders.filter(
     (folder) =>
       currentFolderId === null
@@ -39,6 +44,44 @@ export const FolderList = ({
 
     const currentFolder = folders.find((f) => f.id === currentFolderId);
     setCurrentFolderId(currentFolder?.parentFolderId ?? null);
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent, folderId: number) => {
+    e.stopPropagation();
+    setFolderToDelete(folderId);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!folderToDelete) return;
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const success = await folderService.deleteFolder(folderToDelete);
+
+      if (success) {
+        if (folderToDelete === currentFolderId) {
+          const deletedFolder = folders.find((f) => f.id === folderToDelete);
+          setCurrentFolderId(deletedFolder?.parentFolderId ?? null);
+        }
+
+        setFolderToDelete(null);
+
+        onFolderDeleted?.();
+      } else {
+        setDeleteError("Failed to delete folder. Please try again.");
+      }
+    } catch (error) {
+      setDeleteError("Unable to delete folder. Please check your connection.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setFolderToDelete(null);
+    setDeleteError(null);
   };
 
   return (
@@ -74,7 +117,11 @@ export const FolderList = ({
               >
                 <FaRegFolder className="folder-icon" size={25} />
                 <span className="folder-name">{folder.name}</span>
-                <RiDeleteBin6Line className="delete-icon" size={22} />
+                <RiDeleteBin6Line
+                  className="delete-icon"
+                  size={22}
+                  onClick={(e) => handleDeleteClick(e, folder.id)}
+                />
               </li>
             ))}
           </>
@@ -82,6 +129,42 @@ export const FolderList = ({
           <div className="empty-folder-message"></div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {folderToDelete && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Confirm Deletion</h3>
+            <p>
+              Are you sure you want to delete this folder and all its contents?
+              This action cannot be undone.
+            </p>
+
+            {deleteError && (
+              <div className="error-message" style={{ marginBottom: "1rem" }}>
+                {deleteError}
+              </div>
+            )}
+
+            <div className="modal-actions">
+              <button
+                onClick={handleCancelDelete}
+                disabled={isDeleting}
+                className="cancel-button"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+                className="delete-button"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

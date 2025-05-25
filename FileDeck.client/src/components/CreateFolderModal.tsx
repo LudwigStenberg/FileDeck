@@ -53,7 +53,7 @@ export const CreateFolderModal = ({
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Create New Folder</h2>
+        <h2 id="create-new-folder-header">Create New Folder</h2>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>

@@ -8,6 +8,7 @@ using FileDeck.api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileDeck.api.Repositories;
+
 public class FolderRepository : IFolderRepository
 {
 
@@ -98,6 +99,9 @@ public class FolderRepository : IFolderRepository
                 childfolder.IsDeleted = true;
                 childfolder.LastModifiedDate = DateTime.UtcNow;
             }
+
+            folder.IsDeleted = true;
+            folder.LastModifiedDate = DateTime.UtcNow;
 
             var folderIds = childFolders.Select(f => f.Id).ToList();
             folderIds.Add(folderId);

@@ -3,6 +3,7 @@ import { FileResponse } from "../types";
 import * as fileService from "../services/fileService";
 import { formatFileSize } from "../utilities/fileUtilities";
 import "../styles/file.css";
+import "../styles/modal.css";
 
 interface FilePreviewModalProps {
   fileId: number;
@@ -145,7 +146,7 @@ export const FilePreviewModal = ({
   return (
     <div className="modal-overlay">
       <div className="modal-content file-preview-modal">
-        <h2>File Preview</h2>
+        <h2 id="preview-header">File Preview</h2>
 
         {isLoading && <div>Loading file information...</div>}
 

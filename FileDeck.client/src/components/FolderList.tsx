@@ -3,8 +3,8 @@ import { FolderResponse } from "../types";
 import { FaRegFolder } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { GoHome } from "react-icons/go";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import "../styles/modal.css";
-
 import "../styles/folder.css";
 import { Breadcrumb } from "./Breadcrumb";
 
@@ -19,6 +19,8 @@ export const FolderList = ({
   currentFolderId,
   setCurrentFolderId,
 }: FolderListProps) => {
+  const [folderToDelete, setFolderToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const displayedFolders = folders.filter(
     (folder) =>
       currentFolderId === null
@@ -70,8 +72,9 @@ export const FolderList = ({
                 className="folder-item"
                 onClick={() => handleFolderClick(folder.id)}
               >
-                <FaRegFolder className="folder-icon" size={20} />
+                <FaRegFolder className="folder-icon" size={25} />
                 <span className="folder-name">{folder.name}</span>
+                <RiDeleteBin6Line className="delete-icon" size={22} />
               </li>
             ))}
           </>

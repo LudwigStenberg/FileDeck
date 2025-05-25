@@ -1,4 +1,5 @@
 import { FolderResponse } from "../types";
+import "../styles/folder.css";
 
 interface BreadcrumbProps {
   folders: FolderResponse[];

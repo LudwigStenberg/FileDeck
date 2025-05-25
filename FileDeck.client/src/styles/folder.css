@@ -17,6 +17,17 @@
   cursor: pointer;
 }
 
+.delete-icon {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.delete-icon:hover,
+.go-home-icon:hover,
+.go-up-icon:hover {
+  transform: translateY(-1px);
+}
+
 .navigation-path {
   display: flex;
   align-items: center;
@@ -27,7 +38,6 @@
 /* Relating to folder headers */
 .folder-list-header {
   margin: 2rem 0rem 2rem 0rem;
-  font-weight: bold;
 }
 
 .folder-name-header {
@@ -36,8 +46,9 @@
 
 /* A specific folder*/
 .folder-icon {
-  margin-top: 0.5rem;
+  margin-top: 0.8 rem;
   margin-left: 2.2rem;
+  cursor: pointer;
 }
 
 .folder-items {
@@ -47,10 +58,26 @@
 
 .folder-item {
   list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.folder-item:hover,
+.breadcrumb-item:hover {
+  background-color: #333;
+  transform: translateY(-4px);
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .folder-name {
   margin: 0rem 4rem 0rem 0.5rem;
+}
+
+.folder-name:hover {
+  font-weight: bold;
 }
 
 .folder-created {

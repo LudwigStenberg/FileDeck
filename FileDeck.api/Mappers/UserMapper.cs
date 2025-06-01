@@ -33,13 +33,13 @@ public static class UserMapper
         };
     }
 
-    public static LoginResponse ToSuccessfulLoginResponse(UserEntity user, string token)
+    public static LoginResponse ToSuccessfulLoginResponse(UserEntity user, TokenResult tokenResult)
     {
         return new LoginResponse
         {
             Succeeded = true,
-            Token = token,
-            Expiration = DateTime.UtcNow.AddMinutes(30),
+            Token = tokenResult.Token,
+            Expiration = tokenResult.Expiration,
             UserId = user.Id,
             Email = user.Email ?? string.Empty
         };

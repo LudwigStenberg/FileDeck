@@ -25,7 +25,7 @@ public class TokenService : ITokenService
     /// </summary>
     /// <param name="user">The user entity for which to generate the token.</param>
     /// <returns>A JWT token string containing the user identity claims, expiration date, and signature.</returns>
-    public string GenerateToken(UserEntity user)
+    public TokenResult GenerateToken(UserEntity user)
     {
         logger.LogInformation("Initiated token generation for user {UserId}", user.Id);
 
@@ -35,6 +35,7 @@ public class TokenService : ITokenService
         // Create signing credentials using the security key and algorithm
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
+        var expiration = DateTime.UtcNow.AddMinutes(jwtSettings.ExpirationInMinutes);
 
         // Create claims that will be included in the token
         var claims = new List<Claim>
@@ -48,7 +49,7 @@ public class TokenService : ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(jwtSettings.ExpirationInMinutes),
+            Expires = expiration,
             SigningCredentials = creds,
             Issuer = jwtSettings.Issuer,
             Audience = jwtSettings.Audience
@@ -60,6 +61,10 @@ public class TokenService : ITokenService
 
         logger.LogInformation("Token successfully generated for user {UserId}", user.Id);
 
-        return tokenHandler.WriteToken(token);
+        return new TokenResult
+        {
+            Token = tokenHandler.WriteToken(token),
+            Expiration = expiration
+        };
     }
 }

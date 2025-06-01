@@ -5,6 +5,6 @@ namespace FileDeck.api.Services;
 
 public interface ITokenService
 {
-    string GenerateToken(UserEntity user);
+    TokenResult GenerateToken(UserEntity user);
 }
 

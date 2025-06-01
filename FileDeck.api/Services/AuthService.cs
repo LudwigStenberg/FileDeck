@@ -79,12 +79,7 @@ public class AuthService : IAuthService
         if (user == null)
         {
             logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", request.Email);
-
-            return new LoginResponse
-            {
-                Succeeded = false,
-                Errors = new List<string> { "The email or password is incorrect" }
-            };
+            UserMapper.ToFailedLoginResponse(new List<string> { "The email or password is incorrect." });
         }
 
         logger.LogDebug("Attempting to validate password for email: {Email}", request.Email);
@@ -95,27 +90,13 @@ public class AuthService : IAuthService
         {
             logger.LogInformation("User password successfully checked for email: {Email}. Generating token...", request.Email);
 
-            var token = tokenService.GenerateToken(user);
+            var tokenResult = tokenService.GenerateToken(user);
 
             logger.LogInformation("User successfully logged in: {UserId}, {Email}", user.Id, user.Email);
-
-            return new LoginResponse
-            {
-                Succeeded = true,
-                Token = token,
-                Expiration = DateTime.UtcNow.AddMinutes(240),
-                UserId = user.Id,
-                Username = user.UserName ?? string.Empty,
-                Email = user.Email ?? string.Empty
-            };
+            return UserMapper.ToSuccessfulLoginResponse(user, tokenResult);
         }
 
         logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", request.Email);
-
-        return new LoginResponse
-        {
-            Succeeded = false,
-            Errors = new List<string> { "The email or password is incorrect" }
-        };
+        return UserMapper.ToFailedLoginResponse(new List<string> { "The email or password is incorrect." });
     }
 }

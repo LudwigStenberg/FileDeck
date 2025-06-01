@@ -2,6 +2,7 @@ using FileDeck.api.DTOs;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace FileDeck.api.Services;
 
@@ -55,33 +56,21 @@ public class FolderService : IFolderService
             return null;
         }
 
-        var FolderResponse = new FolderResponse
-        {
-            Id = folder.Id,
-            Name = folder.Name,
-            ParentFolderId = folder.ParentFolderId,
-            CreatedDate = folder.CreatedDate
-        };
-
         logger.LogInformation("Folder retrieval successful for user {UserId}. Folder {FolderId}, {FolderName} was found.",
             userId, folderId, folder.Name);
-
-        return FolderResponse;
+        return FolderMapper.ToResponse(folder);
     }
 
+    /// <summary>
+    /// Retrieves all folders belonging to a specific user.
+    /// </summary>
+    /// <param name="userId">The ID of the user requesting to retrieve the folders, and who has access to them.</param>
+    /// <returns>A list containing FolderResponse DTOs. It can be empty.</returns>
     public async Task<IEnumerable<FolderResponse>> GetAllFoldersAsync(string userId)
     {
         var folders = await folderRepository.GetAllFoldersAsync(userId);
 
-        var folderList = folders.ToList();
-
-        return folderList.Select(folder => new FolderResponse
-        {
-            Id = folder.Id,
-            Name = folder.Name,
-            ParentFolderId = folder.ParentFolderId,
-            CreatedDate = folder.CreatedDate
-        });
+        return folders.Select(FolderMapper.ToResponse).ToList();
     }
 
     /// <summary>

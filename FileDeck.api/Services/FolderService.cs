@@ -105,18 +105,10 @@ public class FolderService : IFolderService
         logger.LogInformation("Retrieval of root folders initiated for user {UserId}.", userId);
         var rootFolders = await folderRepository.GetRootFoldersAsync(userId);
 
-        var rootFoldersList = rootFolders.ToList();
+        var rootFolderList = rootFolders.ToList();
 
-        logger.LogInformation("Retrieval of root folders successful for user {UserId}. Found {FolderCount} folders in root.", userId, rootFoldersList.Count);
-
-
-        return rootFoldersList.Select(folder => new FolderResponse
-        {
-            Id = folder.Id,
-            Name = folder.Name,
-            ParentFolderId = folder.ParentFolderId,
-            CreatedDate = folder.CreatedDate
-        });
+        logger.LogInformation("Retrieval of root folders successful for user {UserId}. Found {FolderCount} folders in root.", userId, rootFolderList.Count);
+        return rootFolderList.Select(FolderMapper.ToResponse);
     }
 
     /// <summary>
@@ -139,25 +131,7 @@ public class FolderService : IFolderService
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(request.NewName))
-        {
-            logger.LogWarning("Folder renaming failed for user {UserId}. Empty folder name provided", userId);
-            throw new ArgumentException("Folder name cannot be empty.");
-        }
-
-        if (request.NewName.Length > 50)
-        {
-            logger.LogWarning("Folder renaming failed for user {UserId}. Name too long ({NameLength} chars)",
-                userId, request.NewName.Length);
-            throw new ArgumentException("Folder name cannot be longer than 50 characters.");
-        }
-
-        string invalidChars = "\\/:*?\"<>|";
-        if (request.NewName.Any(invalidChars.Contains))
-        {
-            logger.LogWarning("Folder renaming failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.NewName);
-            throw new ArgumentException("Folder name contains invalid characters.");
-        }
+        NewMethod(request, userId);
 
         var success = await folderRepository.RenameFolderAsync(folderId, request.NewName, userId);
 
@@ -237,6 +211,29 @@ public class FolderService : IFolderService
                 logger.LogWarning("Folder creation failed for user {UserId}. The parent folder {ParentFolderId} could not be found", userId, request.ParentFolderId);
                 throw new ArgumentException("Parent folder does not exist or you do not have access to it.");
             }
+        }
+    }
+
+    private void ValidateRenameFolderRequest(RenameFolderRequest request, string userId)
+    {
+        if (string.IsNullOrWhiteSpace(request.NewName))
+        {
+            logger.LogWarning("Folder renaming failed for user {UserId}. Empty folder name provided", userId);
+            throw new ArgumentException("Folder name cannot be empty.");
+        }
+
+        if (request.NewName.Length > 50)
+        {
+            logger.LogWarning("Folder renaming failed for user {UserId}. Name too long ({NameLength} chars)",
+                userId, request.NewName.Length);
+            throw new ArgumentException("Folder name cannot be longer than 50 characters.");
+        }
+
+        string invalidChars = "\\/:*?\"<>|";
+        if (request.NewName.Any(invalidChars.Contains))
+        {
+            logger.LogWarning("Folder renaming failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.NewName);
+            throw new ArgumentException("Folder name contains invalid characters.");
         }
     }
 

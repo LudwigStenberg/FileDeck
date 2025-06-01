@@ -36,14 +36,14 @@ public class AuthService : IAuthService
         if (request.Password != request.ConfirmPassword)
         {
             logger.LogWarning("Registration failed: passwords do not match for {Email}", request.Email);
-            UserMapper.ToFailedRegisterResponse(new List<string> { "Passwords do not match" });
+            return UserMapper.ToFailedRegisterResponse(new List<string> { "Passwords do not match" });
         }
 
         var existingUser = await authRepository.FindUserByEmailAsync(request.Email);
         if (existingUser != null)
         {
             logger.LogWarning("Registration failed: email {Email} is already in use", request.Email);
-            UserMapper.ToFailedRegisterResponse(new List<string> { "Email is already in use" });
+            return UserMapper.ToFailedRegisterResponse(new List<string> { "Email is already in use" });
         }
 
         var newUser = UserMapper.ToEntity(request);
@@ -53,27 +53,15 @@ public class AuthService : IAuthService
 
         if (result.Succeeded)
         {
-            logger.LogDebug("User registered successfully: {UserId}, {Email}",
-                             newUser.Id, newUser.Email);
-
-            return new RegisterResponse
-            {
-                Succeeded = true,
-                UserId = newUser.Id,
-                Username = newUser.UserName ?? string.Empty,
-                Email = newUser.Email ?? string.Empty,
-            };
+            logger.LogDebug("User registered successfully: {UserId}, {Email}", newUser.Id, newUser.Email);
+            return UserMapper.ToSuccessfulRegisterResponse(newUser);
         }
         else
         {
             logger.LogWarning("User registration failed for {Email}. Errors: {Errors}",
                             request.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
 
-            return new RegisterResponse
-            {
-                Succeeded = false,
-                Errors = result.Errors.Select(error => error.Description).ToList()
-            };
+            return UserMapper.ToFailedRegisterResponse(result.Errors.Select(error => error.Description).ToList());
         }
     }
 

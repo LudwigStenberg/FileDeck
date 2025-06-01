@@ -88,13 +88,7 @@ public class FolderService : IFolderService
         var subfolderList = subfolders.ToList();
 
         logger.LogInformation("Retrieval of subfolders successful for user {UserId}. Found {SubfolderCount}.", userId, subfolderList.Count);
-        return subfolderList.Select(folder => new FolderResponse
-        {
-            Id = folder.Id,
-            Name = folder.Name,
-            ParentFolderId = folder.ParentFolderId,
-            CreatedDate = folder.CreatedDate
-        });
+        return subfolders.Select(FolderMapper.ToResponse);
     }
 
     /// <summary>

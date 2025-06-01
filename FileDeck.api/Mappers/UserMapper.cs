@@ -43,7 +43,6 @@ public static class UserMapper
             UserId = user.Id,
             Email = user.Email ?? string.Empty
         };
-
     }
 
     public static LoginResponse ToFailedLoginResponse(List<string> errors)

@@ -1,9 +1,7 @@
 using FileDeck.api.DTOs.Auth;
-using FileDeck.api.Models;
 using FileDeck.api.Repositories;
 using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 
 namespace FileDeck.api.Services;
 
@@ -60,7 +58,6 @@ public class AuthService : IAuthService
         {
             logger.LogWarning("User registration failed for {Email}. Errors: {Errors}",
                             request.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
-
             return UserMapper.ToFailedRegisterResponse(result.Errors.Select(error => error.Description).ToList());
         }
     }
@@ -79,7 +76,7 @@ public class AuthService : IAuthService
         if (user == null)
         {
             logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", request.Email);
-            UserMapper.ToFailedLoginResponse(new List<string> { "The email or password is incorrect." });
+            return UserMapper.ToFailedLoginResponse(new List<string> { "The email or password is incorrect." });
         }
 
         logger.LogDebug("Attempting to validate password for email: {Email}", request.Email);

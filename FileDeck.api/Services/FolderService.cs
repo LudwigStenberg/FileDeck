@@ -70,7 +70,11 @@ public class FolderService : IFolderService
     {
         var folders = await folderRepository.GetAllFoldersAsync(userId);
 
-        return folders.Select(FolderMapper.ToResponse).ToList();
+        var folderList = folders.ToList();
+
+        logger.LogInformation("Retrieval of all folders successful for user {UserId}. Found {FolderCount}.", userId, folderList.Count);
+
+        return folderList.Select(FolderMapper.ToResponse);
     }
 
     /// <summary>
@@ -104,6 +108,8 @@ public class FolderService : IFolderService
         var rootFoldersList = rootFolders.ToList();
 
         logger.LogInformation("Retrieval of root folders successful for user {UserId}. Found {FolderCount} folders in root.", userId, rootFoldersList.Count);
+
+
         return rootFoldersList.Select(folder => new FolderResponse
         {
             Id = folder.Id,

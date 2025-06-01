@@ -1,18 +1,9 @@
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using FileDeck.api.DTOs;
-using FileDeck.api.DTOs.Auth;
-using FileDeck.api.Models;
 using FileDeck.api.Repositories;
 using FileDeck.api.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.Extensions.Logging;
 
 namespace FileDeck.api.Services;
+
 public class FileService : IFileService
 {
     private readonly IFolderRepository folderRepository;
@@ -32,73 +23,29 @@ public class FileService : IFileService
     /// <summary>
     /// Uploads a file to the database for the provided user.
     /// </summary>
-    /// <param name="fileUpload">The DTO that contains the information on the new file.</param>
+    /// <param name="request">The DTO that contains the information on the new file.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponse which contains information on the newly uploaded file.</returns>
     /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if a folder associated with the file, doesn't exist.</exception>
-    public async Task<FileResponse> UploadFileAsync(FileUploadRequest fileUpload, string userId)
+    public async Task<FileResponse> UploadFileAsync(FileUploadRequest request, string userId)
     {
         logger.LogInformation("File upload initiated for user {UserId}: {FileName}, {FileSize} bytes",
-            userId, fileUpload.Name, fileUpload.Content.Length);
+            userId, request.Name, request.Content.Length);
 
-        if (fileUpload.Name.Length > 50)
-        {
-            logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",
-                fileUpload.Name.Length, userId);
-            throw new ArgumentException("File name cannot be longer than 50 characters");
-        }
+        await ValidateFileUploadRequest(request, userId);
 
-        string invalidChars = "\\/:*?\"<>|";
-        if (fileUpload.Name.Any(invalidChars.Contains))
-        {
-            logger.LogWarning("File upload rejected: invalid characters in filename for user {UserId}", userId);
-            throw new ArgumentException("Folder name contains invalid characters");
-        }
-
-        if (fileUpload.FolderId.HasValue)
-        {
-            logger.LogDebug("Checking if folder {FolderId} exists for user {UserId}", fileUpload.FolderId.Value, userId);
-            bool folderExists = await folderRepository.FolderExistsAsync(fileUpload.FolderId.Value, userId);
-            if (!folderExists)
-            {
-                logger.LogWarning("File upload rejected: specified folder {FolderId} does not exist for user {UserId}",
-                    fileUpload.FolderId.Value, userId);
-                throw new ArgumentException("The specified folder does not exist or you don't have access to it");
-            }
-        }
-
-        var newFile = new FileEntity
-        {
-            Name = fileUpload.Name,
-            ContentType = fileUpload.ContentType,
-            Content = fileUpload.Content,
-            Size = fileUpload.Content.Length,
-            UserId = userId,
-            FolderId = fileUpload.FolderId,
-            UploadDate = DateTime.UtcNow,
-            LastModifiedDate = DateTime.UtcNow,
-            IsDeleted = false
-        };
+        var newFile = FileMapper.ToEntity(request, userId);
 
         logger.LogDebug("Saving new file to database: {FileName}, {ContentType}, {FileSize} bytes",
-            fileUpload.Name, fileUpload.ContentType, fileUpload.Content.Length);
+            request.Name, request.ContentType, request.Content.Length);
+
         var savedFile = await fileRepository.CreateFileAsync(newFile);
 
         logger.LogInformation("File successfully uploaded: ID={FileId}, {FileName} by user {UserId}",
             savedFile.Id, savedFile.Name, userId);
 
-        return new FileResponse
-        {
-            Id = savedFile.Id,
-            Name = savedFile.Name,
-            ContentType = savedFile.ContentType,
-            Size = savedFile.Size,
-            UploadDate = savedFile.UploadDate,
-            LastModifiedDate = savedFile.LastModifiedDate,
-            FolderId = savedFile.FolderId
-        };
+        return FileMapper.ToResponse(savedFile);
     }
-
 
     /// <summary>
     /// Retrieves a file based on the file ID provided.
@@ -119,16 +66,8 @@ public class FileService : IFileService
 
         logger.LogInformation("File {FileId} successfully retrieved for user {UserId} - {FileName}",
             fileId, userId, fileEntity.Name);
-        return new FileResponse
-        {
-            Id = fileEntity.Id,
-            Name = fileEntity.Name,
-            ContentType = fileEntity.ContentType,
-            Size = fileEntity.Size,
-            UploadDate = fileEntity.UploadDate,
-            LastModifiedDate = fileEntity.LastModifiedDate,
-            FolderId = fileEntity.FolderId
-        };
+
+        return FileMapper.ToResponse(fileEntity);
     }
 
     /// <summary>
@@ -141,19 +80,11 @@ public class FileService : IFileService
         logger.LogInformation("Retrieval of root files initiated for user {UserId}.", userId);
 
         var rootFiles = await fileRepository.GetRootFilesAsync(userId);
-        var rootFilesList = rootFiles.ToList();
+        var rootFileList = rootFiles.ToList();
 
-        logger.LogInformation("Retrieval of root files successful for user {UserId}. Found {FileCount} files.", userId, rootFilesList.Count);
-        return rootFilesList.Select(file => new FileResponse
-        {
-            Id = file.Id,
-            Name = file.Name,
-            ContentType = file.ContentType,
-            Size = file.Size,
-            UploadDate = file.UploadDate,
-            LastModifiedDate = file.LastModifiedDate,
-            FolderId = file.FolderId
-        });
+        logger.LogInformation("Retrieval of root files successful for user {UserId}. Found {FileCount} files.", userId, rootFileList.Count);
+
+        return rootFileList.Select(FileMapper.ToResponse);
     }
 
     /// <summary>
@@ -176,13 +107,7 @@ public class FileService : IFileService
 
         logger.LogInformation("File {FileId} successfully downloaded for user {UserId} - {FileName}", fileId, userId, fileEntity.Name);
 
-        return new FileDownloadResponse
-        {
-            Id = fileEntity.Id,
-            Name = fileEntity.Name,
-            ContentType = fileEntity.ContentType,
-            Content = fileEntity.Content
-        };
+        return FileMapper.ToDownloadResponse(fileEntity);
     }
 
     /// <summary>
@@ -212,16 +137,7 @@ public class FileService : IFileService
         logger.LogInformation("Successfully retrieved {FileCount} files from folder {FolderId} for user {UserId}",
             filesList.Count, folderId, userId);
 
-        return filesList.Select(file => new FileResponse
-        {
-            Id = file.Id,
-            Name = file.Name,
-            ContentType = file.ContentType,
-            Size = file.Size,
-            UploadDate = file.UploadDate,
-            LastModifiedDate = file.LastModifiedDate,
-            FolderId = file.FolderId
-        });
+        return filesList.Select(FileMapper.ToResponse);
     }
 
     /// <summary>
@@ -253,5 +169,34 @@ public class FileService : IFileService
         }
 
         return result;
+    }
+
+    private async Task ValidateFileUploadRequest(FileUploadRequest request, string userId)
+    {
+        if (request.Name.Length > 50)
+        {
+            logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",
+                request.Name.Length, userId);
+            throw new ArgumentException("File name cannot be longer than 50 characters");
+        }
+
+        string invalidChars = "\\/:*?\"<>|";
+        if (request.Name.Any(invalidChars.Contains))
+        {
+            logger.LogWarning("File upload rejected: invalid characters in filename for user {UserId}", userId);
+            throw new ArgumentException("Folder name contains invalid characters");
+        }
+
+        if (request.FolderId.HasValue)
+        {
+            logger.LogDebug("Checking if folder {FolderId} exists for user {UserId}", request.FolderId.Value, userId);
+            bool folderExists = await folderRepository.FolderExistsAsync(request.FolderId.Value, userId);
+            if (!folderExists)
+            {
+                logger.LogWarning("File upload rejected: specified folder {FolderId} does not exist for user {UserId}",
+                    request.FolderId.Value, userId);
+                throw new ArgumentException("The specified folder does not exist or you don't have access to it");
+            }
+        }
     }
 }

@@ -1,6 +1,5 @@
-using System;
-
 namespace FileDeck.api.Models;
+
 public class FileEntity
 {
     public int Id { get; set; }

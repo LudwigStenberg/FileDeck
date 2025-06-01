@@ -1,21 +1,21 @@
-// src/components/FileUploadModal.tsx
+// src/components/requestModal.tsx
 import { useState, useRef } from "react";
 import * as fileService from "../services/fileService";
 import { formatFileSize } from "../utilities/fileUtilities";
 
-interface FileUploadModalProps {
+interface requestModalProps {
   currentFolderId: number | null;
-  onFileUploaded: () => void;
+  onrequested: () => void;
   onClose: () => void;
   isOpen: boolean;
 }
 
-export const FileUploadModal = ({
+export const requestModal = ({
   currentFolderId,
-  onFileUploaded,
+  onrequested,
   onClose,
   isOpen,
-}: FileUploadModalProps) => {
+}: requestModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -68,7 +68,7 @@ export const FileUploadModal = ({
         fileInputRef.current.value = "";
       }
 
-      onFileUploaded();
+      onrequested();
       onClose();
     } catch (error) {
       console.error("Error uploading file:", error);

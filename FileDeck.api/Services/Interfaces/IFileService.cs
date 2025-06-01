@@ -8,7 +8,7 @@ namespace FileDeck.api.Services;
 
 public interface IFileService
 {
-    Task<FileResponse> UploadFileAsync(FileUploadRequest fileUpload, string userId);
+    Task<FileResponse> UploadFileAsync(FileUploadRequest request, string userId);
 
     Task<FileResponse?> GetFileByIdAsync(int fileId, string userId);
 

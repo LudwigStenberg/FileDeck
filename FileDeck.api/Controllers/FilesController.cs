@@ -21,7 +21,7 @@ public class FilesController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> UploadFile(FileUploadRequest fileUpload)
+    public async Task<IActionResult> UploadFile(requestRequest request)
     {
         if (!ModelState.IsValid)
         {
@@ -34,7 +34,7 @@ public class FilesController : ControllerBase
             return Unauthorized(new { message = "User ID not found in token" });
         }
 
-        var newFile = await fileService.UploadFileAsync(fileUpload, userId);
+        var newFile = await fileService.UploadFileAsync(request, userId);
 
         return CreatedAtAction(
             nameof(GetFileById),

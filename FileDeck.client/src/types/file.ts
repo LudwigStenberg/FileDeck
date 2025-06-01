@@ -1,4 +1,4 @@
-export interface FileUploadRequest {
+export interface requestRequest {
   name: string;
   contentType: string;
   content: string; // base64

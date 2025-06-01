@@ -1,9 +1,9 @@
 import api from "./api";
-import { FileUploadRequest, FileResponse } from "../types";
+import { requestRequest, FileResponse } from "../types";
 
 // Upload File
 export const uploadFile = async (
-  fileData: FileUploadRequest
+  fileData: requestRequest
 ): Promise<FileResponse> => {
   const response = await api.post<FileResponse>("/files", fileData);
 

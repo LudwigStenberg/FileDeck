@@ -20,13 +20,35 @@ public static class UserMapper
         {
             Succeeded = true,
             UserId = user.Id,
-            Email = user.Email
+            Email = user.Email ?? string.Empty
         };
     }
 
     public static RegisterResponse ToFailedRegisterResponse(List<string> errors)
     {
         return new RegisterResponse
+        {
+            Succeeded = false,
+            Errors = errors
+        };
+    }
+
+    public static LoginResponse ToSuccessfulLoginResponse(UserEntity user, string token)
+    {
+        return new LoginResponse
+        {
+            Succeeded = true,
+            Token = token,
+            Expiration = DateTime.UtcNow.AddMinutes(30),
+            UserId = user.Id,
+            Email = user.Email ?? string.Empty
+        };
+
+    }
+
+    public static LoginResponse ToFailedLoginResponse(List<string> errors)
+    {
+        return new LoginResponse
         {
             Succeeded = false,
             Errors = errors

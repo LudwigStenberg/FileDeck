@@ -7,5 +7,5 @@ namespace FileDeck.api.Services.Interfaces;
 public interface IAuthService
 {
     Task<RegisterResponse> RegisterUserAsync(RegisterRequest request);
-    Task<LoginResponse> LoginUserAsync(LoginRequest loginDto);
+    Task<LoginResponse> LoginUserAsync(LoginRequest request);
 }

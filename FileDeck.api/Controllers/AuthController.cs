@@ -73,14 +73,14 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginUserAsync(LoginRequest loginDto)
+    public async Task<IActionResult> LoginUserAsync(LoginRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var result = await authService.LoginUserAsync(loginDto);
+        var result = await authService.LoginUserAsync(request);
 
 
         if (result.Succeeded)

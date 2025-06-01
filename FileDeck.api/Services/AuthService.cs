@@ -68,17 +68,17 @@ public class AuthService : IAuthService
     /// <summary>
     /// Signs in an existing user based on the provided login information.
     /// </summary>
-    /// <param name="loginDto">The login information including email and password.</param>
+    /// <param name="request">The login information including email and password.</param>
     /// <returns>A LoginResponse object containing the result of the login attempt including success status, potential errors and a newly generated token if the attempt is successful.</returns>
-    public async Task<LoginResponse> LoginUserAsync(LoginRequest loginDto)
+    public async Task<LoginResponse> LoginUserAsync(LoginRequest request)
     {
-        logger.LogInformation("User login attempt for email: {Email}", loginDto.Email);
+        logger.LogInformation("User login attempt for email: {Email}", request.Email);
 
-        var user = await authRepository.FindUserByEmailAsync(loginDto.Email);
+        var user = await authRepository.FindUserByEmailAsync(request.Email);
 
         if (user == null)
         {
-            logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", loginDto.Email);
+            logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", request.Email);
 
             return new LoginResponse
             {
@@ -87,13 +87,13 @@ public class AuthService : IAuthService
             };
         }
 
-        logger.LogDebug("Attempting to validate password for email: {Email}", loginDto.Email);
+        logger.LogDebug("Attempting to validate password for email: {Email}", request.Email);
 
-        var result = await authRepository.CheckPasswordSignInAsync(user, loginDto.Password);
+        var result = await authRepository.CheckPasswordSignInAsync(user, request.Password);
 
         if (result.Succeeded)
         {
-            logger.LogInformation("User password successfully checked for email: {Email}. Generating token...", loginDto.Email);
+            logger.LogInformation("User password successfully checked for email: {Email}. Generating token...", request.Email);
 
             var token = tokenService.GenerateToken(user);
 
@@ -110,7 +110,7 @@ public class AuthService : IAuthService
             };
         }
 
-        logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", loginDto.Email);
+        logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", request.Email);
 
         return new LoginResponse
         {

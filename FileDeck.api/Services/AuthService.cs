@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories;
@@ -29,45 +25,31 @@ public class AuthService : IAuthService
     /// <summary>
     /// Registers new user in the system based on the provided registration information.
     /// </summary>
-    /// <param name="registerDto">The registration information including email and password.</param>
+    /// <param name="request">The registration information including email and password.</param>
     /// <returns>A RegisterResponse object containing the result of the registration attempt
     // including success status and any error messages if registration failed.</returns>
-    public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest registerDto)
+    public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request)
     {
-        logger.LogInformation("User registration attempt for email: {Email}", registerDto.Email);
+        logger.LogInformation("User registration attempt for email: {Email}", request.Email);
 
 
-        if (registerDto.Password != registerDto.ConfirmPassword)
+        if (request.Password != request.ConfirmPassword)
         {
-            logger.LogWarning("Registration failed: passwords do not match for {Email}", registerDto.Email);
-
-            return new RegisterResponse
-            {
-                Succeeded = false,
-                Errors = new List<string> { "Passwords do not match" }
-            };
+            logger.LogWarning("Registration failed: passwords do not match for {Email}", request.Email);
+            UserMapper.ToFailedRegisterResponse(new List<string> { "Passwords do not match" });
         }
 
-        var existingUser = await authRepository.FindUserByEmailAsync(registerDto.Email);
+        var existingUser = await authRepository.FindUserByEmailAsync(request.Email);
         if (existingUser != null)
         {
-            logger.LogWarning("Registration failed: email {Email} is already in use", registerDto.Email);
-
-            return new RegisterResponse
-            {
-                Succeeded = false,
-                Errors = new List<string> { "Email is already in use" }
-            };
+            logger.LogWarning("Registration failed: email {Email} is already in use", request.Email);
+            UserMapper.ToFailedRegisterResponse(new List<string> { "Email is already in use" });
         }
 
-        var newUser = new UserEntity
-        {
-            UserName = registerDto.Email,
-            Email = registerDto.Email
-        };
+        var newUser = UserMapper.ToEntity(request);
 
-        logger.LogDebug("Attempting to create new user with email: {Email}", registerDto.Email);
-        IdentityResult result = await authRepository.CreateUserAsync(newUser, registerDto.Password);
+        logger.LogDebug("Attempting to create new user with email: {Email}", request.Email);
+        IdentityResult result = await authRepository.CreateUserAsync(newUser, request.Password);
 
         if (result.Succeeded)
         {
@@ -85,7 +67,7 @@ public class AuthService : IAuthService
         else
         {
             logger.LogWarning("User registration failed for {Email}. Errors: {Errors}",
-                            registerDto.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
+                            request.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
 
             return new RegisterResponse
             {

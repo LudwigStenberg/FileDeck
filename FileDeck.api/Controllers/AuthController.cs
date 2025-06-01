@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterUserAsync(RegisterRequest registerDto)
+    public async Task<IActionResult> RegisterUserAsync(RegisterRequest request)
     {
         // Based on the attributes of RegisterRequest
         if (!ModelState.IsValid)
@@ -38,7 +38,7 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var result = await authService.RegisterUserAsync(registerDto);
+        var result = await authService.RegisterUserAsync(request);
 
 
         if (result.Succeeded)

@@ -1,8 +1,6 @@
 using FileDeck.api.DTOs;
-using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace FileDeck.api.Services;
 
@@ -92,7 +90,7 @@ public class FolderService : IFolderService
         var subfolderList = subfolders.ToList();
 
         logger.LogInformation("Retrieval of subfolders successful for user {UserId}. Found {SubfolderCount}.", userId, subfolderList.Count);
-        return subfolders.Select(FolderMapper.ToResponse);
+        return subfolderList.Select(FolderMapper.ToResponse);
     }
 
     /// <summary>
@@ -131,7 +129,7 @@ public class FolderService : IFolderService
             return false;
         }
 
-        NewMethod(request, userId);
+        ValidateRenameFolderRequest(request, userId);
 
         var success = await folderRepository.RenameFolderAsync(folderId, request.NewName, userId);
 

@@ -1,7 +1,6 @@
 
 using FileDeck.api.DTOs;
 using FileDeck.api.Models;
-using Microsoft.Extensions.Configuration.UserSecrets;
 
 public static class FolderMapper
 {
@@ -13,6 +12,17 @@ public static class FolderMapper
             ParentFolderId = request.ParentFolderId,
             UserId = userId
 
+        };
+    }
+
+    public static FolderResponse ToResponse(FolderEntity folder)
+    {
+        return new FolderResponse
+        {
+            Id = folder.Id,
+            Name = folder.Name,
+            ParentFolderId = folder.ParentFolderId,
+            CreatedDate = folder.CreatedDate
         };
     }
 }

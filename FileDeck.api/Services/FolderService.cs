@@ -34,17 +34,8 @@ public class FolderService : IFolderService
 
         var savedFolder = await folderRepository.CreateFolderAsync(newFolder);
 
-        var FolderResponse = new FolderResponse
-        {
-            Id = savedFolder.Id,
-            Name = savedFolder.Name,
-            ParentFolderId = savedFolder.ParentFolderId,
-            CreatedDate = savedFolder.CreatedDate
-        };
-
         logger.LogInformation("Folder {FolderName} (ID: {FolderId})for user {UserId} successfully created", request.Name, savedFolder.Id, userId);
-
-        return FolderResponse;
+        return FolderMapper.ToResponse(savedFolder);
     }
 
     /// <summary>

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
@@ -21,7 +17,6 @@ public class FolderRepository : IFolderRepository
 
     public async Task<FolderEntity> CreateFolderAsync(FolderEntity folder)
     {
-        Console.WriteLine($"Repository - Folder User ID before save: '{folder.UserId}'");
         context.Folders.Add(folder);
         await context.SaveChangesAsync();
 

@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-
 namespace FileDeck.api.Models;
+
 public class FolderEntity
 {
     public int Id { get; set; }

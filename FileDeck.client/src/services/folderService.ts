@@ -1,7 +1,7 @@
 import api from "./api";
 import {
   CreateFolderRequest,
-  RenameFolderDto,
+  Renamerequest,
   FolderResponse,
   FileResponse,
 } from "../types";
@@ -45,7 +45,7 @@ export const getFilesInFolder = async (
 // Rename folder
 export const renameFolder = async (
   folderId: number,
-  renameData: RenameFolderDto
+  renameData: Renamerequest
 ): Promise<boolean> => {
   const response = await api.put<{ message: string }>(
     `/folders/${folderId}/rename`,

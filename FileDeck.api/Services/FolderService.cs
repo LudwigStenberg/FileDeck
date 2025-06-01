@@ -1,15 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FileDeck.api.DTOs;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace FileDeck.api.Services;
+
 public class FolderService : IFolderService
 {
     private readonly IFolderRepository folderRepository;
@@ -23,59 +18,19 @@ public class FolderService : IFolderService
     /// <summary>
     /// Creates a new folder based on the information provided in the input DTO.
     /// </summary>
-    /// <param name="folderDto">The DTO used to create the new folder. Contains the name and the ID of the parent folder, if there is one.</param>
+    /// <param name="request">The DTO used to create the new folder. Contains the name and the ID of the parent folder, if there is one.</param>
     /// <param name="userId">The ID of the user requesting the folder to be created and who will have access to it.</param>
     /// <returns>A FolderResponse with additional data that was created during construction.</returns>
-    /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if the parent folder doesn't exist despite folderDto.ParentFolderId being populated.</exception>
-    public async Task<FolderResponse> CreateFolderAsync(CreateFolderRequest folderDto, string userId)
+    /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if the parent folder doesn't exist despite request.ParentFolderId being populated.</exception>
+    public async Task<FolderResponse> CreateFolderAsync(CreateFolderRequest request, string userId)
     {
-        logger.LogInformation("Initiated creation of folder with name {FolderName} by user {UserId}", folderDto.Name, userId);
+        logger.LogInformation("Initiated creation of folder with name {FolderName} by user {UserId}", request.Name, userId);
 
-        if (string.IsNullOrWhiteSpace(folderDto.Name))
-        {
-            logger.LogWarning("Folder creation failed for user {UserId}. Name is null or has whitespace.", userId);
-            throw new ArgumentException("Folder name cannot be empty.");
-        }
+        await ValidateCreateFolderRequest(request, userId);
 
-        if (folderDto.Name.Length > 50)
-        {
-            logger.LogWarning("Folder creation failed for user {UserId}. Name too long ({NameLength} chars)",
-                userId, folderDto.Name.Length);
-            throw new ArgumentException("Folder name cannot be longer than 50 characters.");
-        }
+        var newFolder = FolderMapper.ToEntity(request, userId);
 
-        string invalidChars = "\\/:*?\"<>|";
-        if (folderDto.Name.Any(invalidChars.Contains))
-        {
-            logger.LogWarning("Folder creation failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, folderDto.Name);
-            throw new ArgumentException("Folder name contains invalid characters.");
-        }
-
-
-        if (folderDto.ParentFolderId != null)
-        {
-            logger.LogDebug("Checking if parent folder {ParentFolderId} exists for user {UserId}", folderDto.ParentFolderId, userId);
-
-            bool parentFolderExists = await folderRepository.FolderExistsAsync(folderDto.ParentFolderId.Value, userId);
-
-            if (!parentFolderExists)
-            {
-                logger.LogWarning("Folder creation failed for user {UserId}. The parent folder {ParentFolderId} could not be found", userId, folderDto.ParentFolderId);
-                throw new ArgumentException("Parent folder does not exist or you do not have access to it.");
-            }
-        }
-
-        var newFolder = new FolderEntity
-        {
-            Name = folderDto.Name,
-            ParentFolderId = folderDto.ParentFolderId,
-            UserId = userId,
-            CreatedDate = DateTime.UtcNow,
-            LastModifiedDate = DateTime.UtcNow,
-            IsDeleted = false
-        };
-
-        logger.LogDebug("Attempting to create the new folder {FolderName} for user {UserId}", folderDto.Name, userId);
+        logger.LogDebug("Attempting to create the new folder {FolderName} for user {UserId}", request.Name, userId);
 
         var savedFolder = await folderRepository.CreateFolderAsync(newFolder);
 
@@ -87,7 +42,7 @@ public class FolderService : IFolderService
             CreatedDate = savedFolder.CreatedDate
         };
 
-        logger.LogInformation("Folder {FolderName} (ID: {FolderId})for user {UserId} successfully created", folderDto.Name, savedFolder.Id, userId);
+        logger.LogInformation("Folder {FolderName} (ID: {FolderId})for user {UserId} successfully created", request.Name, savedFolder.Id, userId);
 
         return FolderResponse;
     }
@@ -264,4 +219,46 @@ public class FolderService : IFolderService
         logger.LogInformation("Folder deletion for user {UserId} successful. Folder with ID {FolderId} removed", userId, folderId);
         return true;
     }
+
+
+    #region Helper methods
+
+    private async Task ValidateCreateFolderRequest(CreateFolderRequest request, string userId)
+    {
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            logger.LogWarning("Folder creation failed for user {UserId}. Name is null or has whitespace.", userId);
+            throw new ArgumentException("Folder name cannot be empty.");
+        }
+
+        if (request.Name.Length > 50)
+        {
+            logger.LogWarning("Folder creation failed for user {UserId}. Name too long ({NameLength} chars)",
+                userId, request.Name.Length);
+            throw new ArgumentException("Folder name cannot be longer than 50 characters.");
+        }
+
+        string invalidChars = "\\/:*?\"<>|";
+        if (request.Name.Any(invalidChars.Contains))
+        {
+            logger.LogWarning("Folder creation failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.Name);
+            throw new ArgumentException("Folder name contains invalid characters.");
+        }
+
+
+        if (request.ParentFolderId != null)
+        {
+            logger.LogDebug("Checking if parent folder {ParentFolderId} exists for user {UserId}", request.ParentFolderId, userId);
+
+            bool parentFolderExists = await folderRepository.FolderExistsAsync(request.ParentFolderId.Value, userId);
+
+            if (!parentFolderExists)
+            {
+                logger.LogWarning("Folder creation failed for user {UserId}. The parent folder {ParentFolderId} could not be found", userId, request.ParentFolderId);
+                throw new ArgumentException("Parent folder does not exist or you do not have access to it.");
+            }
+        }
+    }
+
+    #endregion
 }

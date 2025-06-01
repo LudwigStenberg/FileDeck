@@ -6,7 +6,7 @@ namespace FileDeck.api.Services.Interfaces;
 
 public interface IFolderService
 {
-    Task<FolderResponse> CreateFolderAsync(CreateFolderRequest folderDto, string userId);
+    Task<FolderResponse> CreateFolderAsync(CreateFolderRequest request, string userId);
     Task<FolderResponse?> GetFolderByIdAsync(int folderId, string userId);
     Task<IEnumerable<FolderResponse>> GetAllFoldersAsync(string userId);
     Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId);

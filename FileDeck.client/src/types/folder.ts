@@ -3,7 +3,7 @@ export interface CreateFolderRequest {
   parentFolderId: number | null;
 }
 
-export interface RenameFolderDto {
+export interface Renamerequest {
   newName: string;
 }
 

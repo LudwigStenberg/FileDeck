@@ -56,9 +56,10 @@ public class AuthService : IAuthService
         }
         else
         {
-            logger.LogWarning("User registration failed for {Email}. Errors: {Errors}",
-                            request.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
-            return UserMapper.ToFailedRegisterResponse(result.Errors.Select(error => error.Description).ToList());
+            var errors = result.Errors.Select(e => e.Description).ToList();
+
+            logger.LogWarning("User registration failed for {Email}. Errors: {Errors}", request.Email, string.Join(", ", errors));
+            return UserMapper.ToFailedRegisterResponse(errors);
         }
     }
 

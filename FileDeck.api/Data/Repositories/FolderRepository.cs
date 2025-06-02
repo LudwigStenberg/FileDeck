@@ -56,22 +56,15 @@ public class FolderRepository : IFolderRepository
             .ToListAsync();
     }
 
-    public async Task<bool> RenameFolderAsync(int folderId, string newName, string userId)
+    public async Task RenameFolderAsync(int folderId, string newName, string userId)
     {
         var folder = await context.Folders
             .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId && !f.IsDeleted);
 
-        if (folder == null)
-        {
-            return false;
-        }
-
-        folder.Name = newName;
+        folder!.Name = newName;
         folder.LastModifiedDate = DateTime.UtcNow;
 
-        int affectedRows = await context.SaveChangesAsync();
-
-        return affectedRows > 0;
+        await context.SaveChangesAsync();
     }
 
     public async Task<bool> DeleteFolderAsync(int folderId, string userId)

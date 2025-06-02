@@ -121,7 +121,7 @@ public class FolderService : IFolderService
     /// <param name="userId">The ID of the user requesting the renaming and who has access to it.</param>
     /// <returns>A boolean to indicate a successful or unsuccessful operation.</returns>
     /// <exception cref="ArgumentException">The exceptions thrown when one of the arguments do not meet the validation requirements.</exception>
-    public async Task<bool> RenameFolderAsync(int folderId, RenameFolderRequest request, string userId)
+    public async Task RenameFolderAsync(int folderId, RenameFolderRequest request, string userId)
     {
         logger.LogInformation("Folder renaming initiated for user {UserId}. ID of folder to be renamed: {FolderId}", userId, folderId);
 
@@ -130,21 +130,15 @@ public class FolderService : IFolderService
         if (!folderExists)
         {
             logger.LogWarning("Folder renaming failed. The folder {FolderId} could not be found for user {UserId}", userId, folderId);
-            return false;
+            throw new FolderNotFoundException(folderId);
         }
 
         ValidateRenameFolderRequest(request, userId);
 
-        var success = await folderRepository.RenameFolderAsync(folderId, request.NewName, userId);
+        await folderRepository.RenameFolderAsync(folderId, request.NewName, userId);
 
-        if (!success)
-        {
-            logger.LogWarning("Folder renaming failed for user {UserId}. The folder {FolderId} could not be renamed.", userId, folderId);
-            return false;
-        }
-
-        logger.LogInformation("Folder {FolderId} renaming successful for user {UserId}. Renamed to {FolderName}", folderId, userId, request.NewName);
-        return true;
+        logger.LogInformation("Folder {FolderId} renaming successful for user {UserId}. Renamed to {FolderName}",
+            folderId, userId, request.NewName);
     }
 
     /// <summary>
@@ -219,21 +213,21 @@ public class FolderService : IFolderService
         if (string.IsNullOrWhiteSpace(request.NewName))
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Empty folder name provided", userId);
-            throw new ArgumentException("Folder name cannot be empty.");
+            throw new ValidationException("Folder name cannot be empty.");
         }
 
         if (request.NewName.Length > 50)
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Name too long ({NameLength} chars)",
                 userId, request.NewName.Length);
-            throw new ArgumentException("Folder name cannot be longer than 50 characters.");
+            throw new ValidationException("Folder name cannot be longer than 50 characters.");
         }
 
         string invalidChars = "\\/:*?\"<>|";
         if (request.NewName.Any(invalidChars.Contains))
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.NewName);
-            throw new ArgumentException("Folder name contains invalid characters.");
+            throw new ValidationException("Folder name contains invalid characters.");
         }
     }
 

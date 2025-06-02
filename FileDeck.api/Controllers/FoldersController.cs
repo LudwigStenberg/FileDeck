@@ -131,16 +131,9 @@ public class FoldersController : ControllerBase
             return Unauthorized(new { message = "User ID not found in token" });
         }
 
-        bool success = await folderService.RenameFolderAsync(folderId, request, userId);
+        await folderService.RenameFolderAsync(folderId, request, userId);
 
-        if (success)
-        {
-            return Ok(new { message = "Folder renamed successfully" });
-        }
-        else
-        {
-            return NotFound(new { message = "Folder not found or operation failed" });
-        }
+        return NoContent();
     }
 
     [HttpDelete("{folderId}")]

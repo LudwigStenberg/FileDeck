@@ -1,10 +1,7 @@
-
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using FileDeck.api.DTOs;
 using FileDeck.api.Models;
 
 namespace FileDeck.api.Repositories;
+
 public interface IFileRepository
 {
     Task<FileEntity> CreateFileAsync(FileEntity file);

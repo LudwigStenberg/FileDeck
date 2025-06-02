@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.OpenApi.MicrosoftExtensions;
 
 namespace FileDeck.api;
 
@@ -94,15 +96,28 @@ public class Program
         {
             options.Run(async context =>
             {
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
                 var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-                await context.Response.WriteAsJsonAsync(new
+
+                if (exception is FileNotFoundException)
                 {
-                    error = exception?.Message ?? "An unexpected error occured"
-                });
+                    context.Response.StatusCode = StatusCodes.Status404NotFound;
+                }
+                else
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                }
+
+                string errorMessage = exception switch
+                {
+                    FileNotFoundException => exception.Message,
+                    _ => "An unexpected error occurred."
+                };
+
+                await context.Response.WriteAsJsonAsync(new { error = errorMessage });
             });
         });
+
 
         // Configure the HTTP request pipeline (Add Middleware)
         if (app.Environment.IsDevelopment())

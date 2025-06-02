@@ -10,7 +10,7 @@ public interface IFileService
 {
     Task<FileResponse> UploadFileAsync(FileUploadRequest request, string userId);
 
-    Task<FileResponse?> GetFileByIdAsync(int fileId, string userId);
+    Task<FileResponse> GetFileByIdAsync(int fileId, string userId);
 
     Task<IEnumerable<FileResponse>> GetRootFilesAsync(string userId);
     Task<FileDownloadResponse?> DownloadFileAsync(int fileId, string userId);

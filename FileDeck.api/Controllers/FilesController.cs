@@ -75,11 +75,6 @@ public class FilesController : ControllerBase
 
         var file = await fileService.GetFileByIdAsync(id, userId);
 
-        if (file == null)
-        {
-            return NotFound();
-        }
-
         return Ok(file);
     }
 

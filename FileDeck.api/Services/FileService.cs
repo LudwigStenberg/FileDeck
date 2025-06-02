@@ -93,7 +93,7 @@ public class FileService : IFileService
     /// <param name="fileId">The ID of the file to be downloaded.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileDownloadResponse containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
-    public async Task<FileDownloadResponse?> DownloadFileAsync(int fileId, string userId)
+    public async Task<FileDownloadResponse> DownloadFileAsync(int fileId, string userId)
     {
         logger.LogInformation("File download initiated for user: {UserId}. File: {FileId}", userId, fileId);
 
@@ -102,7 +102,7 @@ public class FileService : IFileService
         if (fileEntity == null)
         {
             logger.LogWarning("File download for user {UserId} failed. File: {FileId} could not be found.", userId, fileId);
-            return null;
+            throw new FileNotFoundException(fileId);
         }
 
         logger.LogInformation("File {FileId} successfully downloaded for user {UserId} - {FileName}", fileId, userId, fileEntity.Name);

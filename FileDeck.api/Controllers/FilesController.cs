@@ -54,11 +54,6 @@ public class FilesController : ControllerBase
 
         var file = await fileService.DownloadFileAsync(id, userId);
 
-        if (file == null)
-        {
-            return NotFound();
-        }
-
         return File(file.Content, file.ContentType, file.Name);
     }
 

@@ -12,8 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.OpenApi.MicrosoftExtensions;
 
 namespace FileDeck.api;
 

@@ -1,16 +1,9 @@
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using FileDeck.api.Data;
-using FileDeck.api.DTOs;
 using FileDeck.api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileDeck.api.Repositories;
+
 public class FileRepository : IFileRepository
 {
     private readonly FileDeckDbContext context;

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using FileDeck.api.DTOs;
 using FileDeck.api.Repositories;
 using FileDeck.api.Repositories.Interfaces;
@@ -154,7 +155,7 @@ public class FileService : IFileService
         if (!fileExists)
         {
             logger.LogWarning("File deletion failed. File {FileId} could not be found for user {UserId}", fileId, userId);
-            return false;
+            throw new FileNotFoundException(fileId);
         }
 
         bool result = await fileRepository.DeleteFileAsync(fileId, userId);
@@ -179,14 +180,14 @@ public class FileService : IFileService
         {
             logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",
                 request.Name.Length, userId);
-            throw new ArgumentException("File name cannot be longer than 50 characters");
+            throw new ValidationException("File name cannot be longer than 50 characters");
         }
 
         string invalidChars = "\\/:*?\"<>|";
         if (request.Name.Any(invalidChars.Contains))
         {
             logger.LogWarning("File upload rejected: invalid characters in filename for user {UserId}", userId);
-            throw new ArgumentException("Folder name contains invalid characters");
+            throw new ValidationException("File name contains invalid characters");
         }
 
         if (request.FolderId.HasValue)
@@ -197,7 +198,7 @@ public class FileService : IFileService
             {
                 logger.LogWarning("File upload rejected: specified folder {FolderId} does not exist for user {UserId}",
                     request.FolderId.Value, userId);
-                throw new ArgumentException("The specified folder does not exist or you don't have access to it");
+                throw new FolderNotFoundException(request.FolderId.Value);
             }
         }
     }

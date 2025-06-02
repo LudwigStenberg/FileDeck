@@ -88,7 +88,6 @@ public class FoldersController : ControllerBase
         }
 
         var files = await fileService.GetFilesInFolderAsync(folderId, userId);
-
         return Ok(files);
     }
 

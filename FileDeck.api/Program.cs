@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace FileDeck.api;
@@ -98,7 +99,12 @@ public class Program
                 context.Response.ContentType = "application/json";
                 var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-                if (exception is FileNotFoundException or FolderNotFoundException)
+
+                if (exception is ValidationException)
+                {
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                }
+                else if (exception is FileNotFoundException or FolderNotFoundException)
                 {
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                 }
@@ -109,6 +115,7 @@ public class Program
 
                 string errorMessage = exception switch
                 {
+                    ValidationException => exception.Message,
                     FileNotFoundException => exception.Message,
                     FolderNotFoundException => exception.Message,
                     _ => "An unexpected error occurred."

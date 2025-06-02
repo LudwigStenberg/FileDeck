@@ -13,6 +13,7 @@ using System.Text;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics;
 
+
 namespace FileDeck.api;
 
 public class Program
@@ -97,7 +98,7 @@ public class Program
                 context.Response.ContentType = "application/json";
                 var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-                if (exception is FileNotFoundException)
+                if (exception is FileNotFoundException or FolderNotFoundException)
                 {
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                 }
@@ -109,6 +110,7 @@ public class Program
                 string errorMessage = exception switch
                 {
                     FileNotFoundException => exception.Message,
+                    FolderNotFoundException => exception.Message,
                     _ => "An unexpected error occurred."
                 };
 

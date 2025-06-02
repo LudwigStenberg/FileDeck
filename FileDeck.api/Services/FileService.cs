@@ -125,7 +125,7 @@ public class FileService : IFileService
         if (!folderExists)
         {
             logger.LogWarning("File retrieval failed: the folder {FolderId} does not exist for user {UserId}", folderId, userId);
-            return Enumerable.Empty<FileResponse>();
+            throw new FolderNotFoundException(folderId);
         }
 
         logger.LogDebug("Folder {FolderId} was found. Retrieving the files within for user {UserId}", folderId, userId);

@@ -45,7 +45,8 @@ public class FolderService : IFolderService
     /// <param name="folderId">The ID of the folder to be retrieved.</param>
     /// <param name="userId">The ID of the user requesting the folder and who will have access to it.</param>
     /// <returns>A FolderResponse which contains the information on the folder that has been retrieved. If no folder is found, returns null.</returns>
-    public async Task<FolderResponse?> GetFolderByIdAsync(int folderId, string userId)
+    /// <exception cref="FolderNotFoundException">Thrown when the folder associated with the file cannot be found.</exception>
+    public async Task<FolderResponse> GetFolderByIdAsync(int folderId, string userId)
     {
         logger.LogInformation("Retrieval of folder {FolderId} for user {UserId} initiated", folderId, userId);
 
@@ -53,11 +54,12 @@ public class FolderService : IFolderService
         if (folder == null)
         {
             logger.LogWarning("Folder retrieval failed. The folder {FolderId} could not be found for user {UserId}", folderId, userId);
-            return null;
+            throw new FolderNotFoundException(folderId);
         }
 
         logger.LogInformation("Folder retrieval successful for user {UserId}. Folder {FolderId}, {FolderName} was found.",
             userId, folderId, folder.Name);
+
         return FolderMapper.ToResponse(folder);
     }
 

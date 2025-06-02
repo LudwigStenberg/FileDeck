@@ -28,10 +28,8 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not foud in token" });
+            return Unauthorized(new { message = "User ID not found in token" });
         }
-
-        Console.WriteLine($"Controller - User ID from token: '{userId}'");
 
         var newFolder = await folderService.CreateFolderAsync(request, userId);
 
@@ -43,7 +41,7 @@ public class FoldersController : ControllerBase
     }
 
     // Returns an existing folder
-    [HttpGet("{folderId}")]
+    [HttpGet("{id}")]
     [Authorize]
     public async Task<IActionResult> GetFolderById(int folderId)
     {
@@ -52,17 +50,13 @@ public class FoldersController : ControllerBase
         {
             return Unauthorized(new { message = "User ID not found in token" });
         }
-        var folder = await folderService.GetFolderByIdAsync(folderId, userId);
 
-        if (folder == null)
-        {
-            return NotFound();
-        }
+        var folder = await folderService.GetFolderByIdAsync(folderId, userId);
 
         return Ok(folder);
     }
 
-    [HttpGet("all")]
+    [HttpGet]
     [Authorize]
     public async Task<IActionResult> GetAllFolders()
     {

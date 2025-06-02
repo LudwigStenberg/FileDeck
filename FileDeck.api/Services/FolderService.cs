@@ -172,7 +172,6 @@ public class FolderService : IFolderService
         return true;
     }
 
-
     #region Helper methods
 
     private async Task ValidateCreateFolderRequest(CreateFolderRequest request, string userId)

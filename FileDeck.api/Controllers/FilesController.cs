@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Threading.Tasks;
 using FileDeck.api.DTOs;
 using FileDeck.api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +20,7 @@ public class FilesController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> UploadFile(requestRequest request)
+    public async Task<IActionResult> UploadFile(FileUploadRequest request)
     {
         if (!ModelState.IsValid)
         {

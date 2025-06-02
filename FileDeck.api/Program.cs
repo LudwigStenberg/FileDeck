@@ -1,8 +1,4 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using FileDeck.api.Data;
 using FileDeck.api.Models;
 using Microsoft.AspNetCore.Identity;
@@ -14,10 +10,8 @@ using FileDeck.api.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 
 namespace FileDeck.api;
 
@@ -27,7 +21,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add Database context with PostgreSQL provider
         builder.Services.AddDbContext<FileDeckDbContext>(options => options.UseNpgsql(
             builder.Configuration.GetConnectionString("DefaultConnection"),
             npgsqlOptions => npgsqlOptions.MigrationsAssembly("FileDeck.api")
@@ -50,7 +43,7 @@ public class Program
         // Add Identity services:
         builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
         {
-            //Password settings
+            // Password settings
             options.Password.RequireDigit = true;
             options.Password.RequireLowercase = true;
             options.Password.RequireUppercase = true;
@@ -91,12 +84,9 @@ public class Program
         builder.Services.AddScoped<IFolderRepository, FolderRepository>();
         builder.Services.AddScoped<IFileRepository, FileRepository>();
 
-        // Add services to the container:
         builder.Services.AddControllers();
-        // Enables API Endpoints Discovery - Helps Swagger work
-        // (Creates metadata: like a map of the API landscape)
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddOpenApi(); // default is v1
+        builder.Services.AddOpenApi();
 
         var app = builder.Build();
 

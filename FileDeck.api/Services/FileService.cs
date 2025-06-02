@@ -171,6 +171,8 @@ public class FileService : IFileService
         return result;
     }
 
+    #region Helper Methods
+
     private async Task ValidateFileUploadRequest(FileUploadRequest request, string userId)
     {
         if (request.Name.Length > 50)
@@ -199,4 +201,6 @@ public class FileService : IFileService
             }
         }
     }
+
+    #endregion
 }

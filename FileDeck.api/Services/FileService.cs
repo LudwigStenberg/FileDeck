@@ -27,7 +27,8 @@ public class FileService : IFileService
     /// <param name="request">The DTO that contains the information on the new file.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponse which contains information on the newly uploaded file.</returns>
-    /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if a folder associated with the file, doesn't exist.</exception>
+    /// <exception cref="ValidationException">Thrown when the validation for the request parameter's properties do not fulfill either one of: Name.Length or no invalid characters.</exception>
+    /// <exception cref="FolderNotFoundException">Thrown when the folder associated with the file cannot be found.</exception>
     public async Task<FileResponse> UploadFileAsync(FileUploadRequest request, string userId)
     {
         logger.LogInformation("File upload initiated for user {UserId}: {FileName}, {FileSize} bytes",
@@ -54,6 +55,7 @@ public class FileService : IFileService
     /// <param name="fileId">The ID of the file to be retrieved.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponse containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the file ID cannot be found for the provided user ID.</exception>
     public async Task<FileResponse> GetFileByIdAsync(int fileId, string userId)
     {
         logger.LogInformation("File retrieval initiated for user {UserId}. File: {FileId}", userId, fileId);
@@ -94,6 +96,7 @@ public class FileService : IFileService
     /// <param name="fileId">The ID of the file to be downloaded.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileDownloadResponse containing information about the file if found and if the user has access to it; otherwise returns null.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the file ID cannot be found for the provided user ID.</exception>
     public async Task<FileDownloadResponse> DownloadFileAsync(int fileId, string userId)
     {
         logger.LogInformation("File download initiated for user: {UserId}. File: {FileId}", userId, fileId);
@@ -117,6 +120,7 @@ public class FileService : IFileService
     /// <param name="folderId">The folder ID of the folder containing the files.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A list of FileResponse objects if the request is successful; otherwise it returns an empty enumerable. </returns>
+    /// <exception cref="FolderNotFoundException">Thrown when the folder ID cannot be found for the provided user ID.</exception>
     public async Task<IEnumerable<FileResponse>> GetFilesInFolderAsync(int folderId, string userId)
     {
         logger.LogInformation("Retrieval of files in folder {FolderId} initiated by user {UserId}", folderId, userId);
@@ -146,8 +150,8 @@ public class FileService : IFileService
     /// </summary>
     /// <param name="fileId">The ID of the file to be deleted.</param>
     /// <param name="userId">The ID of the user requesting to delete the file and who should have access to it.</param>
-    /// <returns>A boolean value to indicate whether the operation was a success or a failure.</returns>
-    public async Task<bool> DeleteFileAsync(int fileId, string userId)
+    /// <exception cref="FileNotFoundException">Thrown when the file ID cannot be found for the provided user ID.</exception>
+    public async Task DeleteFileAsync(int fileId, string userId)
     {
         logger.LogInformation("Deletion of file {FileId} initiated for user {UserId}", fileId, userId);
 
@@ -168,8 +172,6 @@ public class FileService : IFileService
         {
             logger.LogWarning("File {FileId} deletion failed for user {UserId} during database operation", fileId, userId);
         }
-
-        return result;
     }
 
     #region Helper Methods

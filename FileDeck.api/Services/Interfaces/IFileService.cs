@@ -13,6 +13,6 @@ public interface IFileService
 
     Task<IEnumerable<FileResponse>> GetFilesInFolderAsync(int folderId, string userId);
 
-    Task<bool> DeleteFileAsync(int fileId, string userId); // Soft delete
+    Task DeleteFileAsync(int fileId, string userId); // Soft delete
 }
 

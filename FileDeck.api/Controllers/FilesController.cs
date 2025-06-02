@@ -4,7 +4,6 @@ using FileDeck.api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace FileDeck.api.Controllers;
 
 [ApiController]
@@ -88,8 +87,6 @@ public class FilesController : ControllerBase
         return Ok(rootFiles);
     }
 
-
-
     [HttpDelete("{id}")]
     [Authorize]
     public async Task<IActionResult> DeleteFile(int id)
@@ -100,12 +97,7 @@ public class FilesController : ControllerBase
             return Unauthorized(new { message = "User ID not found in token" });
         }
 
-        var result = await fileService.DeleteFileAsync(id, userId);
-
-        if (!result)
-        {
-            return NotFound();
-        }
+        await fileService.DeleteFileAsync(id, userId);
 
         return NoContent();
     }

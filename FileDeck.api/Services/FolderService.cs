@@ -119,8 +119,8 @@ public class FolderService : IFolderService
     /// <param name="folderId">The ID of the folder to be renamed.</param>
     /// <param name="request">The DTO containing the new name.</param>
     /// <param name="userId">The ID of the user requesting the renaming and who has access to it.</param>
-    /// <returns>A boolean to indicate a successful or unsuccessful operation.</returns>
-    /// <exception cref="ArgumentException">The exceptions thrown when one of the arguments do not meet the validation requirements.</exception>
+    /// <exception cref="FolderNotFoundException">Thrown when the folder associated with the file cannot be found.</exception>
+    /// <exception cref="ValidationException">The exceptions thrown when one of the arguments do not meet the validation requirements.</exception>
     public async Task RenameFolderAsync(int folderId, RenameFolderRequest request, string userId)
     {
         logger.LogInformation("Folder renaming initiated for user {UserId}. ID of folder to be renamed: {FolderId}", userId, folderId);
@@ -146,8 +146,8 @@ public class FolderService : IFolderService
     /// </summary>
     /// <param name="folderId">The ID of the folder to be removed.</param>
     /// <param name="userId">The ID of the user requesting the deletion and who has access to it.</param>
-    /// <returns>A boolean to indicate a successful or unsuccessful operation.</returns>
-    public async Task<bool> DeleteFolderAsync(int folderId, string userId)
+    /// <exception cref="FolderNotFoundException">Thrown when the folder associated with the file cannot be found.</exception>
+    public async Task DeleteFolderAsync(int folderId, string userId)
     {
         logger.LogInformation("Folder deletion initiated for user {UserId}. ID of folder to be deleted: {FolderId}", userId, folderId);
         var folderExists = await folderRepository.FolderExistsAsync(folderId, userId);
@@ -155,19 +155,12 @@ public class FolderService : IFolderService
         if (!folderExists)
         {
             logger.LogWarning("Folder deletion failed for user {UserId}. Folder with ID: {FolderId} could not be found", userId, folderId);
-            return false;
+            throw new FolderNotFoundException(folderId);
         }
 
-        bool success = await folderRepository.DeleteFolderAsync(folderId, userId);
-
-        if (!success)
-        {
-            logger.LogWarning("Folder deletion failed for user {UserId}. Folder with ID {FolderId} could not be deleted.", userId, folderId);
-            return false;
-        }
+        await folderRepository.DeleteFolderAsync(folderId, userId);
 
         logger.LogInformation("Folder deletion for user {UserId} successful. Folder with ID {FolderId} removed", userId, folderId);
-        return true;
     }
 
     #region Helper methods

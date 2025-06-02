@@ -14,6 +14,6 @@ public interface IFolderRepository
     Task<IEnumerable<FolderEntity>> GetRootFoldersAsync(string userId);
     Task<bool> FolderExistsAsync(int parentFolderId, string userId);
     Task RenameFolderAsync(int folderId, string newName, string userId);
-    Task<bool> DeleteFolderAsync(int folderId, string userId);
+    Task DeleteFolderAsync(int folderId, string userId);
 
 }

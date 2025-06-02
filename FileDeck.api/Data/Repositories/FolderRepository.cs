@@ -67,7 +67,7 @@ public class FolderRepository : IFolderRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteFolderAsync(int folderId, string userId)
+    public async Task DeleteFolderAsync(int folderId, string userId)
     {
         using var transaction = await context.Database.BeginTransactionAsync();
 
@@ -76,11 +76,6 @@ public class FolderRepository : IFolderRepository
             var folder = await context.Folders
                 .SingleOrDefaultAsync(f => f.Id == folderId && f.UserId == userId);
 
-            if (folder == null)
-            {
-                return false;
-            }
-
             var childFolders = await GetAllChildFoldersAsync(folderId, userId);
             foreach (var childfolder in childFolders)
             {
@@ -88,7 +83,7 @@ public class FolderRepository : IFolderRepository
                 childfolder.LastModifiedDate = DateTime.UtcNow;
             }
 
-            folder.IsDeleted = true;
+            folder!.IsDeleted = true;
             folder.LastModifiedDate = DateTime.UtcNow;
 
             var folderIds = childFolders.Select(f => f.Id).ToList();
@@ -104,19 +99,14 @@ public class FolderRepository : IFolderRepository
                 file.LastModifiedDate = DateTime.UtcNow;
             }
 
-            int affectedRows = await context.SaveChangesAsync();
-
+            await context.SaveChangesAsync();
             await transaction.CommitAsync();
-
-            return affectedRows > 0;
-
         }
         catch (Exception)
         {
             await transaction.RollbackAsync();
+            throw;
         }
-
-        return false;
     }
 
     private async Task<List<FolderEntity>> GetAllChildFoldersAsync(int parentFolderId, string userId)

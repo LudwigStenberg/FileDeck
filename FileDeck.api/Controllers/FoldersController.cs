@@ -147,15 +147,9 @@ public class FoldersController : ControllerBase
             return Unauthorized();
         }
 
-        bool success = await folderService.DeleteFolderAsync(folderId, userId);
+        await folderService.DeleteFolderAsync(folderId, userId);
 
-        if (success)
-        {
-            return NoContent();
-        }
-        else
-        {
-            return NotFound(new { message = "Folder not found or operation failed" });
-        }
+        return NoContent();
+
     }
 }

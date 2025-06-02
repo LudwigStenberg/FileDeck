@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using FileDeck.api.DTOs;
 using FileDeck.api.Repositories.Interfaces;
 using FileDeck.api.Services.Interfaces;
@@ -20,7 +21,8 @@ public class FolderService : IFolderService
     /// <param name="request">The DTO used to create the new folder. Contains the name and the ID of the parent folder, if there is one.</param>
     /// <param name="userId">The ID of the user requesting the folder to be created and who will have access to it.</param>
     /// <returns>A FolderResponse with additional data that was created during construction.</returns>
-    /// <exception cref="ArgumentException">The exceptions thrown when the arguments do not fulfill either one of: Name.Length, no invalid characters or if the parent folder doesn't exist despite request.ParentFolderId being populated.</exception>
+    /// <exception cref="ValidationException">Thrown when the validation for one of the following fails: Empty or whitespace name, Name.Length or invalid characters.</exception>
+    /// <exception cref="FolderNotFoundException">The exceptions thrown when  the parent folder doesn't exist despite request.ParentFolderId being populated.</exception>
     public async Task<FolderResponse> CreateFolderAsync(CreateFolderRequest request, string userId)
     {
         logger.LogInformation("Initiated creation of folder with name {FolderName} by user {UserId}", request.Name, userId);
@@ -179,23 +181,22 @@ public class FolderService : IFolderService
         if (string.IsNullOrWhiteSpace(request.Name))
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Name is null or has whitespace.", userId);
-            throw new ArgumentException("Folder name cannot be empty.");
+            throw new ValidationException("Folder name cannot be empty.");
         }
 
         if (request.Name.Length > 50)
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Name too long ({NameLength} chars)",
                 userId, request.Name.Length);
-            throw new ArgumentException("Folder name cannot be longer than 50 characters.");
+            throw new ValidationException("Folder name cannot be longer than 50 characters.");
         }
 
         string invalidChars = "\\/:*?\"<>|";
         if (request.Name.Any(invalidChars.Contains))
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.Name);
-            throw new ArgumentException("Folder name contains invalid characters.");
+            throw new ValidationException("Folder name contains invalid characters.");
         }
-
 
         if (request.ParentFolderId != null)
         {
@@ -206,7 +207,7 @@ public class FolderService : IFolderService
             if (!parentFolderExists)
             {
                 logger.LogWarning("Folder creation failed for user {UserId}. The parent folder {ParentFolderId} could not be found", userId, request.ParentFolderId);
-                throw new ArgumentException("Parent folder does not exist or you do not have access to it.");
+                throw new FolderNotFoundException(request.ParentFolderId.Value);
             }
         }
     }

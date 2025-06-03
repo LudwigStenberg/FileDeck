@@ -1,12 +1,10 @@
 using System.Security.Claims;
 using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
-using FileDeck.api.Services;
 using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace FileDeck.api.Controllers;
 
@@ -38,25 +36,17 @@ public class AuthController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize]
-    // Should this be async as well? (Good practice to have either none or all actions async?)
     public async Task<IActionResult> GetUserById(string id)
     {
-        // Get the current user from the token
-        var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (id != currentUserId)
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
         {
-            return Forbid();
+            return Unauthorized(new { message = "User ID not found in token" });
         }
 
-        var user = await userManager.FindByIdAsync(id);
+        var user = await authService.GetUserById(id);
 
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(new { user.Id, user.Email });
+        return Ok(user);
     }
 
     [HttpPost("login")]
@@ -69,12 +59,6 @@ public class AuthController : ControllerBase
 
         var result = await authService.LoginUserAsync(request);
 
-
-        if (result.Succeeded)
-        {
-            return Ok(result);
-        }
-
-        return Unauthorized(result);
+        return Ok(result);
     }
 }

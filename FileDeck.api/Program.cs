@@ -104,9 +104,13 @@ public class Program
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 }
-                else if (exception is FileNotFoundException or FolderNotFoundException)
+                else if (exception is FileNotFoundException or FolderNotFoundException or UserNotFoundException)
                 {
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
+                }
+                else if (exception is UserAlreadyExistsException)
+                {
+                    context.Response.StatusCode = StatusCodes.Status409Conflict;
                 }
                 else
                 {
@@ -118,6 +122,8 @@ public class Program
                     ValidationException => exception.Message,
                     FileNotFoundException => exception.Message,
                     FolderNotFoundException => exception.Message,
+                    UserNotFoundException => "User not found.",
+                    UserAlreadyExistsException => exception.Message,
                     _ => "An unexpected error occurred."
                 };
 

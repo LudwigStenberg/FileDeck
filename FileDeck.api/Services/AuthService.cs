@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Authentication;
 using FileDeck.api.DTOs.Auth;
+using FileDeck.api.Models;
 using FileDeck.api.Repositories;
 using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -11,14 +12,17 @@ public class AuthService : IAuthService
 {
     private readonly IAuthRepository authRepository;
     private readonly ITokenService tokenService;
+    private readonly UserManager<UserEntity> userManager;
     private readonly ILogger<AuthService> logger;
     public AuthService(
         IAuthRepository authRepository,
         ITokenService tokenService,
+        UserManager<UserEntity> userManager,
         ILogger<AuthService> logger)
     {
         this.authRepository = authRepository;
         this.tokenService = tokenService;
+        this.userManager = userManager;
         this.logger = logger;
     }
 
@@ -31,7 +35,6 @@ public class AuthService : IAuthService
     public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request)
     {
         logger.LogInformation("User registration attempt for email: {Email}", request.Email);
-
 
         if (request.Password != request.ConfirmPassword)
         {
@@ -66,7 +69,8 @@ public class AuthService : IAuthService
     /// Signs in an existing user based on the provided login information.
     /// </summary>
     /// <param name="request">The login information including email and password.</param>
-    /// <returns>A LoginResponse object containing the result of the login attempt including success status, potential errors and a newly generated token if the attempt is successful.</returns>
+    /// <returns>A LoginResponse DTO containing a token and its expiration, UserId and Email.</returns>
+    /// <exception cref="InvalidCredentialException">Thrown when the provided Email or Password is incorrect.</exception>
     public async Task<LoginResponse> LoginUserAsync(LoginRequest request)
     {
         logger.LogInformation("User login attempt for email: {Email}", request.Email);
@@ -76,24 +80,44 @@ public class AuthService : IAuthService
         if (user == null)
         {
             logger.LogWarning("Login attempt failed for email: {Email}. The email or password is incorrect", request.Email);
-            return UserMapper.ToFailedLoginResponse(new List<string> { "The email or password is incorrect." });
+            throw new InvalidCredentialException("Incorrect email or password.");
         }
 
         logger.LogDebug("Attempting to validate password for email: {Email}", request.Email);
 
         var result = await authRepository.CheckPasswordSignInAsync(user, request.Password);
 
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            logger.LogInformation("User password successfully checked for email: {Email}. Generating token...", request.Email);
-
-            var tokenResult = tokenService.GenerateToken(user);
-
-            logger.LogInformation("User successfully logged in: {UserId}, {Email}", user.Id, user.Email);
-            return UserMapper.ToSuccessfulLoginResponse(user, tokenResult);
+            logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", request.Email);
+            throw new InvalidCredentialException("Incorrect email or password.");
         }
 
-        logger.LogWarning("User login failed for email: {Email}. Incorrect email or password.", request.Email);
-        return UserMapper.ToFailedLoginResponse(new List<string> { "The email or password is incorrect." });
+        logger.LogDebug("User password successfully checked for email: {Email}. Generating token...", request.Email);
+        var tokenResult = tokenService.GenerateToken(user);
+
+        logger.LogDebug("User successfully logged in: {UserId}, {Email}", user.Id, user.Email);
+        return UserMapper.ToLoginResponse(user, tokenResult);
+    }
+
+    /// <summary>
+    /// Retrieves information for the provided user.
+    /// </summary>
+    /// <param name="userId">The ID of the user requesting the retrieval and who should have access to it.</param>
+    /// <returns>A UserResponse DTO containing information about the user.</returns>
+    /// <exception cref="UserNotFoundException">Thrown when the user cannot be found.</exception>
+    public async Task<UserResponse> GetUserById(string userId)
+    {
+        logger.LogInformation("Starting retrieval attempt for user with ID: '{userId}'", userId);
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            logger.LogWarning("User with ID: '{UserId}' could not be found.", userId);
+            throw new UserNotFoundException(userId);
+        }
+
+        logger.LogDebug("User with ID: '{UserId}' successfully retrieved.", userId);
+        return UserMapper.ToUserResponse(user);
     }
 }

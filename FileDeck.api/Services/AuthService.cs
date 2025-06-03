@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.Security.Authentication;
 using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Repositories;
 using FileDeck.api.Services.Interfaces;
@@ -34,14 +36,14 @@ public class AuthService : IAuthService
         if (request.Password != request.ConfirmPassword)
         {
             logger.LogWarning("Registration failed: passwords do not match for {Email}", request.Email);
-            return UserMapper.ToFailedRegisterResponse(new List<string> { "Passwords do not match" });
+            throw new ValidationException("Passwords do not match");
         }
 
         var existingUser = await authRepository.FindUserByEmailAsync(request.Email);
         if (existingUser != null)
         {
             logger.LogWarning("Registration failed: email {Email} is already in use", request.Email);
-            return UserMapper.ToFailedRegisterResponse(new List<string> { "Email is already in use" });
+            throw new UserAlreadyExistsException(request.Email);
         }
 
         var newUser = UserMapper.ToEntity(request);
@@ -49,18 +51,15 @@ public class AuthService : IAuthService
         logger.LogDebug("Attempting to create new user with email: {Email}", request.Email);
         IdentityResult result = await authRepository.CreateUserAsync(newUser, request.Password);
 
-        if (result.Succeeded)
-        {
-            logger.LogDebug("User registered successfully: {UserId}, {Email}", newUser.Id, newUser.Email);
-            return UserMapper.ToSuccessfulRegisterResponse(newUser);
-        }
-        else
+        if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-
             logger.LogWarning("User registration failed for {Email}. Errors: {Errors}", request.Email, string.Join(", ", errors));
-            return UserMapper.ToFailedRegisterResponse(errors);
+            throw new ValidationException(string.Join(", ", errors));
         }
+
+        logger.LogDebug("User registered successfully: {UserId}, {Email}", newUser.Id, newUser.Email);
+        return UserMapper.ToRegisterResponse(newUser);
     }
 
     /// <summary>

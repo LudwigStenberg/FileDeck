@@ -41,7 +41,7 @@ public class FoldersController : ControllerBase
     }
 
     // Returns an existing folder
-    [HttpGet("{id}")]
+    [HttpGet("{folderId}")]
     [Authorize]
     public async Task<IActionResult> GetFolderById(int folderId)
     {

@@ -1,16 +1,12 @@
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
 using FileDeck.api.Services;
 using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query;
-using Npgsql.Replication;
+
 
 namespace FileDeck.api.Controllers;
 
@@ -18,21 +14,18 @@ namespace FileDeck.api.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly ITokenService tokenService;
     private readonly IAuthService authService;
     private readonly UserManager<UserEntity> userManager;
 
-    public AuthController(ITokenService tokenService, IAuthService authService, UserManager<UserEntity> userManager)
+    public AuthController(IAuthService authService, UserManager<UserEntity> userManager)
     {
-        this.tokenService = tokenService;
         this.authService = authService;
         this.userManager = userManager;
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterUserAsync(RegisterRequest request)
+    public async Task<IActionResult> RegisterUser(RegisterRequest request)
     {
-        // Based on the attributes of RegisterRequest
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
@@ -40,13 +33,7 @@ public class AuthController : ControllerBase
 
         var result = await authService.RegisterUserAsync(request);
 
-
-        if (result.Succeeded)
-        {
-            return CreatedAtAction(nameof(GetUserById), new { id = result.UserId }, result);
-        }
-
-        return BadRequest(result);
+        return CreatedAtAction(nameof(GetUserById), new { id = result.UserId }, result);
     }
 
     [HttpGet("{id}")]
@@ -73,7 +60,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginUserAsync(LoginRequest request)
+    public async Task<IActionResult> LoginUser(LoginRequest request)
     {
         if (!ModelState.IsValid)
         {

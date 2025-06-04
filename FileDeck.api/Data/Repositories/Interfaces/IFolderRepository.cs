@@ -15,5 +15,5 @@ public interface IFolderRepository
     Task<bool> FolderExistsAsync(int parentFolderId, string userId);
     Task RenameFolderAsync(int folderId, string newName, string userId);
     Task DeleteFolderAsync(int folderId, string userId);
-
+    Task<DeletionResult> HardDeleteOldFoldersAsync(DateTime cutOffDate);
 }

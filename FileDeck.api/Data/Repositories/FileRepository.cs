@@ -46,7 +46,7 @@ public class FileRepository : IFileRepository
 
         if (file == null)
         {
-            return false; // File not found (or already deleted)
+            return false;
         }
 
         file.IsDeleted = true;
@@ -55,6 +55,26 @@ public class FileRepository : IFileRepository
         int affectedRows = await context.SaveChangesAsync();
 
         return affectedRows > 0;
+    }
+
+    public async Task<DeletionResult> HardDeleteOldFilesAsync(DateTime cutOffDate)
+    {
+        var deletionResult = new DeletionResult();
+
+        var fileIds = await context.Files
+                    .Where(f => f.IsDeleted && f.LastModifiedDate < cutOffDate)
+                    .Select(f => f.Id)
+                    .ToListAsync();
+
+        var deletedFiles = await context.Files
+            .Where(f => f.IsDeleted && f.LastModifiedDate < cutOffDate)
+            .ExecuteDeleteAsync();
+
+        deletionResult.Ids.AddRange(fileIds);
+        deletionResult.Count = deletedFiles;
+
+        return deletionResult;
+
     }
 
     public async Task<bool> FileExistsAsync(int fileId, string userId)

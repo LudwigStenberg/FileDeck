@@ -85,6 +85,9 @@ public class Program
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
         builder.Services.AddScoped<IFolderRepository, FolderRepository>();
         builder.Services.AddScoped<IFileRepository, FileRepository>();
+        builder.Services.AddScoped<ICleanupService, CleanupService>();
+
+        builder.Services.AddHostedService<CleanupBackgroundService>();
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

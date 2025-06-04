@@ -32,4 +32,13 @@ public static class UserMapper
             Email = user.Email ?? string.Empty
         };
     }
+
+    public static UserResponse ToUserResponse(UserEntity user)
+    {
+        return new UserResponse
+        {
+            UserId = user.Id,
+            Email = user.Email
+        };
+    }
 }

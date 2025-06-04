@@ -126,6 +126,24 @@ public class FolderRepository : IFolderRepository
         }
 
         return result;
+    }
 
+    public async Task<DeletionResult> HardDeleteOldFoldersAsync(DateTime cutOffDate)
+    {
+        var deletionResult = new DeletionResult();
+
+        var folderIds = await context.Folders
+            .Where(f => f.IsDeleted && f.LastModifiedDate < cutOffDate)
+            .Select(f => f.Id)
+            .ToListAsync();
+
+        var deletedFolders = await context.Folders
+            .Where(f => f.IsDeleted && f.LastModifiedDate < cutOffDate)
+            .ExecuteDeleteAsync();
+
+        deletionResult.Ids.AddRange(folderIds);
+        deletionResult.Count = deletedFolders;
+
+        return deletionResult;
     }
 }

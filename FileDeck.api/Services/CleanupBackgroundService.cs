@@ -59,7 +59,7 @@ public class CleanupBackgroundService : IHostedService
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error occurred during clceanup process.");
+            logger.LogError(ex, "Error occurred during cleanup process.");
         }
 
     }

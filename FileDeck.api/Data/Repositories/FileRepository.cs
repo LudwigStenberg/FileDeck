@@ -74,7 +74,6 @@ public class FileRepository : IFileRepository
         deletionResult.Count = deletedFiles;
 
         return deletionResult;
-
     }
 
     public async Task<bool> FileExistsAsync(int fileId, string userId)

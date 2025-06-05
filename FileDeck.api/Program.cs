@@ -41,6 +41,9 @@ public class Program
         builder.Services.Configure<JwtSettings>(
             builder.Configuration.GetSection("JwtSettings"));
 
+        builder.Services.Configure<CleanupSettings>(
+            builder.Configuration.GetSection("CleanupSettings"));
+
 
         // Add Identity services:
         builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>

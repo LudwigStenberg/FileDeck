@@ -21,8 +21,10 @@ public class FolderService : IFolderService
     /// <param name="request">The DTO used to create the new folder. Contains the name and the ID of the parent folder, if there is one.</param>
     /// <param name="userId">The ID of the user requesting the folder to be created and who will have access to it.</param>
     /// <returns>A FolderResponse with additional data that was created during construction.</returns>
-    /// <exception cref="ValidationException">Thrown when the validation for one of the following fails: Empty or whitespace name, Name.Length or invalid characters.</exception>
-    /// <exception cref="FolderNotFoundException">The exceptions thrown when  the parent folder doesn't exist despite request.ParentFolderId being populated.</exception>
+    /// <exception cref="EmptyNameException">Thrown when the folder name is empty or whitespace.</exception>
+    /// <exception cref="NameTooLongException">Thrown when the folder name exceeds the maximum allowed length.</exception>
+    /// <exception cref="InvalidCharactersException">Thrown when the folder name contains invalid characters.</exception>
+    /// <exception cref="FolderNotFoundException">Thrown when the parent folder doesn't exist despite request.ParentFolderId being populated.</exception>
     public async Task<FolderResponse> CreateFolderAsync(CreateFolderRequest request, string userId)
     {
         logger.LogInformation("Initiated creation of folder with name {FolderName} by user {UserId}", request.Name, userId);
@@ -119,8 +121,10 @@ public class FolderService : IFolderService
     /// <param name="folderId">The ID of the folder to be renamed.</param>
     /// <param name="request">The DTO containing the new name.</param>
     /// <param name="userId">The ID of the user requesting the renaming and who has access to it.</param>
-    /// <exception cref="FolderNotFoundException">Thrown when the folder associated with the file cannot be found.</exception>
-    /// <exception cref="ValidationException">The exceptions thrown when one of the arguments do not meet the validation requirements.</exception>
+    /// <exception cref="FolderNotFoundException">Thrown when the folder to be renamed cannot be found.</exception>
+    /// <exception cref="EmptyNameException">Thrown when the new folder name is empty or whitespace.</exception>
+    /// <exception cref="NameTooLongException">Thrown when the new folder name exceeds the maximum allowed length.</exception>
+    /// <exception cref="InvalidCharactersException">Thrown when the new folder name contains invalid characters.</exception>
     public async Task RenameFolderAsync(int folderId, RenameFolderRequest request, string userId)
     {
         logger.LogInformation("Folder renaming initiated for user {UserId}. ID of folder to be renamed: {FolderId}", userId, folderId);
@@ -180,8 +184,7 @@ public class FolderService : IFolderService
             throw new NameTooLongException("folder", 50);
         }
 
-        string invalidChars = "\\/:*?\"<>|";
-        if (request.Name.Any(invalidChars.Contains))
+        if (request.Name.Any(ValidationConstants.InvalidNameCharacters.Contains))
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.Name);
             throw new InvalidCharactersException("folder");
@@ -206,21 +209,20 @@ public class FolderService : IFolderService
         if (string.IsNullOrWhiteSpace(request.NewName))
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Empty folder name provided", userId);
-            throw new ValidationException("Folder name cannot be empty.");
+            throw new EmptyNameException("folder");
         }
 
         if (request.NewName.Length > 50)
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Name too long ({NameLength} chars)",
                 userId, request.NewName.Length);
-            throw new ValidationException("Folder name cannot be longer than 50 characters.");
+            throw new NameTooLongException("folder", 50);
         }
 
-        string invalidChars = "\\/:*?\"<>|";
-        if (request.NewName.Any(invalidChars.Contains))
+        if (request.NewName.Any(ValidationConstants.InvalidNameCharacters.Contains))
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.NewName);
-            throw new ValidationException("Folder name contains invalid characters.");
+            throw new InvalidCharactersException("folder");
         }
     }
 

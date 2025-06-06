@@ -27,8 +27,10 @@ public class FileService : IFileService
     /// <param name="request">The DTO that contains the information on the new file.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponse which contains information on the newly uploaded file.</returns>
-    /// <exception cref="ValidationException">Thrown when the validation for the request parameter's properties do not fulfill either one of: Name.Length or no invalid characters.</exception>
-    /// <exception cref="FolderNotFoundException">Thrown when the folder associated with the file cannot be found.</exception>
+    /// <exception cref="EmptyNameException">Thrown when the file name is empty or whitespace.</exception>
+    /// <exception cref="NameTooLongException">Thrown when the file name exceeds the maximum allowed length.</exception>
+    /// <exception cref="InvalidCharactersException">Thrown when the file name contains invalid characters.</exception>
+    /// <exception cref="FolderNotFoundException">Thrown when the specified folder cannot be found.</exception>
     public async Task<FileResponse> UploadFileAsync(FileUploadRequest request, string userId)
     {
         logger.LogInformation("File upload initiated for user {UserId}: {FileName}, {FileSize} bytes",
@@ -192,8 +194,7 @@ public class FileService : IFileService
             throw new NameTooLongException("file", 50);
         }
 
-        string invalidChars = "\\/:*?\"<>|";
-        if (request.Name.Any(invalidChars.Contains))
+        if (request.Name.Any(ValidationConstants.InvalidNameCharacters.Contains))
         {
             logger.LogWarning("File upload rejected: invalid characters in filename for user {UserId}", userId);
             throw new InvalidCharactersException("file");

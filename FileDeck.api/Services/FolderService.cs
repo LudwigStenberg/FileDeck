@@ -177,14 +177,14 @@ public class FolderService : IFolderService
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Name too long ({NameLength} chars)",
                 userId, request.Name.Length);
-            throw new ValidationException("Folder name cannot be longer than 50 characters.");
+            throw new NameTooLongException("folder", 50);
         }
 
         string invalidChars = "\\/:*?\"<>|";
         if (request.Name.Any(invalidChars.Contains))
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Invalid characters in folder name: {FolderName}", userId, request.Name);
-            throw new ValidationException("Folder name contains invalid characters.");
+            throw new InvalidCharactersException("folder");
         }
 
         if (request.ParentFolderId != null)

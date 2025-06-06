@@ -189,14 +189,14 @@ public class FileService : IFileService
         {
             logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",
                 request.Name.Length, userId);
-            throw new ValidationException("File name cannot be longer than 50 characters");
+            throw new NameTooLongException("file", 50);
         }
 
         string invalidChars = "\\/:*?\"<>|";
         if (request.Name.Any(invalidChars.Contains))
         {
             logger.LogWarning("File upload rejected: invalid characters in filename for user {UserId}", userId);
-            throw new ValidationException("File name contains invalid characters");
+            throw new InvalidCharactersException("file");
         }
 
         if (request.FolderId.HasValue)

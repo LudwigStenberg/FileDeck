@@ -114,7 +114,7 @@ public class Program
                 {
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                 }
-                else if (exception is EmptyNameException)
+                else if (exception is EmptyNameException or NameTooLongException or InvalidCharactersException)
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 }
@@ -130,10 +130,15 @@ public class Program
                 string errorMessage = exception switch
                 {
                     ValidationException => exception.Message,
+
                     FileNotFoundException => exception.Message,
                     FolderNotFoundException => exception.Message,
                     UserNotFoundException => "User not found.",
+
                     EmptyNameException => exception.Message,
+                    NameTooLongException => exception.Message,
+                    InvalidCharactersException => exception.Message,
+
                     UserAlreadyExistsException => exception.Message,
                     _ => "An unexpected error occurred."
                 };

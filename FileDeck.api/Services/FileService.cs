@@ -178,6 +178,13 @@ public class FileService : IFileService
 
     private async Task ValidateFileUploadRequest(FileUploadRequest request, string userId)
     {
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            logger.LogWarning("File creation failed for user {UserId}. Name is null or has whitespace.", userId);
+            throw new EmptyNameException("file");
+        }
+
         if (request.Name.Length > 50)
         {
             logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",

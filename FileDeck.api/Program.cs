@@ -114,6 +114,10 @@ public class Program
                 {
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                 }
+                else if (exception is EmptyNameException)
+                {
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                }
                 else if (exception is UserAlreadyExistsException)
                 {
                     context.Response.StatusCode = StatusCodes.Status409Conflict;
@@ -129,6 +133,7 @@ public class Program
                     FileNotFoundException => exception.Message,
                     FolderNotFoundException => exception.Message,
                     UserNotFoundException => "User not found.",
+                    EmptyNameException => exception.Message,
                     UserAlreadyExistsException => exception.Message,
                     _ => "An unexpected error occurred."
                 };

@@ -170,7 +170,7 @@ public class FolderService : IFolderService
         if (string.IsNullOrWhiteSpace(request.Name))
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Name is null or has whitespace.", userId);
-            throw new ValidationException("Folder name cannot be empty.");
+            throw new EmptyNameException("folder");
         }
 
         if (request.Name.Length > 50)

@@ -28,7 +28,7 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var newFolder = await folderService.CreateFolderAsync(request, userId);
@@ -48,7 +48,7 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var folder = await folderService.GetFolderByIdAsync(folderId, userId);
@@ -63,7 +63,7 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var folders = await folderService.GetAllFoldersAsync(userId);
@@ -78,7 +78,7 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var files = await fileService.GetFilesInFolderAsync(folderId, userId);
@@ -93,7 +93,7 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var subfolders = await folderService.GetSubfoldersAsync(folderId, userId);
@@ -108,7 +108,7 @@ public class FoldersController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var rootFolders = await folderService.GetRootFoldersAsync(userId);
@@ -128,7 +128,7 @@ public class FoldersController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         await folderService.RenameFolderAsync(folderId, request, userId);

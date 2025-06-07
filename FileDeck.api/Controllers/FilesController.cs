@@ -28,7 +28,7 @@ public class FilesController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var newFile = await fileService.UploadFileAsync(request, userId);
@@ -47,7 +47,7 @@ public class FilesController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var file = await fileService.DownloadFileAsync(id, userId);
@@ -63,7 +63,7 @@ public class FilesController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var file = await fileService.GetFileByIdAsync(id, userId);
@@ -78,7 +78,7 @@ public class FilesController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var rootFiles = await fileService.GetRootFilesAsync(userId);
@@ -93,7 +93,7 @@ public class FilesController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         await fileService.DeleteFileAsync(id, userId);

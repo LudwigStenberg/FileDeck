@@ -15,7 +15,7 @@ public class FolderService : IFolderService
     }
 
     /// <summary>
-    /// Creates a new folder based on the information provided in the input DTO.
+    /// Asynchronously creates a new folder based on the information provided in the input DTO.
     /// </summary>
     /// <param name="request">The DTO used to create the new folder. Contains the name and the ID of the parent folder, if there is one.</param>
     /// <param name="userId">The ID of the user requesting the folder to be created and who will have access to it.</param>
@@ -41,7 +41,7 @@ public class FolderService : IFolderService
     }
 
     /// <summary>
-    /// Retrieves a specific folder and its information.
+    /// Asynchronously retrieves a specific folder and its information.
     /// </summary>
     /// <param name="folderId">The ID of the folder to be retrieved.</param>
     /// <param name="userId">The ID of the user requesting the folder and who will have access to it.</param>
@@ -65,7 +65,7 @@ public class FolderService : IFolderService
     }
 
     /// <summary>
-    /// Retrieves all folders belonging to a specific user.
+    /// Asynchronously retrieves all folders belonging to a specific user.
     /// </summary>
     /// <param name="userId">The ID of the user requesting to retrieve the folders, and who has access to them.</param>
     /// <returns>A list containing FolderResponse DTOs. It can be empty.</returns>
@@ -81,7 +81,7 @@ public class FolderService : IFolderService
     }
 
     /// <summary>
-    /// Retrieves the subfolders within a specific folder.
+    /// Asynchronously retrieves the subfolders within a specific folder.
     /// </summary>
     /// <param name="folderId">The ID of the folder to be searched within.</param>
     /// <param name="userId">The ID of the user requesting to see the subfolders and who has access to it.</param>
@@ -99,7 +99,7 @@ public class FolderService : IFolderService
     }
 
     /// <summary>
-    /// Retrieves the root folders for a specific user. 
+    /// Asynchronously retrieves the root folders for a specific user. 
     /// </summary>
     /// <param name="userId">The ID of the user requesting the retrieval.</param>
     /// <returns>A list of FolderResponse DTOs, can be empty.</returns>
@@ -115,7 +115,7 @@ public class FolderService : IFolderService
     }
 
     /// <summary>
-    /// Renames a specific folder.
+    /// Asynchronously renames a specific folder.
     /// </summary>
     /// <param name="folderId">The ID of the folder to be renamed.</param>
     /// <param name="request">The DTO containing the new name.</param>
@@ -145,7 +145,7 @@ public class FolderService : IFolderService
     }
 
     /// <summary>
-    /// Deletes a specific folder in addition to its content (subfolders and files) using soft deletion.
+    /// Asynchronously deletes a specific folder in addition to its content (subfolders and files) using soft deletion.
     /// </summary>
     /// <param name="folderId">The ID of the folder to be removed.</param>
     /// <param name="userId">The ID of the user requesting the deletion and who has access to it.</param>
@@ -176,11 +176,11 @@ public class FolderService : IFolderService
             throw new EmptyNameException("folder");
         }
 
-        if (request.Name.Length > 50)
+        if (request.Name.Length > ValidationConstants.MaxFolderNameLength)
         {
             logger.LogWarning("Folder creation failed for user {UserId}. Name too long ({NameLength} chars)",
                 userId, request.Name.Length);
-            throw new NameTooLongException("folder", 50);
+            throw new NameTooLongException("folder", ValidationConstants.MaxFolderNameLength);
         }
 
         if (request.Name.Any(ValidationConstants.InvalidNameCharacters.Contains))
@@ -211,11 +211,11 @@ public class FolderService : IFolderService
             throw new EmptyNameException("folder");
         }
 
-        if (request.NewName.Length > 50)
+        if (request.NewName.Length > ValidationConstants.MaxFolderNameLength)
         {
             logger.LogWarning("Folder renaming failed for user {UserId}. Name too long ({NameLength} chars)",
                 userId, request.NewName.Length);
-            throw new NameTooLongException("folder", 50);
+            throw new NameTooLongException("folder", ValidationConstants.MaxFolderNameLength);
         }
 
         if (request.NewName.Any(ValidationConstants.InvalidNameCharacters.Contains))

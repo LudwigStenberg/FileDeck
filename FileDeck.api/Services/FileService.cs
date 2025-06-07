@@ -192,7 +192,7 @@ public class FileService : IFileService
     private async Task ValidateFileUploadRequest(IFormFile file, byte[] content, int? folderId, string userId)
     {
 
-        if (file.Length > 50 * 1024 * 1024)
+        if (file.Length > ValidationConstants.MaxFileSizeBytes)
         {
             throw new FileTooLargeException();
         }
@@ -203,11 +203,11 @@ public class FileService : IFileService
             throw new EmptyNameException("file");
         }
 
-        if (file.FileName.Length > 50)
+        if (file.FileName.Length > ValidationConstants.MaxFileNameLength)
         {
             logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",
                 file.FileName.Length, userId);
-            throw new NameTooLongException("file", 50);
+            throw new NameTooLongException("file", ValidationConstants.MaxFileNameLength);
         }
 
         if (file.FileName.Any(ValidationConstants.InvalidNameCharacters.Contains))

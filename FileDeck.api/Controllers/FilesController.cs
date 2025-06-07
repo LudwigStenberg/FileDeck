@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using FileDeck.api.DTOs;
 using FileDeck.api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +18,11 @@ public class FilesController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> UploadFile(FileUploadRequest request)
+    public async Task<IActionResult> UploadFile([FromForm] IFormFile file, [FromForm] int? folderId = null)
     {
-        if (!ModelState.IsValid)
+        if (file == null || file.Length == 0)
         {
-            return BadRequest(ModelState);
+            throw new FileEmptyException();
         }
 
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

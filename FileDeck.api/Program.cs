@@ -110,14 +110,16 @@ public class Program
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 }
+                else if (exception is EmptyNameException or NameTooLongException or
+                    InvalidCharactersException or FileEmptyException)
+                {
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                }
                 else if (exception is FileNotFoundException or FolderNotFoundException or UserNotFoundException)
                 {
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                 }
-                else if (exception is EmptyNameException or NameTooLongException or InvalidCharactersException)
-                {
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                }
+
                 else if (exception is UserAlreadyExistsException)
                 {
                     context.Response.StatusCode = StatusCodes.Status409Conflict;
@@ -131,13 +133,14 @@ public class Program
                 {
                     ValidationException => exception.Message,
 
-                    FileNotFoundException => exception.Message,
-                    FolderNotFoundException => exception.Message,
-                    UserNotFoundException => "User not found.",
-
                     EmptyNameException => exception.Message,
                     NameTooLongException => exception.Message,
                     InvalidCharactersException => exception.Message,
+                    FileEmptyException => exception.Message,
+
+                    FileNotFoundException => exception.Message,
+                    FolderNotFoundException => exception.Message,
+                    UserNotFoundException => "User not found.",
 
                     UserAlreadyExistsException => exception.Message,
                     _ => "An unexpected error occurred."

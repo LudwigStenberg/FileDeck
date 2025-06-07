@@ -108,7 +108,7 @@ public class Program
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 }
                 else if (exception is EmptyNameException or NameTooLongException or
-                    InvalidCharactersException or FileEmptyException)
+                    InvalidCharactersException or FileEmptyException or FileTooLargeException)
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 }
@@ -134,6 +134,7 @@ public class Program
                     NameTooLongException => exception.Message,
                     InvalidCharactersException => exception.Message,
                     FileEmptyException => exception.Message,
+                    FileTooLargeException => exception.Message,
 
                     FileNotFoundException => exception.Message,
                     FolderNotFoundException => exception.Message,

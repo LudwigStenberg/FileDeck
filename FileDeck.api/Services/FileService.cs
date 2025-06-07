@@ -192,6 +192,11 @@ public class FileService : IFileService
     private async Task ValidateFileUploadRequest(IFormFile file, byte[] content, int? folderId, string userId)
     {
 
+        if (file.Length > 50 * 1024 * 1024)
+        {
+            throw new FileTooLargeException();
+        }
+
         if (string.IsNullOrWhiteSpace(file.FileName))
         {
             logger.LogWarning("File creation failed for user {UserId}. Name is null or has whitespace.", userId);

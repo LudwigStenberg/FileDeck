@@ -3,15 +3,15 @@ using FileDeck.api.Models;
 
 public static class FileMapper
 {
-    public static FileEntity ToEntity(FileUploadRequest request, string userId)
+    public static FileEntity ToEntity(IFormFile file, byte[] content, int? folderId, string userId)
     {
         return new FileEntity
         {
-            Name = request.Name,
-            ContentType = request.ContentType,
-            Content = request.Content,
-            Size = request.Content.Length,
-            FolderId = request.FolderId,
+            Name = file.FileName,
+            ContentType = file.ContentType,
+            Content = content,
+            Size = content.Length,
+            FolderId = folderId,
             UserId = userId
         };
     }

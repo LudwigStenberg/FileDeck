@@ -30,10 +30,24 @@ public class FileService : IFileService
     /// <exception cref="NameTooLongException">Thrown when the file name exceeds the maximum allowed length.</exception>
     /// <exception cref="InvalidCharactersException">Thrown when the file name contains invalid characters.</exception>
     /// <exception cref="FolderNotFoundException">Thrown when the specified folder cannot be found.</exception>
-    public async Task<FileResponse> UploadFileAsync(FileUploadRequest request, string userId)
+    public async Task<FileResponse> UploadFileAsync(IFormFile file, int? folderId, string userId)
     {
-        logger.LogInformation("File upload initiated for user {UserId}: {FileName}, {FileSize} bytes",
-            userId, request.Name, request.Content.Length);
+
+        logger.LogInformation("File upload initiated for user with ID: '{UserId}': {FileName}, {FileSize} bytes",
+            userId, file.FileName, file.Length);
+
+        string fileName = file.FileName;
+        string contentType = file.ContentType;
+
+        byte[] content;
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.CopyToAsync(memoryStream);
+            content = memoryStream.ToArray();
+        }
+
+
+
 
         await ValidateFileUploadRequest(request, userId);
 

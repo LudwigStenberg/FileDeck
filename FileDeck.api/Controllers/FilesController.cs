@@ -31,7 +31,7 @@ public class FilesController : ControllerBase
             return Unauthorized();
         }
 
-        var newFile = await fileService.UploadFileAsync(request, userId);
+        var newFile = await fileService.UploadFileAsync(file, folderId, userId);
 
         return CreatedAtAction(
             nameof(GetFileById),

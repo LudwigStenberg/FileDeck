@@ -1,4 +1,3 @@
-
 public class UserNotFoundException : Exception
 {
     public string UserId { get; }

@@ -1,4 +1,3 @@
-
 public class UserResponse
 {
     public required string UserId { get; set; }

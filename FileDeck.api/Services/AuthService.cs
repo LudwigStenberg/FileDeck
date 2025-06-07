@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Authentication;
-using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
 using FileDeck.api.Repositories;
-using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace FileDeck.api.Services;

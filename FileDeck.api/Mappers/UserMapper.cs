@@ -1,5 +1,4 @@
 
-using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
 
 public static class UserMapper

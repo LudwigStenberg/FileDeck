@@ -1,4 +1,3 @@
-
 public class NameTooLongException : Exception
 {
     public NameTooLongException(string entityType, int maxLength)

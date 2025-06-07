@@ -1,7 +1,5 @@
-
-using System;
-
 namespace FileDeck.api.DTOs;
+
 public class FileDownloadResponse
 {
     public int Id { get; set; }

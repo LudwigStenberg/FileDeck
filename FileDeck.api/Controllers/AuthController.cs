@@ -1,7 +1,5 @@
 using System.Security.Claims;
-using FileDeck.api.DTOs.Auth;
 using FileDeck.api.Models;
-using FileDeck.api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

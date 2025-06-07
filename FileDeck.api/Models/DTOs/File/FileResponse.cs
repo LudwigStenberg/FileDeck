@@ -1,5 +1,3 @@
-using System;
-
 namespace FileDeck.api.DTOs;
 
 public class FileResponse

@@ -1,5 +1,3 @@
-namespace FileDeck.api.DTOs.Auth;
-
 public class LoginResponse
 {
     public string Token { get; set; } = string.Empty;

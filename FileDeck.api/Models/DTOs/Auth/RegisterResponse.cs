@@ -1,5 +1,3 @@
-namespace FileDeck.api.DTOs.Auth;
-
 public class RegisterResponse
 {
     public string UserId { get; set; } = string.Empty;

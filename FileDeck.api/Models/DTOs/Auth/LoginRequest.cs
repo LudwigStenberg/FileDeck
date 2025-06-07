@@ -1,7 +1,4 @@
-
 using System.ComponentModel.DataAnnotations;
-
-namespace FileDeck.api.DTOs.Auth;
 
 public class LoginRequest
 {

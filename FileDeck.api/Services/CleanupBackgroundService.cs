@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 public class CleanupBackgroundService : IHostedService
 {
     private readonly IServiceProvider serviceProvider;

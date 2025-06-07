@@ -1,4 +1,3 @@
-
 public class UserAlreadyExistsException : Exception
 {
     public string Email { get; }

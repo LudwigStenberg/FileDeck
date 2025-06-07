@@ -1,4 +1,3 @@
-
 public class FolderNotFoundException : Exception
 {
     public int FolderId { get; }

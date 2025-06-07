@@ -13,12 +13,7 @@ export const uploadFile = async (
     formData.append("folderId", folderId.toString());
   }
 
-  const response = await api.post<FileResponse>("/files", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-
+  const response = await api.post<FileResponse>("/files", formData);
   return response.data;
 };
 

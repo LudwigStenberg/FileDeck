@@ -21,9 +21,10 @@ public class FileService : IFileService
     }
 
     /// <summary>
-    /// Uploads a file to the database for the provided user.
+    /// Asynchronously uploads a file to the database for the provided user.
     /// </summary>
-    /// <param name="request">The DTO that contains the information on the new file.</param>
+    /// <param name="file">The uploaded file containing content and metadata.</param>
+    /// <param name="folderId">The ID of the folder to store the file in, or null for root.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
     /// <returns>A FileResponse which contains information on the newly uploaded file.</returns>
     /// <exception cref="EmptyNameException">Thrown when the file name is empty or whitespace.</exception>
@@ -46,15 +47,12 @@ public class FileService : IFileService
             content = memoryStream.ToArray();
         }
 
+        await ValidateFileUploadRequest(file, content, folderId, userId);
 
-
-
-        await ValidateFileUploadRequest(request, userId);
-
-        var newFile = FileMapper.ToEntity(request, userId);
+        var newFile = FileMapper.ToEntity(file, content, folderId, userId);
 
         logger.LogDebug("Saving new file to database: {FileName}, {ContentType}, {FileSize} bytes",
-            request.Name, request.ContentType, request.Content.Length);
+            fileName, contentType, content.Length);
 
         var savedFile = await fileRepository.CreateFileAsync(newFile);
 
@@ -65,7 +63,7 @@ public class FileService : IFileService
     }
 
     /// <summary>
-    /// Retrieves a file based on the file ID provided.
+    /// Asynchronously retrieves a file based on the file ID provided.
     /// </summary>
     /// <param name="fileId">The ID of the file to be retrieved.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
@@ -89,7 +87,7 @@ public class FileService : IFileService
     }
 
     /// <summary>
-    /// Retrieves all the files located in the root.
+    ///  Asynchronously retrieves all the files located in the root.
     /// </summary>
     /// <param name="userId">The ID of the user requesting the files and who has access to it.</param>
     /// <returns>A list containing FileResponse DTOs. It can be empty.</returns>
@@ -106,7 +104,7 @@ public class FileService : IFileService
     }
 
     /// <summary>
-    /// Retrieves and downloads a file from the database.
+    /// Asynchronously retrieves and downloads a file from the database.
     /// </summary>
     /// <param name="fileId">The ID of the file to be downloaded.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
@@ -130,7 +128,7 @@ public class FileService : IFileService
     }
 
     /// <summary>
-    /// Retrieves information on the files within a specific folder.
+    /// Asynchronously retrieves information on the files within a specific folder.
     /// </summary>
     /// <param name="folderId">The folder ID of the folder containing the files.</param>
     /// <param name="userId">The ID of the user requesting the file and who should have access to it.</param>
@@ -161,7 +159,7 @@ public class FileService : IFileService
     }
 
     /// <summary>
-    /// Deletes a specific file by means of a soft-delete.
+    /// Asynchronously deletes a specific file by means of a soft-delete.
     /// </summary>
     /// <param name="fileId">The ID of the file to be deleted.</param>
     /// <param name="userId">The ID of the user requesting to delete the file and who should have access to it.</param>
@@ -191,37 +189,38 @@ public class FileService : IFileService
 
     #region Helper Methods
 
-    private async Task ValidateFileUploadRequest(FileUploadRequest request, string userId)
+    private async Task ValidateFileUploadRequest(IFormFile file, byte[] content, int? folderId, string userId)
     {
 
-        if (string.IsNullOrWhiteSpace(request.Name))
+        if (string.IsNullOrWhiteSpace(file.FileName))
         {
             logger.LogWarning("File creation failed for user {UserId}. Name is null or has whitespace.", userId);
             throw new EmptyNameException("file");
         }
 
-        if (request.Name.Length > 50)
+        if (file.FileName.Length > 50)
         {
             logger.LogWarning("File upload rejected: name too long ({NameLength} chars) for user {UserId}",
-                request.Name.Length, userId);
+                file.FileName.Length, userId);
             throw new NameTooLongException("file", 50);
         }
 
-        if (request.Name.Any(ValidationConstants.InvalidNameCharacters.Contains))
+        if (file.FileName.Any(ValidationConstants.InvalidNameCharacters.Contains))
         {
             logger.LogWarning("File upload rejected: invalid characters in filename for user {UserId}", userId);
             throw new InvalidCharactersException("file");
         }
 
-        if (request.FolderId.HasValue)
+        if (folderId.HasValue)
         {
-            logger.LogDebug("Checking if folder {FolderId} exists for user {UserId}", request.FolderId.Value, userId);
-            bool folderExists = await folderRepository.FolderExistsAsync(request.FolderId.Value, userId);
+            logger.LogDebug("Checking if folder {FolderId} exists for user {UserId}", folderId.Value, userId);
+
+            bool folderExists = await folderRepository.FolderExistsAsync(folderId.Value, userId);
             if (!folderExists)
             {
                 logger.LogWarning("File upload rejected: specified folder {FolderId} does not exist for user {UserId}",
-                    request.FolderId.Value, userId);
-                throw new FolderNotFoundException(request.FolderId.Value);
+                    folderId.Value, userId);
+                throw new FolderNotFoundException(folderId.Value);
             }
         }
     }

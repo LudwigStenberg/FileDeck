@@ -37,12 +37,11 @@ public class CleanupBackgroundService : IHostedService
     {
         try
         {
-            var swedishTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-            var currentSwedishTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, swedishTimeZone);
+            var currentUtc = DateTime.UtcNow;
 
-            if (currentSwedishTime.Hour == 2 && !cleanedToday)
+            if (currentUtc.Hour == 1 && !cleanedToday)
             {
-                logger.LogInformation("Time to run cleanup! Current Swedish time: {Time}.", currentSwedishTime);
+                logger.LogInformation("Time to run cleanup! Current UTC time: {Time}.", currentUtc);
 
                 using var scope = serviceProvider.CreateScope();
                 var cleanupService = scope.ServiceProvider.GetRequiredService<ICleanupService>();
@@ -50,7 +49,7 @@ public class CleanupBackgroundService : IHostedService
 
                 cleanedToday = true;
             }
-            else if (currentSwedishTime.Hour != 2)
+            else if (currentUtc.Hour != 1)
             {
                 cleanedToday = false;
             }

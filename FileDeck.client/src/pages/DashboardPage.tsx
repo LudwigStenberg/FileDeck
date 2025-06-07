@@ -65,7 +65,7 @@ export default function DashboardPage() {
     fetchAllFolders();
   };
 
-  const handlerequested = () => {
+  const handleUploaded = () => {
     fetchFiles();
   };
 
@@ -101,7 +101,7 @@ export default function DashboardPage() {
 
         <FileUploadModal
           currentFolderId={currentFolderId}
-          onUploaded={handlerequested}
+          onUploaded={handleUploaded}
           onClose={() => setIsFileUploadModalOpen(false)}
           isOpen={isFileUploadModalOpen}
         />

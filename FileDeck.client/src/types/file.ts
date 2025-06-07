@@ -1,10 +1,3 @@
-export interface requestRequest {
-  name: string;
-  contentType: string;
-  content: string; // base64
-  folderId?: number | null;
-}
-
 export interface FileDownloadResponse {
   id: number;
   name: string;

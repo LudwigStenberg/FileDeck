@@ -24,7 +24,7 @@ export const getFolderById = async (
 
 // Get all folders
 export const getAllFolders = async (): Promise<FolderResponse[]> => {
-  const response = await api.get<FolderResponse[]>("/folders/all");
+  const response = await api.get<FolderResponse[]>("/folders");
   return response.data;
 };
 

@@ -1,11 +1,23 @@
 import api from "./api";
-import { requestRequest, FileResponse } from "../types";
+import { FileResponse } from "../types";
 
 // Upload File
 export const uploadFile = async (
-  fileData: requestRequest
+  file: File,
+  folderId: number | null = null
 ): Promise<FileResponse> => {
-  const response = await api.post<FileResponse>("/files", fileData);
+  const formData = new FormData();
+  formData.append("file", file);
+
+  if (folderId !== null) {
+    formData.append("folderId", folderId.toString());
+  }
+
+  const response = await api.post<FileResponse>("/files", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };

@@ -1,21 +1,20 @@
-// src/components/requestModal.tsx
 import { useState, useRef } from "react";
 import * as fileService from "../services/fileService";
 import { formatFileSize } from "../utilities/fileUtilities";
 
-interface requestModalProps {
+interface FileUploadModalProps {
   currentFolderId: number | null;
-  onrequested: () => void;
+  onUploaded: () => void;
   onClose: () => void;
   isOpen: boolean;
 }
 
-export const requestModal = ({
+export const FileUploadModal = ({
   currentFolderId,
-  onrequested,
+  onUploaded,
   onClose,
   isOpen,
-}: requestModalProps) => {
+}: FileUploadModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -44,31 +43,15 @@ export const requestModal = ({
     setError(null);
 
     try {
-      const fileContent = await readFileAsArrayBuffer(selectedFile);
+      await fileService.uploadFile(selectedFile, currentFolderId);
 
-      const base64Content = btoa(
-        new Uint8Array(fileContent).reduce(
-          (data, byte) => data + String.fromCharCode(byte),
-          ""
-        )
-      );
-
-      const fileData = {
-        name: selectedFile.name,
-        contentType: selectedFile.type,
-        content: base64Content,
-        folderId: currentFolderId,
-      };
-
-      await fileService.uploadFile(fileData);
       setSelectedFile(null);
 
-      // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
 
-      onrequested();
+      onUploaded();
       onClose();
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -76,33 +59,6 @@ export const requestModal = ({
     } finally {
       setIsUploading(false);
     }
-  };
-
-  const readFileAsArrayBuffer = (file: File): Promise<ArrayBuffer> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const progress = Math.round((event.loaded / event.total) * 100);
-          setUploadProgress(progress);
-        }
-      };
-
-      reader.onload = () => {
-        if (reader.result instanceof ArrayBuffer) {
-          resolve(reader.result);
-        } else {
-          reject(new Error("Failed to read file as ArrayBuffer"));
-        }
-      };
-
-      reader.onerror = () => {
-        reject(reader.error);
-      };
-
-      reader.readAsArrayBuffer(file);
-    });
   };
 
   return (

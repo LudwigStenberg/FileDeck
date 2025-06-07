@@ -4,11 +4,11 @@ import { FolderList } from "../components/FolderList";
 import { Navbar } from "../components/Navbar";
 import { FileResponse, FolderResponse } from "../types";
 import { CreateFolderModal } from "../components/CreateFolderModal";
+import { FileUploadModal } from "../components/FileUploadModal";
 import * as folderService from "../services/folderService";
 import * as fileService from "../services/fileService";
 import "../styles/navbar.css";
 import "../styles/dashboard.css";
-import { requestModal } from "../components/requestModal";
 
 export default function DashboardPage() {
   const [currentFolderId, setCurrentFolderId] = useState<number | null>(null);
@@ -17,7 +17,7 @@ export default function DashboardPage() {
   const [folders, setFolders] = useState<FolderResponse[]>([]);
   const [files, setFiles] = useState<FileResponse[]>([]);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
-  const [isrequestModalOpen, setIsrequestModalOpen] = useState(false);
+  const [isFileUploadModalOpen, setIsFileUploadModalOpen] = useState(false);
 
   const fetchAllFolders = async () => {
     try {
@@ -86,7 +86,7 @@ export default function DashboardPage() {
           </button>
           <button
             className="action-button upload-button"
-            onClick={() => setIsrequestModalOpen(true)}
+            onClick={() => setIsFileUploadModalOpen(true)}
           >
             Upload File
           </button>
@@ -99,11 +99,11 @@ export default function DashboardPage() {
           isOpen={isCreateFolderModalOpen}
         />
 
-        <requestModal
+        <FileUploadModal
           currentFolderId={currentFolderId}
-          onrequested={handlerequested}
-          onClose={() => setIsrequestModalOpen(false)}
-          isOpen={isrequestModalOpen}
+          onUploaded={handlerequested}
+          onClose={() => setIsFileUploadModalOpen(false)}
+          isOpen={isFileUploadModalOpen}
         />
         <FolderList
           folders={folders}

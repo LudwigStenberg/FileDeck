@@ -20,7 +20,6 @@ public class FoldersController : ControllerBase
         this.fileService = fileService;
     }
 
-    // Creates a new folder
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> CreateFolder([FromBody] CreateFolderRequest request)
@@ -40,7 +39,6 @@ public class FoldersController : ControllerBase
         );
     }
 
-    // Returns an existing folder
     [HttpGet("{folderId}")]
     [Authorize]
     public async Task<IActionResult> GetFolderById(int folderId)
@@ -52,7 +50,6 @@ public class FoldersController : ControllerBase
         }
 
         var folder = await folderService.GetFolderByIdAsync(folderId, userId);
-
         return Ok(folder);
     }
 
@@ -67,7 +64,6 @@ public class FoldersController : ControllerBase
         }
 
         var folders = await folderService.GetAllFoldersAsync(userId);
-
         return Ok(folders);
     }
 
@@ -132,7 +128,6 @@ public class FoldersController : ControllerBase
         }
 
         await folderService.RenameFolderAsync(folderId, request, userId);
-
         return NoContent();
     }
 
@@ -148,7 +143,6 @@ public class FoldersController : ControllerBase
         }
 
         await folderService.DeleteFolderAsync(folderId, userId);
-
         return NoContent();
 
     }

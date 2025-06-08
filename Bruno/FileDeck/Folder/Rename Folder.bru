@@ -1,0 +1,25 @@
+meta {
+  name: Rename Folder
+  type: http
+  seq: 7
+}
+
+put {
+  url: http://localhost:5298/api/Folders/:id/rename
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+headers {
+  Authorization: Bearer
+}
+
+body:json {
+  {
+    "newName": "Photos"
+  }
+}

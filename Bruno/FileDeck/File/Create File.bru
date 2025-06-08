@@ -1,0 +1,29 @@
+meta {
+  name: Create File
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:5298/api/Files
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Authorization: Bearer
+}
+
+body:json {
+  {
+    "name": "Root file",
+    "contentType": ".txt",
+    "content": "Just some text",
+    "folderId": null
+  }
+}
+
+body:multipart-form {
+  file: @file(/home/ludwig/Letter.txt)
+  folderId: 1 @contentType(Text)
+}

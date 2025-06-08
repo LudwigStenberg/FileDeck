@@ -1,0 +1,19 @@
+meta {
+  name: Get Files In Folder
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:5298/api/Folders/:id/files
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJkNDljMmM4Ny0yNWYzLTQxMWYtYTVkMy1hNjQwMDY2NGZkYzYiLCJ1bmlxdWVfbmFtZSI6InBldGVyQGd1eS5jb20iLCJlbWFpbCI6InBldGVyQGd1eS5jb20iLCJuYmYiOjE3NDkzNzcxMzUsImV4cCI6MTc0OTM5MTUzNSwiaWF0IjoxNzQ5Mzc3MTM1LCJpc3MiOiJGaWxlRGVja0FQSSIsImF1ZCI6IkZpbGVEZWNrQ2xpZW50In0.cAZ_2XD-zDq-kU8e5IlCd7azFXEbhX6r_vfIkdAo00ZvRfJxr-FUuB-AmgoFg-EKrHJ0RE4L4H8HNQWeq5Sj8g
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Get File By Id
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5298/api/Files/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI2OGNiYWU1YS03MGNhLTRlMmEtOWU0Yy03YzZlYWQzZjY1NDIiLCJ1bmlxdWVfbmFtZSI6Im1pa2VAaW5jLmNvbSIsImVtYWlsIjoibWlrZUBpbmMuY29tIiwibmJmIjoxNzQ5Mzc2Mzk3LCJleHAiOjE3NDkzOTA3OTcsImlhdCI6MTc0OTM3NjM5NywiaXNzIjoiRmlsZURlY2tBUEkiLCJhdWQiOiJGaWxlRGVja0NsaWVudCJ9.w1t-uX61SYqPrEFR1To_Z7ijkqOaM5465ShrP5An6k3VX5ferf_cWzpK3DjLOjwFTY4qM_mi9Zuh-OPIptfw0g
+}

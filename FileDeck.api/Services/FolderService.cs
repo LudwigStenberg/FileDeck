@@ -86,9 +86,17 @@ public class FolderService : IFolderService
     /// <param name="folderId">The ID of the folder to be searched within.</param>
     /// <param name="userId">The ID of the user requesting to see the subfolders and who has access to it.</param>
     /// <returns>A list containing FolderResponse DTOs. It can be empty.</returns>
+    /// <exception cref="FolderNotFoundException">Thrown when the folder cannot be found for the provided User ID.</exception>
     public async Task<IEnumerable<FolderResponse>> GetSubfoldersAsync(int folderId, string userId)
     {
         logger.LogInformation("Retrieval of subfolders initiated for user {UserId}. ID of the folder to be searched within: {FolderId}", userId, folderId);
+
+        bool parentExists = await folderRepository.FolderExistsAsync(folderId, userId);
+        if (!parentExists)
+        {
+            logger.LogWarning("Folder retrieval failed. The folder {FolderId} could not be found for user {UserId}", folderId, userId);
+            throw new FolderNotFoundException(folderId);
+        }
 
         var subfolders = await folderRepository.GetSubfoldersAsync(folderId, userId);
 

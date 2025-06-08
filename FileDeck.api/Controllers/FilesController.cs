@@ -51,7 +51,6 @@ public class FilesController : ControllerBase
         }
 
         var file = await fileService.DownloadFileAsync(id, userId);
-
         return File(file.Content, file.ContentType, file.Name);
     }
 
@@ -67,7 +66,6 @@ public class FilesController : ControllerBase
         }
 
         var file = await fileService.GetFileByIdAsync(id, userId);
-
         return Ok(file);
     }
 
@@ -82,7 +80,6 @@ public class FilesController : ControllerBase
         }
 
         var rootFiles = await fileService.GetRootFilesAsync(userId);
-
         return Ok(rootFiles);
     }
 
@@ -97,7 +94,6 @@ public class FilesController : ControllerBase
         }
 
         await fileService.DeleteFileAsync(id, userId);
-
         return NoContent();
     }
 }

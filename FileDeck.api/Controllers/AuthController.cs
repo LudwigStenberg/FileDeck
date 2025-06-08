@@ -29,7 +29,10 @@ public class AuthController : ControllerBase
 
         var result = await authService.RegisterUserAsync(request);
 
-        return CreatedAtAction(nameof(GetUserById), new { id = result.UserId }, result);
+        return CreatedAtAction(
+            nameof(GetUserById),
+            new { id = result.UserId },
+            result);
     }
 
     [HttpGet("{id}")]
@@ -39,11 +42,10 @@ public class AuthController : ControllerBase
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { message = "User ID not found in token" });
+            return Unauthorized();
         }
 
         var user = await authService.GetUserById(id);
-
         return Ok(user);
     }
 
@@ -56,7 +58,6 @@ public class AuthController : ControllerBase
         }
 
         var result = await authService.LoginUserAsync(request);
-
         return Ok(result);
     }
 }

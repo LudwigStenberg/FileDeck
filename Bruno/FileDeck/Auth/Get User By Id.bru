@@ -1,0 +1,19 @@
+meta {
+  name: Get User By Id
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:5298/api/auth/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 
+}
+
+headers {
+  Authorization: Bearer
+}

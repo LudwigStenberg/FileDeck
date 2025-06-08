@@ -1,0 +1,19 @@
+meta {
+  name: Get Subfolders
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:5298/api/Folders/:id/subfolders
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 3
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI2OGNiYWU1YS03MGNhLTRlMmEtOWU0Yy03YzZlYWQzZjY1NDIiLCJ1bmlxdWVfbmFtZSI6Im1pa2VAaW5jLmNvbSIsImVtYWlsIjoibWlrZUBpbmMuY29tIiwibmJmIjoxNzQ5Mzc3MjYwLCJleHAiOjE3NDkzOTE2NjAsImlhdCI6MTc0OTM3NzI2MCwiaXNzIjoiRmlsZURlY2tBUEkiLCJhdWQiOiJGaWxlRGVja0NsaWVudCJ9.07SjY3rSVGABN8Th-oCb3WcDopDMONokCYKR31RFUwH0aFU8ayv0dIPIVb0SZF7JcJC0BJds8XSwkyKlaoZEtw
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Download File
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5298/api/Files/:id/download
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 
+}
+
+headers {
+  Authorization: Bearer
+}

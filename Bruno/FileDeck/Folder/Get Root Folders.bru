@@ -1,0 +1,15 @@
+meta {
+  name: Get Root Folders
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:5298/api/Folders/root
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer
+}

@@ -81,7 +81,6 @@ public class FoldersController : ControllerBase
         return Ok(files);
     }
 
-    // Potentially Deprecated (GetAllFolders)
     [HttpGet("{folderId}/subfolders")]
     [Authorize]
     public async Task<IActionResult> GetSubfolders(int folderId)
@@ -96,7 +95,6 @@ public class FoldersController : ControllerBase
         return Ok(subfolders);
     }
 
-    // Potentially Deprecated (GetAllFolders)
     [HttpGet("root")]
     [Authorize]
     public async Task<IActionResult> GetRootFolders()

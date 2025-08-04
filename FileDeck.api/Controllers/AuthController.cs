@@ -11,12 +11,10 @@ namespace FileDeck.api.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService authService;
-    private readonly UserManager<UserEntity> userManager;
 
-    public AuthController(IAuthService authService, UserManager<UserEntity> userManager)
+    public AuthController(IAuthService authService)
     {
         this.authService = authService;
-        this.userManager = userManager;
     }
 
     [HttpPost("register")]
